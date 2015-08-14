@@ -1,0 +1,38 @@
+name = Ishøj
+description = Ishøj Kommunes intranet
+package = Core
+version = "1.0"
+core = 7.x
+
+
+; STYLESHEET
+stylesheets[all][] = dist/css/test.css
+stylesheets[all][] = dist/css/uglen.css
+
+	
+; SCRIPTS
+;scripts[] = js/modernizr-2.6.2.min.js
+;scripts[] = js/jquery.timer.js
+;scripts[] = js/jquery.flexslider-min.js
+;scripts[] = js/swiper.jquery.min.js
+scripts[] = dist/js/uglen.js
+scripts[] = dist/js/test.js
+
+
+; REGIONS
+regions[menu_mobile]        = Mobilmenu 
+regions[menu]               = Hovedmenu 
+regions[logo]               = Logo 
+regions[editor]             = Hjemmesideredaktør 
+regions[content] 	   		= Indhold
+regions[footer_kontakt]     = Kontakt
+regions[footer_sociale]     = Sociale medier
+regions[footer_hjemmesider] = Andre kommunale hjemmesider
+regions[krisekommunikation]	= Krisekommunikation
+
+;regions[footer]			= Footer
+;regions[header]    	   	= Header
+
+
+; PLUGINS
+;plugins[panels][layouts] = 'panels/layouts'

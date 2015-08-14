@@ -1,0 +1,44 @@
+This is Taxon 2.1.2
+
+-------------------------------------------------------------------------------
+Change log
+-------------------------------------------------------------------------------
+2.1.2 - 3/5-2013
+	Fixed bug in calculateConfidenceCoefficient
+	Added taxon/getallclasses.php
+	Added test/test_getallclasses.php
+
+2.1.1 - 2/5-2013
+	Cleaned up code
+
+2.1 - 02/04-2013
+	Added the scoreTotal in result.
+	Added the confidence coefficient in result.
+	
+	Improved the use of non-ASCII characters.
+
+	Now all classes get the first position score on the same term.
+	
+	Added taxon/getallterms.php.
+	
+	Taxon now checks that the taxonomy is the same major version, eg 2.x.
+
+2.0 - 01/11-2012
+	Changed the structure of the taxonomy.
+
+	Added the use af an alternative taxonomy.
+
+	Added setting defaults/onNoResultsUseAlternativeTaxonomy
+	Added setting defaults/returnShortResult
+
+	Added section versions
+	Added setting versions/taxonomy_version
+	Added setting versions/build
+	Added setting versions/taxon_version
+
+	Added section information
+	Added setting information/taxonomy_name
+
+
+1.0 - 01/08-2012
+	Initial release

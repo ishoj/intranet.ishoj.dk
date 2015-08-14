@@ -1,0 +1,36 @@
+name = Ishøj
+description = Ishøj Kommunes mobilvenlige og responsive theme.
+package = Core
+version = "0.5"
+core = 7.x
+
+
+; STYLESHEET
+stylesheets[all][] = css/ishoj.css
+
+	
+; SCRIPTS
+scripts[] = js/modernizr-2.6.2.min.js
+;scripts[] = js/jquery.timer.js
+scripts[] = js/jquery.flexslider-min.js
+scripts[] = js/swiper.jquery.min.js
+scripts[] = js/ishoj.min.js
+
+
+; REGIONS
+regions[menu_mobile]        = Mobilmenu 
+regions[menu]               = Hovedmenu 
+regions[logo]               = Logo 
+regions[editor]             = Hjemmesideredaktør 
+regions[content] 	   		= Indhold
+regions[footer_kontakt]     = Kontakt
+regions[footer_sociale]     = Sociale medier
+regions[footer_hjemmesider] = Andre kommunale hjemmesider
+regions[krisekommunikation]	= Krisekommunikation
+
+;regions[footer]			= Footer
+;regions[header]    	   	= Header
+
+
+; PLUGINS
+plugins[panels][layouts] = 'panels/layouts'

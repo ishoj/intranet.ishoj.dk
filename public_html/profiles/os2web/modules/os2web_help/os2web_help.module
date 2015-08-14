@@ -1,0 +1,91 @@
+<?php
+/**
+ * @file
+ * os2web_help.module
+ */
+
+/**
+ * Implements hook_help().
+ */
+function os2web_help_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#os2web_help':
+      $help_html = t('<p><b>This help page describes all relevant OS2web modules and their functionality.</b></p>');
+      $global = array();
+
+      $global['introduction'] = t('<h2 id="os2web_introduction">OS2web Dynamically loaded help describtions</h2>');
+      $global['introduction'] .= t('<p>The goal for all OS2web modules are that they should be documented. So all OS2web developed modules should invoke the helper funktion that adds information to this page. The dokumentation will apear for each activated module. Therefore this help section will always be updated with each reroll / upgrade that you make. The lists below are automatically gennerated.</p>');
+      $global['introduction'] .= t('<p> <a href="http://www.os2web.dk/document/Links">Links with information about OS2web</a></p>');
+
+
+      $global['introduction'] .= t('<h2>Lists of all available:</h2>');
+      $global['introduction'] .= t('<a href="#os2web_create">Create content</a><br />');
+      $global['introduction'] .= t('<a href="#os2web_fields">Specific Fields</a><br />');
+      $global['introduction'] .= t('<a href="#os2web_import">Import</a><br />');
+      $global['introduction'] .= t('<a href="#os2web_menu">Menues</a><br />');
+      $global['introduction'] .= t('<a href="#os2web_config">Configuration</a><br />');
+
+      $global['list_of_content'] = t('<h2>List of modules with own sections</h2>');
+
+      $global['contenttype'] = t('<h2 id="os2web_create">Create content on your site:</h2>');
+      $global['contenttype'] .= t('<p>Any type of content on your site, can be created <a href="@node-add-url" target="_blank">as a contenttype</a></p>', array('@node-add-url' => url('node/add')));
+
+      $global['fields'] = t('<h2 id="os2web_fields">Specific fields in content:</h2>');
+
+      $global['import'] = t('<h2 id="os2web_import">Import external content and taxonomies</h2>');
+      $global['import'] .= t('<p>Initialize any type of importer <a href="@url">the import page.</a></p>', array('@url' => 'import'));
+
+      $global['menu'] = t('<h2 id="os2web_menu">Menues</h2>');
+      $global['menu'] .= t('<p>Create or edit a link in a menu in the <a href="@node-add-menu" target="_blank">menu overview</a></p>', array('@node-add-menu' => url('admin/structure/menu')));
+
+      $global['configuration'] = t('<h2 id="os2web_config">Configuration</h2>');
+      $global['configuration'] .= t('<p>Many of the OS2web modules has configurations which has to be set, in order for every functionality works as designed. See more at the <a href="@settings-url" target="_blank">OS2web configuration page</a></p>', array('@settings-url' => url('admin/config/os2web/settings')));
+
+
+// example function
+      $global['list_of_content'] .= t('<a href="#os2web_help_example">Create your own help function</a><br />');
+      
+      $global['example_function'] = t('<h2 id="os2web_help_example">Create your own help function for OS2web (example)</h2>');
+      $global['example_function'] .= t('<p>/**<br/>');
+      $global['example_function'] .= t(' * Implements hook_os2web_help().</br>');
+      $global['example_function'] .= t(' */</br>');
+      $global['example_function'] .= t('function os2web_example_os2web_help($sections) {</br>');
+      $global['example_function'] .= t('</br>');
+      $global['example_function'] .= t('  // Module specific information section.</br>');
+      $global['example_function'] .= t('  $sections[\'o2web_esdh_provider\'] = t(\'Your title with H2 tags\');</br>');
+      $global['example_function'] .= t('  $sections[\'o2web_esdh_provider\'] .= t(\'Information about your module here.\);</br>');
+      $global['example_function'] .= t('</br>');
+      $global['example_function'] .= t('  // Genneric information like import, configuration, contenttypes etc.</br>');
+      $global['example_function'] .= t('  $sections[\'configuration\'] .= t(\'Configuration: with information and links to the configuration page \');');
+      $global['example_function'] .= t('  // Import </br>');
+      $global['example_function'] .= t('  $sections[\'import\'] = t(\'Import: with information and links to import pages\')));</br>');
+      $global['example_function'] .= t('  $sections[\'contenttype\'] = t(\'Contenttypes: with information and links to content types\')));</br>');
+      $global['example_function'] .= t('  $sections[\'fields\'] = t(\'Fields: with information and links to fields\')));</br>');
+      $global['example_function'] .= t('  $sections[\'menu\'] = t(\'Menu: with information and links to Menus\')));</br>');
+      $global['example_function'] .= t('</br>');
+      $global['example_function'] .= t('  return $sections;</br>');
+      $global['example_function'] .= t('}</br>');
+      $global['example_function'] .= t('</p>');
+
+      // Add os2web_help hook in modules. MY_MODULE_os2web_help().
+      // The hook implementation should return the html
+      // in the given section of an array.
+      $modules = module_invoke_all('os2web_help', array());
+      // Print all sections.
+      $sections = array_merge_recursive($global, $modules);
+      foreach ($sections as $help) {
+        if (!empty($help)) {
+          if (is_array($help)) {
+            foreach ($help as $help_element) {
+              $help_html .= $help_element;
+            }
+          }
+          else {
+            $help_html .= $help;
+          }
+          $help_html .= t('<hr>');
+        }
+      }
+      return $help_html;
+  }
+}

@@ -1,0 +1,18 @@
+<?php
+/**
+ * @file
+ * Code for the OS2Web Selvbetjeningslinks feature.
+ */
+
+include_once 'os2web_selfservicelinks.features.inc';
+
+/**
+ * Implements hook_os2web_help().
+ */
+function os2web_selfservicelinks_os2web_help($sections) {
+
+  // Importers.
+  $sections['import'] = t('<p><b id=="os2web_selfservicelinks">Selfservice Links:</b> Initialize the importer for Selfservice Links at <a href="@url">the import page.</a></p>', array('@url' => 'import/os2web_selfservicelinks_feeds_import'));
+
+  return $sections;
+}

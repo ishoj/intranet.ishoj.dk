@@ -1,0 +1,482 @@
+<?php
+/**
+ * @file
+ * Provides vocabulary synchronization support between a master site and client
+ * sites.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function taxonomy_sync_menu() {
+  $items = array();
+  $items['taxonomy-sync/list/%taxonomy_vocabulary_machine_name'] = array(
+    'type' => MENU_CALLBACK,
+    'page callback' => 'taxonomy_sync_list',
+    'page arguments' => array(2),
+    'access callback' => 'taxonomy_sync_list_access',
+    'access arguments' => array(2),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function taxonomy_sync_permission() {
+  return array(
+    'administer taxonomy sync' => array(
+      'title' => t('Administer taxonomy sync'),
+      'description' => t('Perform administration tasks for taxonomy sync.'),
+    ),
+  );
+}
+
+/**
+ * Access callback for Vocabulary sync list.
+ *
+ * @param object $vocabulary
+ *   Vocabulary to access check.
+ *
+ * @return bool
+ *   Access granted or denied.
+ */
+function taxonomy_sync_list_access($vocabulary) {
+  $master = taxonomy_sync_is_master($vocabulary);
+  $params = drupal_get_query_parameters(NULL, $exclude = array('q'), $parent = '');
+  // Ensure the Vocab is set as a master.
+  // Ensure the master_key is passed as a param.
+  if ($master && array_key_exists('master_key', $params)) {
+    // Test that the master_key matches the defined key.
+    if (taxonomy_sync_master_key_match($params['master_key'], $vocabulary)) {
+      return TRUE;
+    }
+  }
+  // Always allow admins.
+  if (user_access('administer taxonomy sync') && $master) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Menu callback.
+ *
+ * @param object $vocabulary
+ *   A Drupal Vocabulary to list.
+ *
+ * @see taxonomy_sync_menu
+ */
+function taxonomy_sync_list($vocabulary) {
+  $tree = taxonomy_sync_get_tree($vocabulary);
+  drupal_json_output($tree);
+}
+
+/**
+ * Return if this site is the master for the named vocabulary.
+ *
+ * @param object $vocabulary
+ *   The name of a vocabulary
+ *
+ * @return bool
+ *   Whether the current site is a master for the named vocabulary.
+ */
+function taxonomy_sync_is_master($vocabulary) {
+  $taxonomies = variable_get('taxonomy_sync', NULL);
+  if (!empty($taxonomies[$vocabulary->machine_name])) {
+    $type = $taxonomies[$vocabulary->machine_name]['type'];
+    if ($type == 1) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Determines if the provided hash matches the master_key.
+ *
+ * @param string $hash
+ *   The hash key to test for.
+ *
+ * @param object $vocabulary
+ *   The vocabulary
+ *
+ * @return bool
+ *   Return TRUE if the hash matches, FALSE otherwise.
+ */
+function taxonomy_sync_master_key_match($hash, $vocabulary) {
+  $vocabularies = variable_get('taxonomy_sync');
+  if (array_key_exists($vocabulary->machine_name, $vocabularies)) {
+    return $hash == $vocabularies[$vocabulary->machine_name]['master_key'];
+  }
+}
+
+/**
+ * Builds a Vocabulary tree based on its machine name.
+ *
+ * @param object $vocabulary
+ *   The Drupal Vocabulary.
+ **
+ *  * @return array $tree
+ *   An array representing a Taxonomy Sync Vocabulary tree.
+ */
+function taxonomy_sync_get_tree($vocabulary) {
+  return taxonomy_get_tree($vocabulary->vid);
+}
+
+/**
+ * Implements hook_cron().
+ */
+function taxonomy_sync_cron() {
+  _taxonomy_sync_sync();
+}
+
+/**
+ * Sync all client enabled vocabularies.
+ */
+function _taxonomy_sync_sync() {
+  $vocabularies = variable_get('taxonomy_sync', array());
+  foreach ($vocabularies as $name => $data) {
+    // We only care to act on 'client' type vocabularies.
+    if ($data['type'] == 2) {
+      taxonomy_sync_sync_data($data, taxonomy_vocabulary_machine_name_load($name));
+    }
+  };
+}
+
+/**
+ * Sync all the terms for a given local Vocabulary.
+ *
+ * @param array $data
+ *   The taxonomy_sync config data for this Vocabulary.
+ *
+ * @param object $vocabulary
+ *   A Vocabulary that will house the sync'd terms.
+ */
+function taxonomy_sync_sync_data($data, $vocabulary) {
+  if (!$data['client_uri'] && !$data['client_key']) {
+    return;
+  }
+  // Get the remote Taxonomy terms to sync.
+  $remote_tree = taxonomy_sync_pull_data($data['client_uri'], $data['client_key']);
+  if (!empty($remote_tree)) {
+    foreach ($remote_tree as $remote_term) {
+      $remote_term = (object) $remote_term;
+      // Add or update local terms.
+      taxonomy_sync_sync_term($remote_term, $remote_tree, $vocabulary);
+      $remote_uuids[$remote_term->uuid] = $remote_term->uuid;
+    }
+    if (!empty($remote_uuids)) {
+      // Process any removed terms.
+      taxonomy_sync_sync_cleanse($remote_uuids, $vocabulary);
+    }
+  }
+}
+
+/**
+ * Try and pull vocabulary data given a url.
+ *
+ * @pram string url
+ *   the url for the master vocab.
+ *
+ * @return string
+ *   A Tree from a remote site
+ */
+function taxonomy_sync_pull_data($url, $key) {
+  $query = array(
+    'master_key' => $key,
+  );
+  $url = url($url, array(
+    'query' => $query,
+  ));
+  $response = drupal_http_request($url);
+  if ($response->code == 200 && $response->headers['content-type'] == 'application/json') {
+    return drupal_json_decode($response->data);
+  }
+  return FALSE;
+}
+
+/**
+ * Sync an individual remote term to a local one.
+ *
+ * @param object $remote_term
+ *   The remote vocabulary term.
+ *
+ * @param array $remote_tree
+ *   The Vocabulary tree from the master server.
+ *
+ * @param object $vocabulary
+ *   The local vocabulary to house the term.
+ *
+ * @return mixed|object
+ *   The local term that was created or updated, or NULL if no local term.
+ */
+function taxonomy_sync_sync_term($remote_term, $remote_tree, $vocabulary) {
+  // We require the uuid.
+  if (empty($remote_term->uuid)) {
+    return NULL;
+  }
+  // Process parent first.
+  if (!empty($remote_term->depth)) {
+    foreach ($remote_term->parents as $remote_parent_id) {
+      // Get the remote parent from the tree.
+      $anonymous_filter = taxonomy_sync_parent_filter($remote_parent_id);
+      $parent_term = array_filter($remote_tree, $anonymous_filter);
+      $parent_term = current($parent_term);
+      if (!empty($parent_term)) {
+        // Find the local parent if it exists.
+        $local_parent = entity_uuid_load('taxonomy_term', array($parent_term['uuid']));
+        if (!$local_parent) {
+          // No local parent. Create it.
+          $local_parent = $parent_term;
+          unset($local_parent->tid);
+          $local_parent->vid = $vocabulary->vid;
+          unset($local_parent->changed);
+          unset($local_parent->created);
+          taxonomy_term_save((object) $local_parent);
+        }
+      }
+    }
+  }
+  $term = entity_uuid_load('taxonomy_term', array($remote_term->uuid));
+  if (!$term) {
+    // No local term found. Create a new term.
+    $term = $remote_term;
+    unset($term->tid);
+    $term->vid = $vocabulary->vid;
+    // Add parent if it exists.
+    if (!empty($local_parent)) {
+      $local_parent_id = current($local_parent)->tid;
+      $term->parent = $local_parent_id;
+    }
+    else {
+      $term->parent = 0;
+    }
+    unset($term->changed);
+    unset($term->created);
+    taxonomy_term_save((object) $term);
+  }
+  else {
+    // Existing local term found. Determine if the remote term has been
+    // updated.
+    $term = array_shift($term);
+    if (_taxonomy_sync_terms_differ($remote_term, $term)) {
+      // One of the terms changed. Update the local term data to match remote.
+      $updated_term = $remote_term;
+      $updated_term->tid = $term->tid;
+      $updated_term->vid = $vocabulary->vid;
+      unset($updated_term->changed);
+      unset($updated_term->created);
+      // Add parent if it exists.
+      if (!empty($local_parent)) {
+        $local_parent_id = current($local_parent)->tid;
+        $updated_term->parent = $local_parent_id;
+      }
+      else {
+        $updated_term->parent = 0;
+      }
+      taxonomy_term_save($updated_term);
+      $term = $updated_term;
+    }
+  }
+  return $term;
+}
+
+/**
+ * Process any removed terms.
+ *
+ * @param array $uuids
+ *   An array of the remote uuids. Any others are discarded.
+ *
+ * @param object $vocabulary
+ *   The local Vocabulary to cleanse.
+ */
+function taxonomy_sync_sync_cleanse($uuids, $vocabulary) {
+  foreach (taxonomy_get_tree($vocabulary->vid) as $term) {
+    if (!in_array($term->uuid, $uuids)) {
+      taxonomy_term_delete($term->tid);
+    }
+  }
+}
+
+/**
+ * Array filter callback for locating a tid in a tree.
+ *
+ * @param string $filter_value
+ *   The tid to locate.
+ *
+ * @return closure
+ *   The anonymous closure.
+ */
+function taxonomy_sync_parent_filter($filter_value) {
+  return function ($item) use ($filter_value) {
+    return $item['tid'] == $filter_value;
+  };
+}
+
+/**
+ * Compare a remote and local term to determine if they are different.
+ *
+ * @param object $remote_term
+ *   The remote taxonomy term from the master server.
+ *
+ * @param object $local_term
+ *   The local taxonomy term.
+ *
+ * @return bool
+ *   Returns TRUE if the terms are different, FALSE if they are identical.
+ */
+function _taxonomy_sync_terms_differ($remote_term, $local_term) {
+  // We determine if a term is different by comparing changed dates.
+  return ($remote_term->changed) != ($local_term->changed);
+}
+
+/**
+ * Build a new base-64 encoded, url friendly, sha-256 hash.
+ *
+ * @return string
+ *   A base-64 encoded sha-256 hash.
+ */
+function taxonomy_sync_hash_generate() {
+  return drupal_hash_base64('taxonomy_sync' . time());
+}
+
+/**
+ * Implements hook_form_formID_alter().
+ *
+ * Add taxonomy sync fields to vocabulary form
+ */
+function taxonomy_sync_form_taxonomy_form_vocabulary_alter(&$form) {
+  $name = $form['#vocabulary']->machine_name;
+  $variables = variable_get('taxonomy_sync', FALSE);
+  if (!empty($variables[$name])) {
+    $variables = $variables[$name];
+  }
+  else {
+    $variables = (array) $variables;
+  }
+  $form['taxonomy_sync'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Taxonomy Sync',
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  $form['taxonomy_sync']["taxonomy_sync_type_{$name}"] = array(
+    '#type' => 'radios',
+    '#description' => 'Share this taxonomy with authorized clients, or act as a client to sync from another server.',
+    '#options' => array('Not enabled', 'Master', 'Client'),
+    '#default_value' => isset($variables['type']) ? $variables['type'] : '',
+  );
+  $form['taxonomy_sync']['master'] = array(
+    '#type' => 'fieldset',
+    '#states' => array(
+      'visible' => array(
+        ':input[name="taxonomy_sync_type_' . $name . '"]' => array('value' => 1),
+      ),
+    ),
+  );
+  $form['taxonomy_sync']['master']["taxonomy_sync_master_{$name}"] = array(
+    '#type' => 'textfield',
+    '#title' => t('Master URI'),
+    '#description' => t('This is your master URI. Copy this value to your client when setting up sharing.'),
+    '#default_value' => url("taxonomy-sync/list/$name", array('absolute' => TRUE)),
+    '#disabled' => TRUE,
+  );
+  $form['taxonomy_sync']['master']["taxonomy_sync_master_key_{$name}"] = array(
+    '#type' => 'textfield',
+    '#title' => t('Master Key'),
+    '#description' => t('This is your master key. Copy this key to your client when setting up sharing.'),
+    '#default_value' => isset($variables['master_key']) ? $variables['master_key'] : taxonomy_sync_hash_generate(),
+    '#disabled' => TRUE,
+  );
+  $form['taxonomy_sync']['client'] = array(
+    '#type' => 'fieldset',
+    '#states' => array(
+      'visible' => array(
+        ':input[name="taxonomy_sync_type_' . $name . '"]' => array('value' => 2),
+      ),
+    ),
+  );
+  $form['taxonomy_sync']['client']["taxonomy_sync_client_{$name}"] = array(
+    '#type' => 'textfield',
+    '#description' => t('The URI from the Master site.'),
+    '#default_value' => isset($variables['client_uri']) ? $variables['client_uri'] : '',
+    '#title' => t("Master URI"),
+  );
+  $form['taxonomy_sync']['client']["taxonomy_sync_client_key_{$name}"] = array(
+    '#type' => 'textfield',
+    '#title' => t('Master Key'),
+    '#description' => t('The Key from the Master site.'),
+    '#default_value' => isset($variables['client_key']) ? $variables['client_key'] : '',
+  );
+  $form['#submit'][] = 'taxonomy_sync_form_taxonomy_form_vocabulary_submit';
+  $form['#validate'][] = 'taxonomy_sync_form_taxonomy_form_vocabulary_validate';
+}
+
+
+/**
+ * Implements hook_form_formID_validate().
+ */
+function taxonomy_sync_form_taxonomy_form_vocabulary_validate($form, &$form_state, $edit = array()) {
+  $name = $form['#vocabulary']->machine_name;
+  switch ($form_state['values']["taxonomy_sync_type_{$name}"]) {
+    case '1':
+      if (!$form_state['values']["taxonomy_sync_master_{$name}"]) {
+        form_set_error("taxonomy_sync_client_{$name}", t('URI cannot be blank'));
+      }
+      if (!$form_state['values']["taxonomy_sync_master_key_{$name}"]) {
+        form_set_error("taxonomy_sync_master_key_{$name}", t('Key cannot be blank'));
+      }
+      break;
+
+    case '2':
+      if (!$form_state['values']["taxonomy_sync_client_{$name}"]) {
+        form_set_error("taxonomy_sync_client_{$name}", t('URI cannot be blank'));
+      }
+      if (!$form_state['values']["taxonomy_sync_client_key_{$name}"]) {
+        form_set_error("taxonomy_sync_client_key_{$name}", t('Key cannot be blank'));
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_form_formID_submit().
+ */
+function taxonomy_sync_form_taxonomy_form_vocabulary_submit($form, $form_state) {
+  $name = $form['#vocabulary']->machine_name;
+  // Check if we are deleting this Vocab. If so we need to remove its variables.
+  $vocabularies = variable_get('taxonomy_sync', FALSE);
+  if ($form_state['values']['op'] == 'Delete') {
+    if (array_key_exists($name, $vocabularies)) {
+      unset($vocabularies[$name]);
+      variable_set('taxonomy_sync', $vocabularies);
+    }
+  }
+  else {
+    if (!empty($form_state['values']["taxonomy_sync_type_{$name}"])) {
+      $data[$name] = array(
+        'type' => $form_state['values']["taxonomy_sync_type_{$name}"],
+        'master_uri' => $form_state['values']["taxonomy_sync_master_{$name}"],
+        'master_key' => $form_state['values']["taxonomy_sync_master_key_{$name}"],
+        'client_uri' => $form_state['values']["taxonomy_sync_client_{$name}"],
+        'client_key' => $form_state['values']["taxonomy_sync_client_key_{$name}"],
+      );
+     
+     // variable_set('taxonomy_sync', array_merge($vocabularies, $data));
+     dsm($data);
+     variable_set('taxonomy_sync', $data);
+    }
+    // Deal with a new Vocab where $name will not be set yet.
+    elseif (!empty($form_state['values']["taxonomy_sync_type_"])) {
+      $data[$name] = array(
+        'type' => $form_state['values']["taxonomy_sync_type_"],
+        'master_uri' => $form_state['values']["taxonomy_sync_master_"],
+        'master_key' => $form_state['values']["taxonomy_sync_master_key_"],
+        'client_uri' => $form_state['values']["taxonomy_sync_client_"],
+        'client_key' => $form_state['values']["taxonomy_sync_client_key_"],
+      );
+      variable_set('taxonomy_sync', array_merge($vocabularies, $data));
+    }
+  }
+}

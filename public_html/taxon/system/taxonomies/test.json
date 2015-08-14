@@ -1,0 +1,578 @@
+{
+	"system" :
+	{
+		"defaults" :
+		{
+			"numberResultsReturned": 2,
+         "ignoreTermConstraints":0,
+         "onNoResultsIgnoreTermConstraints":0,
+         "onNoResultsUseAlternativeTaxonomy":0,
+         "returnShortResult":0
+		},
+      "versions":
+      {
+         "taxonomy_version_major":"1.0",
+         "taxon_version":"2.x",
+         "build":"10"
+      },
+      "information":
+      {
+         "taxonomy_name":"Geography"
+      }
+	},
+	"classes" :
+	{
+		"01":
+		{
+			"id": "01",
+			"title": "Europe",
+			"hidden":0,
+			"exclusive":0,
+			"thresholdWeight": 5,
+			"thresholdCount": 1,
+			"thresholdCountUnique": 1,
+			"terms":
+			{
+				"Denmark":
+				{
+					"title": "Denmark",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Germany":
+				{
+					"title": "Germany",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Spain":
+				{
+					"title": "Spain",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				}
+			}
+		},
+		"01.01":
+		{
+			"id": "01.01",
+			"title": "UK",
+			"hidden":0,
+			"exclusive":0,
+			"thresholdWeight": 5,
+			"thresholdCount": 1,
+			"thresholdCountUnique": 1,
+			"terms":
+			{
+				"London":
+				{
+					"title": "London",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"York":
+				{
+					"title": "York",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				}
+			}
+		},
+		"02":
+		{
+			"id": "02",
+			"title": "Asia",
+			"hidden":0,
+			"exclusive":0,
+			"thresholdWeight": 5,
+			"thresholdCount": 1,
+			"thresholdCountUnique": 1,
+			"terms":
+			{
+				"China":
+				{
+					"title": "China",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Japan":
+				{
+					"title": "Japan",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Thailand":
+				{
+					"title": "Thailand",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				}
+			}
+		},
+		"03":
+		{
+			"id": "03",
+			"title": "Americas",
+			"hidden":0,
+			"exclusive":0,
+			"thresholdWeight": 5,
+			"thresholdCount": 1,
+			"thresholdCountUnique": 1,
+			"terms":
+			{
+			}
+		},
+		"03.01":
+		{
+			"id": "03.01",
+			"title": "North America",
+			"hidden":0,
+			"exclusive":1,
+			"thresholdWeight": 5,
+			"thresholdCount": 1,
+			"thresholdCountUnique": 1,
+			"terms":
+			{
+				"Canada":
+				{
+					"title": "Canada",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Mexico":
+				{
+					"title": "Mexico",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "01",
+					"excludeOnClass": "02",
+					"prefix": "",
+					"suffix": ""
+				},
+				"USA":
+				{
+					"title": "USA",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				}
+			}
+		},
+		"03.01.01":
+		{
+			"id": "03.01.01",
+			"title": "USA",
+			"hidden":0,
+			"exclusive":0,
+			"thresholdWeight": 5,
+			"thresholdCount": 1,
+			"thresholdCountUnique": 1,
+			"terms":
+			{
+				"Holland":
+				{
+					"title": "Holland",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"New Holland":
+				{
+					"title": "New Holland",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"New York":
+				{
+					"title": "New York",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Yor":
+				{
+					"title": "Yor",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				}
+			}
+		},
+		"03.02":
+		{
+			"id": "03.02",
+			"title": "South America",
+			"hidden":0,
+			"exclusive":0,
+			"thresholdWeight": 5,
+			"thresholdCount": 1,
+			"thresholdCountUnique": 1,
+			"terms":
+			{
+				"Brazil":
+				{
+					"title": "Brazil",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Chile":
+				{
+					"title": "Chile",
+					"weight": 3,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				}
+			}
+		},
+		"04":
+		{
+			"id": "04",
+			"title": "Africa",
+			"hidden":0,
+			"exclusive":0,
+			"thresholdWeight": 5,
+			"thresholdCount": 1,
+			"thresholdCountUnique": 1,
+			"terms":
+			{
+				"Angola":
+				{
+					"title": "Angola",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Malawi":
+				{
+					"title": "Malawi",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "must",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Morocco":
+				{
+					"title": "Morocco",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "must",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Ghana":
+				{
+					"title": "Ghana",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "01",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Togo":
+				{
+					"title": "Togo",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "01",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Gabon":
+				{
+					"title": "Gabon",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "XX|YY|ZZ",
+					"suffix": ""
+				},
+				"Benin":
+				{
+					"title": "Benin",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": "XX|YY|ZZ"
+				},
+				"Kenya":
+				{
+					"title": "Kenya",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "04",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Gambia":
+				{
+					"title": "Gambia",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "must",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				}
+			}
+		},
+		"05":
+		{
+			"id": "05",
+			"title": "Oceania",
+			"hidden":0,
+			"exclusive":0,
+			"thresholdWeight": 5,
+			"thresholdCount": 1,
+			"thresholdCountUnique": 1,
+			"terms":
+			{
+			}
+		},
+		"05.01":
+		{
+			"id": "05.01",
+			"title": "Australasia",
+			"hidden":0,
+			"exclusive":0,
+			"thresholdWeight": 5,
+			"thresholdCount": 1,
+			"thresholdCountUnique": 1,
+			"terms":
+			{
+				"Australia":
+				{
+					"title": "Australia",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"New Zealand":
+				{
+					"title": "New Zealand",
+					"weight": 5,
+					"required": 1, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				}
+			}
+		},
+		"99":
+		{
+			"id": "99",
+			"title": "Danish laws",
+			"hidden":0,
+			"exclusive":0,
+			"thresholdWeight": 5,
+			"thresholdCount": 1,
+			"thresholdCountUnique": 1,
+			"terms":
+			{
+				"Testloven §42":
+				{
+					"title": "Testloven §42",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				}
+			}
+		},
+		"99.01":
+		{
+			"id": "99.01",
+			"title": "Term border",
+			"hidden":0,
+			"exclusive":0,
+			"thresholdWeight": 5,
+			"thresholdCount": 1,
+			"thresholdCountUnique": 1,
+			"terms":
+			{
+				"Test":
+				{
+					"title": "Test",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Testæ":
+				{
+					"title": "Testæ",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Testæg":
+				{
+					"title": "Testæg",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				},
+				"Ætest":
+				{
+					"title": "Ætest",
+					"weight": 5,
+					"required": 0, 
+					"requireTerm": "",
+					"excludeOnTerm": "",
+					"requireClass": "",
+					"excludeOnClass": "",
+					"prefix": "",
+					"suffix": ""
+				}
+			}
+		}
+	}
+}

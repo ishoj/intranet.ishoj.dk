@@ -1,0 +1,12 @@
+name = Taxon Taxonomy
+description = Calls Taxon to classify a text according to a taxonomy and interacts with a taxonomy field.
+core = 7.x
+
+configure = admin/config/content/taxon-taxonomy
+
+; Information added by Drupal.org packaging script on 2014-07-04
+version = "7.x-2.6"
+core = "7.x"
+project = "taxon_taxonomy"
+datestamp = "1404462229"
+

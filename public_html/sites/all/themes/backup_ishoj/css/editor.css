@@ -1,0 +1,266 @@
+@charset "UTF-8";
+/************************/
+/*** ADMIN STYLESHEET ***/
+/************************/
+/* line 14, ../sass/editor.scss */
+.edit-node {
+  float: left;
+  margin-top: 1em;
+  background: #FCD550;
+}
+/* line 18, ../sass/editor.scss */
+.edit-node:hover {
+  background: #253139;
+}
+/* line 21, ../sass/editor.scss */
+.edit-node:hover a {
+  color: #ffffff !important;
+  background-position: 12px -48px;
+}
+/* line 26, ../sass/editor.scss */
+.edit-node a {
+  display: block;
+  padding: .75em 1.25em .75em .5em;
+  color: #253139 !important;
+  font-weight: 400;
+  background: url(../img/sprites-no/editor/editor_btn_edit.png) left no-repeat;
+  background-position: 12px 0px;
+}
+/* line 34, ../sass/editor.scss */
+.edit-node a:hover {
+  text-decoration: none;
+}
+/* line 37, ../sass/editor.scss */
+.edit-node a span {
+  padding-left: 2.25em;
+}
+
+/* Redaktørmenu */
+/* line 48, ../sass/editor.scss */
+.redaktormenu {
+  padding-bottom: 0;
+}
+
+/* line 52, ../sass/editor.scss */
+.editor ul.menu .leaf {
+  list-style: none;
+}
+
+/* Drupal fix */
+/* line 56, ../sass/editor.scss */
+.editor {
+  float: left;
+  width: 100%;
+  display: block;
+  background: #FCD550;
+  font-weight: 300;
+  padding-top: 0;
+  padding-bottom: 0;
+  /* 1st level*/
+}
+/* line 65, ../sass/editor.scss */
+.editor .editorInner,
+.editor .editorInner div {
+  float: left;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+/* line 75, ../sass/editor.scss */
+.editor .menu {
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+/* line 79, ../sass/editor.scss */
+.editor .menu li {
+  float: left;
+  height: 100%;
+  display: block;
+  cursor: pointer;
+  background: none;
+  margin: 0;
+  padding: 0;
+}
+/* line 87, ../sass/editor.scss */
+.editor .menu li:hover {
+  background: #253139;
+}
+/* line 89, ../sass/editor.scss */
+.editor .menu li:hover a {
+  color: #ffffff;
+}
+/* line 92, ../sass/editor.scss */
+.editor .menu li:hover ul {
+  left: auto;
+}
+/* line 96, ../sass/editor.scss */
+.editor .menu li a {
+  width: auto;
+  height: 100%;
+  display: block;
+  color: #253139;
+  text-decoration: none;
+  font-size: 1.25em;
+  font-weight: 400;
+  padding: 0.75em 1.5em;
+  cursor: pointer;
+  letter-spacing: 0.125em;
+  text-transform: uppercase;
+}
+/* line 109, ../sass/editor.scss */
+.editor .menu li.active:hover {
+  background: #253139;
+}
+/* line 111, ../sass/editor.scss */
+.editor .menu li.active:hover a {
+  color: #ffffff;
+}
+/* line 115, ../sass/editor.scss */
+.editor .menu li ul {
+  position: absolute;
+  z-index: 100;
+  width: 16em;
+  height: auto;
+  left: -999em;
+  padding: 1.0em;
+  background: #253139;
+}
+/* line 123, ../sass/editor.scss */
+.editor .menu li ul li {
+  width: 100%;
+  height: 3em;
+  border: none;
+  border-top: 1px solid #829099;
+}
+/* line 128, ../sass/editor.scss */
+.editor .menu li ul li:nth-child(1) {
+  border: none;
+}
+/* line 131, ../sass/editor.scss */
+.editor .menu li ul li:hover {
+  background: #ffffff;
+}
+/* line 133, ../sass/editor.scss */
+.editor .menu li ul li:hover a {
+  color: #253139;
+}
+/* line 137, ../sass/editor.scss */
+.editor .menu li ul li:hover ul {
+  left: 17.0em !important;
+  top: auto;
+  margin-top: -4.0em;
+}
+/* line 143, ../sass/editor.scss */
+.editor .menu li ul li:hover ul li:hover a {
+  color: #253139;
+}
+/* line 150, ../sass/editor.scss */
+.editor .menu li ul li a {
+  font-size: 1.0em;
+  font-weight: 300;
+  line-height: 3em;
+  padding: 0 1em 0 2.5em;
+  text-transform: none;
+  color: #ffffff;
+  border: none;
+}
+/* line 159, ../sass/editor.scss */
+.editor .menu li ul li ul {
+  position: absolute;
+  z-index: 101;
+  width: 18em;
+  height: auto;
+  left: -999em !important;
+  padding: 1.0em;
+  margin-left: -2em;
+  background: #253139;
+}
+/* line 170, ../sass/editor.scss */
+.editor .menu li ul li ul li:hover a {
+  color: #253139 !important;
+}
+/* line 174, ../sass/editor.scss */
+.editor .menu li ul li ul li a {
+  color: #ffffff !important;
+  border: none;
+}
+
+/* line 191, ../sass/editor.scss */
+.editor li.plus a,
+.editor li.plus:hover li.plus a {
+  background: url(../img/sprites-no/editor/editor_btn_plus.png) left no-repeat !important;
+  background-position: 6px -48px !important;
+}
+
+/* line 196, ../sass/editor.scss */
+.editor li.plus:hover a,
+.editor li.plus:hover li.plus:hover a {
+  background-position: 6px 0 !important;
+}
+
+/* line 201, ../sass/editor.scss */
+.editor li.search a, .editor li.search:hover li.search a {
+  background: url(../img/sprites-no/editor/editor_btn_search.png) left no-repeat;
+  background-position: 6px -48px;
+}
+
+/* line 202, ../sass/editor.scss */
+.editor li.search:hover a, .editor li.search:hover li.search:hover a {
+  background-position: 6px 0;
+}
+
+/* line 204, ../sass/editor.scss */
+.editor li.frontpage a, .editor li.frontpage:hover li.frontpage a {
+  background: url(../img/sprites-no/editor/editor_btn_frontpage.png) left no-repeat !important;
+  background-position: 6px -48px !important;
+}
+
+/* line 205, ../sass/editor.scss */
+.editor li.frontpage:hover a, .editor li.frontpage:hover li.frontpage:hover a {
+  background-position: 6px 0 !important;
+}
+
+/* line 207, ../sass/editor.scss */
+.editor li.user a, .editor li.user:hover li.user a {
+  background: url(../img/sprites-no/editor/editor_btn_user.png) left no-repeat !important;
+  background-position: 6px -48px !important;
+}
+
+/* line 208, ../sass/editor.scss */
+.editor li.user:hover a, .editor li.user:hover li.user:hover a {
+  background-position: 6px 0 !important;
+}
+
+/* line 210, ../sass/editor.scss */
+.editor li.edit a, .editor li.edit:hover li.edit a {
+  background: url(../img/sprites-no/editor/editor_btn_edit.png) left no-repeat !important;
+  background-position: 6px -48px !important;
+}
+
+/* line 211, ../sass/editor.scss */
+.editor li.edit:hover a, .editor li.edit:hover li.edit:hover a {
+  background-position: 6px 0 !important;
+}
+
+/* line 213, ../sass/editor.scss */
+.editor li.logout a, .editor li.logout:hover li.logout a {
+  background: url(../img/sprites-no/editor/editor_btn_logout.png) left no-repeat !important;
+  background-position: 6px -48px !important;
+}
+
+/* line 214, ../sass/editor.scss */
+.editor li.logout:hover a, .editor li.logout:hover li.logout:hover a {
+  background-position: 6px 0 !important;
+}
+
+/* line 216, ../sass/editor.scss */
+.editor li.adduser a, .editor li.adduser:hover li.adduser a {
+  background: url(../img/sprites-no/editor/editor_btn_adduser.png) left no-repeat !important;
+  background-position: 6px -48px !important;
+}
+
+/* line 217, ../sass/editor.scss */
+.editor li.adduser:hover a, .editor li.adduser:hover li.adduser:hover a {
+  background-position: 6px 0 !important;
+}

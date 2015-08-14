@@ -1,0 +1,88 @@
+<?php
+/**
+ * @file
+ * Code for the OS2Web - Frontend feature.
+ */
+
+include_once 'os2web_frontend.features.inc';
+
+/**
+ * Implements hook_init().
+ *
+ * Inject additional Javascripts.
+ */
+function os2web_frontend_init() {
+  $script = <<<EOS
+    /*<![CDATA[*/
+    (function() {
+     var sz = document.createElement('script'); sz.type = 'text/javascript'; sz.async = true;
+     sz.src = '//ssl.siteimprove.com/js/siteanalyze_1480.js';
+     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sz, s);
+     })();
+  /*]]>*/
+EOS;
+  drupal_add_js($script, array(
+    'scope' => 'footer',
+    'type' => 'inline',
+    'every_page' => TRUE));
+
+  drupal_add_js(drupal_get_path('module', 'os2web_frontend') . '/js/menu_style.js', array('scope' => 'footer', 'weight' => 100));
+  drupal_add_js(drupal_get_path('module', 'os2web_frontend') . '/js/jquery.yaselect.min.js', array('scope' => 'header', 'weight' => 102));
+  drupal_add_js(drupal_get_path('module', 'os2web_frontend') . '/js/jquery.sbselect.js', array('scope' => 'footer', 'weight' => 102));
+  drupal_add_js(drupal_get_path('module', 'os2web_frontend') . '/js/jquery.tabindex.js', array('scope' => 'footer', 'weight' => 102));
+}
+
+/**
+ * Implements hook_menu_minipanels_styles().
+ *
+ * Adds extra style selection for minipanel
+ */
+function os2web_frontend_menu_minipanels_styles() {
+  $styles = array(
+    'os2web_core_theme' => t('CMSTheme'),
+  );
+  return $styles;
+}
+
+/**
+ * Implements hook_menu_minipanels_style().
+ */
+function os2web_frontend_menu_minipanels_style($menu_config) {
+  drupal_add_js(drupal_get_path('module', 'os2web_frontend') . '/js/menu_style.js', array('scope' => 'footer', 'weight' => 100));
+  drupal_add_js(drupal_get_path('module', 'os2web_frontend') . '/js/jquery.yaselect.min.js', array('scope' => 'header', 'weight' => 102));
+  drupal_add_js(drupal_get_path('module', 'os2web_frontend') . '/js/jquery.sbselect.js', array('scope' => 'footer', 'weight' => 102));
+  drupal_add_js(drupal_get_path('module', 'os2web_frontend') . '/js/jquery.tabindex.js', array('scope' => 'footer', 'weight' => 102));
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Add configuration to the settings form.
+ */
+function os2web_frontend_form_os2web_settings_settings_form_alter(&$form, &$form_state) {
+  $form['themesettings'] = array(
+    '#type' => 'fieldset',
+    '#collapsible' => FALSE,
+    '#title' => 'Display settings',
+    '#description' => 'Settings for theme and layout',
+  );
+  $form['themesettings']['os2web_default_menu'] = array(
+    '#type' => 'textfield',
+    '#default_value' => variable_get('os2web_default_menu', 'navigation'),
+    '#title' => t('Default menu for first sidebar'),
+    '#description' => t('Machine name for the menu to be inserted in blank left sidebars'),
+  );
+}
+
+/**
+ * Implements hook_os2web_help().
+ */
+function os2web_frontend_os2web_help($sections) {
+  $sections['contenttype'] = t('<b>Background:</b> <a href="@url" target="_blank">Create a background</a>. A background can be used as the background on all pages.', array('@url' => url('node/add/os2web-frontend-background-img')));
+  $sections['menu'] = t('<p><b>Main Menu:</b> Main menu contains the overall site structure.<p/>');
+  $sections['menu'] .= t('<p><b>Contentmenu (<i>Indholdsmenu</i>):</b> The contentmenu contains an expanded menu derived from the Main Menu. Do you need to link to a specific content, <a href="@url" target="_blank">a link can be created.</a>.<p/>', array('@url' => url('admin/structure/menu/manage/os2web-menu-contentmenu/add')));
+  $sections['menu'] .= t('<p><b>Other websites:</b> This menu can be used to link to other websites in your network.<p/>');
+  $sections['menu'] .= t('<p><b>Your municipality:</b> Quick links to relevant sites in Your municipality. This is shown above the main menu.<p/>');
+  $sections['menu'] .= t('<p><b>Top Menu:</b> The Top menu are shown on every pages, and shows some helpfull links.<p/>');
+  return $sections;
+}

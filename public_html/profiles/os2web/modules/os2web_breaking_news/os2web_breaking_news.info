@@ -1,0 +1,9 @@
+name = OS2WEB Breaking News
+description = "Adds breaking news marquee on frontpage"
+core = 7.x
+package = OS2Web - Frontend
+version = 7.x-1.0-beta1
+project = os2web_breaking_news
+features[features_api][] = api:1
+dependencies[] = os2web_base
+dependencies[] = os2web_base_panels

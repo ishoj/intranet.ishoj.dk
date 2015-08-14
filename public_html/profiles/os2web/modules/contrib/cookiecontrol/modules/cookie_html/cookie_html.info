@@ -1,0 +1,9 @@
+name = "Cookie Control HTML class"
+description = "Adds the class cookies to the html tag if cookies are allowed"
+dependencies[] = "cookiecontrol"
+core = 7.x
+
+version = "7.x-1.5"
+core = "7.x"
+project = "cookiecontrol"
+

@@ -1,0 +1,4 @@
+name = Ishoj Dagsorden Aktivitet
+description = Dette modul opretter en node i indholdstypen Aktivitet (aktivitet), når en node oprettes i indholdtypen Meeting (os2web_meetings_meeting).
+core = 7.x
+package = Ishøj Kommune

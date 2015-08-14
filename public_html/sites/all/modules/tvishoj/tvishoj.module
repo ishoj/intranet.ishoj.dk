@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the tvishoj feature.
+ */
+
+include_once 'tvishoj.features.inc';

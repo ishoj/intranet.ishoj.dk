@@ -1,0 +1,18 @@
+This is Taxon Web service 2.1.
+
+-------------------------------------------------------------------------------
+Change log
+-------------------------------------------------------------------------------
+2.1 - 02/04/2013
+	Added the scripts includes/preprocessText and includes/postprocessResult.
+	
+	taxon-ws.php now checks for the 2 files mentioned above and if they exist, 
+	the text is passed through preprocessText before calling classify and the 
+	result is passed through postprocessResult before returned to caller.
+
+2.0 - 01/11/2012
+	Taxon now requires the full path and filename for the taxonomy file, so 
+	that's what we provide.
+
+1.0 - 01/08-2012
+	Initial release

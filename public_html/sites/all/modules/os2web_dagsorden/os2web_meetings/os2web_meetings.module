@@ -1,0 +1,217 @@
+<?php
+
+/**
+ * @file
+ * Code for the OS2Web Meeting Views feature.
+ */
+
+include_once 'os2web_meetings.features.inc';
+
+/**
+ * Implements hook_init().
+ */
+function os2web_meetings_init(){
+  drupal_add_css(drupal_get_path('module', 'os2web_meetings') . '/css/os2web_meetings.css', array('group' => CSS_THEME, 'every_page' => FALSE));
+  drupal_add_js(drupal_get_path('module', 'os2web_meetings') . '/js/os2web_meetings.js');
+  drupal_add_library('system', 'ui.datepicker');
+}
+
+/**
+ * Implements hook_FORM_alter().
+ */
+function os2web_meetings_form_views_exposed_form_alter(&$form, &$form_state) {
+  if ($form['#id'] === 'views-exposed-form-os2web-meetings-view-search-page') {
+    // Set up a validate function to forward user.
+    $form['#validate'] = array('os2web_meetings_views_exposed_form_os2web_meetings_view_search_page_validate');
+
+    $form['from_date']['value']['#date_format'] = 'd-m-Y';
+    $form['to_date']['value']['#date_format'] = 'd-m-Y';
+
+    // Add a little js to make the calendar icons clickable.
+    $cal_icon = url(drupal_get_path('theme', variable_get('theme_default', NULL)) . "/images/cal.png");
+    $datepicker = '
+      
+      
+      (function ($) {
+        Drupal.behaviors.os2web_meetings = {
+          attach: function(context, settings) {
+                      $("#edit-from-date-value-date").datepicker({
+                                    showOn: "both",
+                                    //buttonImage: "' . $cal_icon . '",
+                                    buttonImageOnly: true,
+                                    dateFormat: "dd-mm-yy"
+                      });
+                      $("#edit-to-date-value-date").datepicker({
+                                    showOn: "both",
+                                    //buttonImage: "' . $cal_icon . '",
+                                    buttonImageOnly: true,
+                                    dateFormat: "dd-mm-yy"
+                      });
+            }
+          }
+        }(jQuery));';
+
+    drupal_add_js($datepicker, array(
+      'type' => 'inline',
+      'scope' => 'footer',
+      'weight' => 5)
+    );
+  }
+}
+
+/**
+ * Custom validate callback funtion.
+ */
+function os2web_meetings_views_exposed_form_os2web_meetings_view_search_page_validate(&$form, &$form_state) {
+  $searchtext = rawurlencode($form_state['values']['search_params']);
+  if (is_numeric($form_state['values']['os2web_meetings_tax_committee']) || $form_state['values']['os2web_meetings_tax_committee'] === 'All') {
+
+  }
+  else {
+    $options = array(
+      'external' => TRUE,
+      'absolute' => TRUE,
+    );
+    drupal_goto($form_state['values']['os2web_meetings_tax_committee'] . $searchtext, $options);
+  }
+  views_exposed_form_validate($form, $form_state);
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function os2web_meetings_block_info() {
+  $blocks['meeting-search-block'] = array(
+    'info' => 'Dagsordens søgning',
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function os2web_meetings_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'meeting-search-block':
+      $block['subject'] = t('Search Agendas');
+      $block['content'] = _os2web_meetings_get_exposed_filter();
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Code that extracts the exposed filter for use in block.
+ *
+ * Adopted from: http://www.butlerraines.com/node/4
+ */
+function _os2web_meetings_get_exposed_filter() {
+  // Create a view object first, e. g. $view = views_get_view('myViewName');
+  // Then set the demanded display_id, e. g. $display_id = 'page_1';
+  $view = views_get_view('os2web_meetings_view_search');
+  $display_id = 'page';
+  $view->set_display($display_id);
+
+  // Initialize display handlers.
+  $view->init_handlers();
+  $form_state = array(
+    'view' => $view,
+    'display' => $view->display_handler->display,
+    // Exposed form plugins are used in Views 3.
+    'exposed_form_plugin' => $view->display_handler->get_plugin('exposed_form'),
+    'method' => 'get',
+    'rerender' => TRUE,
+    'no_redirect' => TRUE,
+  );
+  // Create the filter form.
+  $form = drupal_build_form('views_exposed_form', $form_state);
+  // You now have a form array which can be themed or further altered.
+  $rendered_form = drupal_render($form);
+  return $rendered_form;
+}
+
+/**
+ * Helper function for the os2web_meetings_view_search view.
+ *
+ * @param stdObject $entity
+ *   The entity
+ *
+ * @access protected
+ */
+function _os2web_meetings_generate_search_data($entity) {
+  $title = $entity->title;
+  $entity_type = 'node';
+
+  /* $abbr = '';
+    if (is_array(field_get_items($entity_type, $entity, 'field_os2web_meetings_abbr')))
+      $abbr = ' '.array_pop(array_pop(field_get_items($entity_type, $entity, 'field_os2web_meetings_abbr'))); */
+
+  $location = field_get_items($entity_type, $entity, 'field_os2web_meetings_location');
+  if (is_array($location)) {
+    $location_term = taxonomy_term_load(array_pop(array_pop($location)));
+    $location = ' ' . $location_term->name;
+  }
+
+  $committee = field_get_items($entity_type, $entity, 'field_os2web_meetings_committee');
+  if (is_array($committee)) {
+    $committee_term = taxonomy_term_load(array_pop(array_pop($committee)));
+    $committee = ' ' . $committee_term->name;
+  }
+
+  $bps = '';
+  $bpoints = field_get_items($entity_type, $entity, 'field_os2web_meetings_bullets');
+  if (is_array($bpoints)) {
+    foreach ($bpoints as $bpoint) {
+      $node = node_load($bpoint['target_id']);
+      $text = strip_tags(check_markup($node->title, 'plain_text'));
+      $bps .= ' ' . $text;
+
+      $bpas = field_get_items($entity_type, $node, 'field_os2web_meetings_attach');
+      if (is_array($bpas)) {
+        foreach ($bpas as $bpa) {
+          $node2 = node_load($bpa['target_id']);
+          $body = field_get_items($entity_type, $node2, 'field_os2web_meetings_bpa_body');
+          $text = html_entity_decode(strip_tags(check_markup(array_pop(array_pop($body)), 'filtered_html')), 0, 'UTF-8');
+          $text = trim(preg_replace('/[\",;:.\'\(\)]/', ' ', $text));
+          $text = trim(preg_replace('/\s\s+/', ' ', $text));
+          $bps .= ' ' . $text;
+        }
+      }
+
+    }
+  }
+
+  // Extract keywords so only relevant words are stored.
+  $t = mb_split('\s+', $bps);
+  $t = array_keys(array_flip($t));
+  $t = array_filter($t, '_os2web_meetings_strip_words');
+  $bps = implode(' ', $t);
+
+  $result = $title . $location . $committee . ' ' . $bps;
+  return $result;
+}
+
+/**
+ * Helper function which removes common and small (<2 chars) words.
+ */
+function _os2web_meetings_strip_words($text) {
+  $text = preg_replace('/^[^\w|\d|æ|ø|å]+/', '', $text);
+  $text = preg_replace('/[^\w|\d|æ|ø|å]+$/', '', $text);
+  if (strlen($text) > 3) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Implements hook_os2web_help().
+ */
+function os2web_meetings_os2web_help($sections) {
+
+  // Content types.
+  $sections['contenttype'] = t('<p><b>Meetings:</b> Dependent on the system, meetings are often imported by a metting importer, which can communicate with your ESDH.<br />A meeting contains bullets which can contain attachments. These are all imported, and should not be altered directly on site.<br />See the <a href="@url" target="_blank">overview</a> over meetings.</p>', array('@url' => url('dagsorden-og-referat')));
+  return $sections;
+}

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the OS2Web Base Panels feature.
+ */
+
+include_once('os2web_base_panels.features.inc');

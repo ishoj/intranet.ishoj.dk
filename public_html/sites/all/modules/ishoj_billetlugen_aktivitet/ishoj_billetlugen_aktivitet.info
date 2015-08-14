@@ -1,0 +1,4 @@
+name = Ishoj Billetlugen Aktivitet
+description = Dette modul tilføjer ekstra data til felterne, når aktivitetsnoden (fra Billetlugens xml-feed) bliver oprettet.
+core = 7.x
+package = Ishøj Kommune

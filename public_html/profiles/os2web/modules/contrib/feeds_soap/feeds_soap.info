@@ -1,0 +1,10 @@
+name = Feeds SOAP
+description = SOAP fetcher for Feeds
+package = Feeds
+php = 5.2
+core = 7.x
+
+dependencies[] = ctools
+dependencies[] = feeds
+
+files[] = classes/WsSoapClient.inc

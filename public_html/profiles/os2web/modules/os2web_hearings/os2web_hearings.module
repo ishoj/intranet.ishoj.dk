@@ -1,0 +1,21 @@
+<?php
+/**
+ * @file
+ * Code for the OS2web Planer i Høring feature.
+ */
+
+include_once 'os2web_hearings.features.inc';
+
+/**
+ * Implements hook_os2web_help().
+ */
+function os2web_hearings_os2web_help($sections) {
+
+  // Content types.
+  $sections['contenttype'] = t('<p><b>Hearings (<i>Høring</i>):</b> Create a <a href="@url" target="_blank">Hearing</a> to show about your hearing times and dates.<br />Hearings are shown from the <a href="@planer-i-h-ring" target="_blank">here</a>.</p>', array('@url' => url('admin/help/os2web_borger_dk'), '@planer-i-h-ring' => '/planer-i-h-ring'));
+
+  // Importers.
+  $sections['import'] = t('<p><b>Hearings:</b> Initialize the importer for hearings at <a href="@url">the import page.</a></p>', array('@url' => 'import/os2web_hearings_feeds_import'));
+
+  return $sections;
+}

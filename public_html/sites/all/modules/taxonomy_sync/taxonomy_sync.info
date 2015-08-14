@@ -1,0 +1,13 @@
+name = Taxonomy Sync
+description = Synchronize taxonomy terms between sites in a one-to-many arrangement.
+core = 7.x
+dependencies[] = taxonomy
+dependencies[] = uuid
+dependencies[] = taxonomy_creation_date
+
+; Information added by Drupal.org packaging script on 2015-02-04
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "taxonomy_sync"
+datestamp = "1423088602"
+

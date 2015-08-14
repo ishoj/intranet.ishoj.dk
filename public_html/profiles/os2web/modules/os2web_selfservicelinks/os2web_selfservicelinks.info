@@ -1,0 +1,14 @@
+name = OS2Web Selfservicelinks
+core = 7.x
+package = OS2Web - External data sources
+php = 5.2.4
+version = 7.x-1.0-beta1
+project = os2web_selfservicelinks
+dependencies[] = ctools
+dependencies[] = feeds
+dependencies[] = features
+dependencies[] = feeds_soap
+features[ctools][] = feeds:feeds_importer_default:1
+features[features_api][] = api:1
+features[feeds_importer][] = os2web_selfservicelinks_import
+timestamp = 1353326099

@@ -1,0 +1,6 @@
+; $Id$
+name = "Cookie Control for Google Analytics"
+description = "Disabled Google Analytics form tracking until visitor consents"
+dependencies[] = "cookiecontrol"
+dependencies[] = "googleanalytics"
+core = 7.x
