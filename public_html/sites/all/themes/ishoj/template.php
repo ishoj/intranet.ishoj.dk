@@ -185,7 +185,7 @@ function ishoj_preprocess_views_view(&$vars) {
 function ishoj_form_alter(&$form, &$form_state, $form_id) {
   if ($form['#id'] == 'user-login') {
     $form['name']['#description'] = t(''); // Clear the description of name
-    $form['pass']['#description'] = t(''); // Clear the description of pass  
+    $form['pass']['#description'] = t(''); // Clear the description of pass
   }
   if($form['#id'] == "views-exposed-form-aktiviteter-aktivitet-kommende-aktiviteter"){
     $form['field_aktivitetstype_tid']['#options']['All'] = 'Vis alle';// overrides <All> on the dropdown

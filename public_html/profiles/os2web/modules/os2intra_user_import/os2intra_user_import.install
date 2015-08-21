@@ -1,0 +1,33 @@
+<?php
+/**
+ * Implements hook_schema()
+ */
+function os2intra_user_import_schema() {
+  // Log
+  $schema['os2intra_user_import_log'] = array(
+    'description' => t('Stores log for OS2intra user import'),
+    'fields' => array(
+      'uuid' => array(
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => t('Stores users unique id'),
+      ),
+      'message' => array(
+        'type' => 'varchar',
+        'length' =>255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'created' => array(
+        'description' => t('UNIX timestamp for log message'),
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0
+      ),
+    ),
+  );
+
+  return $schema;
+}

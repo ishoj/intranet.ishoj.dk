@@ -26,6 +26,7 @@
     print drupal_render($form['pass']);
     print drupal_render($form['form_build_id']);
     print drupal_render($form['form_id']);
+    print(l(t('Er det første gang du logger på? Klik her'), 'useractivation'));
     print drupal_render($form['actions']);
 
 ?>
