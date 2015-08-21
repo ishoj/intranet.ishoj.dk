@@ -1,0 +1,292 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  os2intra_user_import.features.field_instance.inc: n/a
+#  os2intra_user_import.views_default.inc: n/a
+#  os2intra_user_import.module: n/a
+#  os2intra_user_import.info: n/a
+#  os2intra_user_import.install: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2013-11-06 08:38+0100\n"
+"PO-Revision-Date: 2013-11-06 12:51+0100\n"
+"Last-Translator: Thomas Thune Hansen <tth@bellcom.dk>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: os2intra_user_import.features.field_instance.inc:205
+msgid "Afdeling"
+msgstr ""
+
+#: os2intra_user_import.features.field_instance.inc:206
+msgid "os2intra_employee_id"
+msgstr ""
+
+#: os2intra_user_import.features.field_instance.inc:207
+msgid "os2intra_termination_date"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:304
+msgid "Master"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:305
+msgid "OS2Intra user import"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:306
+msgid "mere"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:307
+msgid "Udfør"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:308
+msgid "Gendan"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:309
+msgid "Sortér efter"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:310
+msgid "Stigende"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:311
+msgid "Faldende"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:312
+msgid "Antal elementer"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:313
+msgid "- Alle -"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:314
+msgid "Forskydning"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:315
+msgid "« første"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:316
+msgid "‹ forrige"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:317
+msgid "næste ›"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:318
+msgid "sidste »"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:319
+msgid "Bruger"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:320
+msgid "Medarbejder nr."
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:321
+msgid "Fornavn"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:322
+msgid "Efternavn"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:323
+msgid "E-mail"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:324
+msgid "Fratrædelsesdato"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:325
+msgid "Aktiv"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:326
+msgid "Navn"
+msgstr ""
+
+#: os2intra_user_import.views_default.inc:327
+msgid "Over overview"
+msgstr ""
+
+#: os2intra_user_import.module:64
+msgid "Employee Id"
+msgstr "Medarbejder nr."
+
+#: os2intra_user_import.module:69
+msgid "E-mail adress"
+msgstr "E-mail adresse"
+
+#: os2intra_user_import.module:74
+msgid "Submit"
+msgstr "Indsend"
+
+#: os2intra_user_import.module:93
+msgid "Invalid employee id"
+msgstr "Medarbejder id'et er ikke gyldigt"
+
+#: os2intra_user_import.module:101
+msgid "Invalid email address"
+msgstr "E-mailadressen er ikke gyldig"
+
+#: os2intra_user_import.module:121
+msgid "A mail has been sent to: "
+msgstr "Der er blevet sendt en mail til: "
+
+#: os2intra_user_import.module:138
+msgid "Administer OS2Intra User import"
+msgstr "Administrer OS2Intra bruger import"
+
+#: os2intra_user_import.module:139
+msgid "Perform administration tasks for user import."
+msgstr ""
+
+#: os2intra_user_import.module:148
+msgid "None"
+msgstr ""
+
+#: os2intra_user_import.module:152
+msgid "This module does not provide a cron hook. This has to be set up manually, by adding the import script to the crontab"
+msgstr "Dette module tilbyder ikke en cron hook. Denne skal sættes op manuelt ved at tilføje import scriptet til crontab'en"
+
+#: os2intra_user_import.module:156
+msgid "Enable user import"
+msgstr "Aktiver bruger import"
+
+#: os2intra_user_import.module:162
+msgid "Directory containing CSV with users"
+msgstr "Mappe der indeholder CSV fil med brugere"
+
+#: os2intra_user_import.module:164
+msgid "ex. private://user_import"
+msgstr ""
+
+#: os2intra_user_import.module:170
+msgid "Mapping"
+msgstr ""
+
+#: os2intra_user_import.module:176
+msgid "Select columns in the CSV file corresponding to the data"
+msgstr "Vælg kolonner der tilsvarer dataen"
+
+#: os2intra_user_import.module:181
+msgid "Firstname"
+msgstr "Fornavn"
+
+#: os2intra_user_import.module:188
+msgid "Lastname"
+msgstr "Efternavn"
+
+#: os2intra_user_import.module:195
+msgid "Department"
+msgstr "Afdeling"
+
+#: os2intra_user_import.module:202
+msgid "Employee id"
+msgstr "Medarbejder nr."
+
+#: os2intra_user_import.module:209
+msgid "Job description"
+msgstr "Stillingsbeskrivelse"
+
+#: os2intra_user_import.module:216
+msgid "Termination date"
+msgstr "Fratrædelsesdato"
+
+#: os2intra_user_import.module:233
+msgid "Invalid selection"
+msgstr "Ugyldigt valg"
+
+#: os2intra_user_import.module:237
+msgid "Cannot use column twice"
+msgstr "Kolonnen kan ikke bruges 2 gange"
+
+#: os2intra_user_import.module:252
+msgid "Activate user"
+msgstr "Aktiver bruger"
+
+#: os2intra_user_import.module:275
+msgid "Message"
+msgstr ""
+
+#: os2intra_user_import.module:275
+msgid "Date"
+msgstr ""
+
+#: os2intra_user_import.module:21
+#: os2intra_user_import.info:0
+msgid "OS2Intra User import"
+msgstr ""
+
+#: os2intra_user_import.module:22
+msgid "Administer user import"
+msgstr ""
+
+#: os2intra_user_import.module:31
+msgid "Settings"
+msgstr ""
+
+#: os2intra_user_import.module:32
+msgid "Administer user import settings"
+msgstr "Administrer bruger import indstillinger"
+
+#: os2intra_user_import.module:39
+msgid "Log"
+msgstr ""
+
+#: os2intra_user_import.module:40
+msgid "View user import log"
+msgstr "Se import log"
+
+#: os2intra_user_import.module:46
+msgid "Overview"
+msgstr "Overblik"
+
+#: os2intra_user_import.module:47
+msgid "See overview of imported users"
+msgstr "Få et overblik over importerede brugere"
+
+#: os2intra_user_import.module:53
+msgid "User activation"
+msgstr "Bruger aktivering"
+
+#: os2intra_user_import.install:8
+msgid "Stores log for OS2intra user import"
+msgstr ""
+
+#: os2intra_user_import.install:15
+msgid "Stores users unique id"
+msgstr ""
+
+#: os2intra_user_import.install:24
+msgid "UNIX timestamp for log message"
+msgstr ""
+
+#: os2intra_user_import.info:0
+msgid "Import users to the system"
+msgstr ""
+
+#: os2intra_user_import.info:0
+msgid "OS2Intra"
+msgstr ""
+

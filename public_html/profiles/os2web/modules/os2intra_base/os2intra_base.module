@@ -1,0 +1,127 @@
+<?php
+/**
+ * @file
+ * Code for the OS2intra base feature.
+ */
+
+include_once 'os2intra_base.features.inc';
+
+/**
+ * Implements hook_init();
+ */
+function os2intra_base_init(){
+  global $user;
+  $allowed_uris = array(
+    '/cron.php*',
+    '/xmlrpc.php',
+    '/sites/default/files/styles*',
+    '/user/login*',
+    '/user/reset*',
+    '/user/password*',
+    '/useractivation',
+  );
+  if ($user->uid == 0 && !drupal_match_path(request_uri(), implode("\n", $allowed_uris)) && !drupal_is_cli()) {
+    drupal_goto('user/login', array('query' => array('destination' => current_path())));
+  }
+
+  // We want to send the user to the node, referenced to the term.
+  if (arg(1) == 'term' && is_numeric(arg(2)) && !arg(3)) {
+    $term = taxonomy_term_load(arg(2));
+
+    // So we check if the term is from the right vocabulary.
+    if($term->vocabulary_machine_name == 'os2intra_organizaiton_tax'){
+      // And we then get the node referenced to the term.
+      $query = new EntityFieldQuery();
+      $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'group')
+        ->propertyCondition('status', 1)
+        ->fieldCondition('field_os2intra_organization', 'tid', arg(2), '=');
+      $result = $query->execute();
+
+      if(!empty($result)){
+        // Off you go.
+        drupal_goto('node/' . key(array_shift($result)) );
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function os2intra_base_views_pre_render(&$view) {
+  if($view->name == "os2intra_group_term_activity" && !empty($view->result)) {
+    // Only show results which the user is allowed to.
+    $group_memberships = og_get_groups_by_user();
+    if(!empty($group_memberships['node'])) {
+      foreach($view->result as $i => $row) {
+        if (!in_array((int) $row->node_og_membership_nid, $group_memberships['node'])) {
+          unset($view->result[$i]);
+        }
+      }
+    }
+  }
+
+  // Remove all groups which are of an organization type.  
+  if($view->name == "commons_groups_directory") {
+    foreach($view->result as $i => $row) {
+      $tid = field_get_items('node', node_load($row->nid), 'field_os2intra_grouptype');
+      if (!empty($tid)) {
+        $tid = array_pop($tid);
+        $type = taxonomy_term_load($tid['tid']);
+        if ($type->name === 'Organisatorisk') {
+          unset($view->result[$i]);
+        }
+      }
+    }
+  }
+}
+/**
+ * Implements hook_block_info().
+ */
+function os2intra_base_block_info() {
+  $blocks = array();
+  $blocks['os2intra_homebox_front'] = array(
+    'info' => t('Homebox frontpage block'),
+  );
+  $blocks['os2intra_homebox_group'] = array(
+    'info' => t('Homebox group block'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function os2intra_base_block_view($delta='') {
+  $block = array();
+  switch($delta) {
+    case 'os2intra_homebox_front' :
+    case 'os2intra_homebox_group' :
+      $block['content'] = homebox_build(homebox_get_page($delta));
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_wysiwyg_editor_settings_alter().
+ */
+function os2intra_base_wysiwyg_editor_settings_alter(&$settings, $context) {
+  if ($context['profile']->editor == 'ckeditor') {
+    // Using ckeditor, set custom config file.
+    $settings['customConfig'] = base_path() . drupal_get_path('module', 'os2intra_base') . '/js/os2intra_base_ckeditor_config.js';
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function os2intra_base_form_alter(&$form, &$form_state, $form_id) {
+  if($form_id === 'homebox_block_edit_homebox_custom_form') {
+    // Remove title field on custom forms. Homebox ruined.
+    if (isset($form['title_custom'])) {
+      unset($form['title_custom']);
+    }
+  }
+}

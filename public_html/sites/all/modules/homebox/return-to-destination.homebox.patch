@@ -1,0 +1,12 @@
+diff --git a/homebox.module b/homebox.module
+index a043802..aeec4c4 100644
+--- a/homebox.module
++++ b/homebox.module
+@@ -458,6 +458,7 @@ function homebox_build($page) {
+  */
+ function homebox_add_link($text, $page, $module, $delta, $options = array()) {
+   $options['query']['token'] = homebox_get_token($page);
++  $options['query']['destination'] = request_path();
+   return l($text, 'homebox/js/' . $page->name . '/add/' . $module . '/' . $delta, $options);
+ }
+ 
