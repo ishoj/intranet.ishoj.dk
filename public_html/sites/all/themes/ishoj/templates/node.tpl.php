@@ -81,7 +81,7 @@
  */
 
 dsm($node);
-
+global $user;
 ?>
 
 
@@ -89,6 +89,80 @@ dsm($node);
 function sortByTitle($a, $b){
   return strcmp($a->title, $b->title);
 }
+
+
+function findusersbytags($contentwithtags) {
+// FIND USERS IN CONTENT AND LOOP  - START            
+$text = render($contentwithtags);
+$re = "/\\W+@([\\pL\\d]+)/u"; 
+preg_match_all($re, $text, $matches);
+foreach ($matches[1] as $foundusers) {
+// GET USER START  - FROM USERNAME NOT UID
+$a_user = user_load_by_name($foundusers);
+if($a_user){
+$outputuser = "";
+$outputuser .= "<div class=\"forfatter\">";
+$outputuser .= "<ul class=\"search-employees show\">";
+$outputuser .= "<li>";
+// KALDENNAVN - FOR- OG EFTERNAVN
+if ($a_user->field_kaldenavn['und'][0]['safe_value'] != '') {
+$name = $a_user->field_kaldenavn['und'][0]['safe_value'];   
+} 
+else {
+$name = $a_user->field_fornavn['und'][0]['safe_value'] . ' ' . $a_user->field_efternavn['und'][0]['safe_value'];  
+}    
+    
+if($a_user->field_fornavn and $a_user->field_efternavn) {
+$outputuser .= "<a href=\"/users/" . $a_user->name . "\" titel=\"\"><span class=\"navn\">" . $name . "</span></a>";
+}
+$outputuser .= "<div class=\"foto\">";
+$outputuser .= "<a class=\"foto\" href=\"/users/" . $a_user->name . "\" titel=\"" . $name . "\">";
+// FOTO
+if($a_user->picture) {
+$outputuser .= "<img alt=\"" . $name . "\" src=\"" . image_style_url('profilfoto_lille', $a_user->picture->uri) . "\" />";
+}
+else {
+$outputuser .= "<img alt=\"" . $name . "\" src=\"/sites/all/themes/ishoj/dist/img/sprites-no/nopic.png\" />";
+}
+
+// LEDIG/OPTAGET
+//$output .= "<span class=\"optaget\"></span>";
+$outputuser .= "</a>";
+$outputuser .= "</div>";
+$outputuser .= "<div class=\"details\">";
+// STILLING
+// field_titel_stilling['und'][0]['tid']
+if($a_user->field_titel_stilling) {
+$outputuser .= "<a href=\"" . url('taxonomy/term/' . $a_user->field_titel_stilling['und'][0]['tid']) . "\" titel=\"" . taxonomy_term_load($a_user->field_titel_stilling['und'][0]['tid'])->name . "\"><span class=\"titel\">" . taxonomy_term_load($a_user->field_titel_stilling['und'][0]['tid'])->name . "</span></a><br />";
+}
+// AFDELING
+if($a_user->field_afdeling) {
+ $outputuser .= "<a href=\"" . url('taxonomy/term/' . $a_user->field_afdeling['und'][0]['tid']) . "\" titel=\"" . taxonomy_term_load($a_user->field_afdeling['und'][0]['tid'])->name . "\"><span class=\"afdeling\">" . taxonomy_term_load($a_user->field_afdeling['und'][0]['tid'])->name . "</span></a><br />";
+}
+// TELEFON
+if($a_user->field_direkte_telefon) {
+$outputuser .= "<span class=\"telefon\">" . $a_user->field_direkte_telefon['und'][0]['safe_value'] . "</span><br />";
+}
+// E-MAIL
+if($a_user->mail) {
+ $outputuser .= "<a href=\"mailto:" . $a_user->mail . "\" titel=\"Send en mail til " . $name . "\"><span class=\"email\">" . $a_user->mail . "</span></a>";
+}
+$outputuser .= "</div>";
+$outputuser .= "</li>";
+$outputuser .= "</ul>";
+$outputuser  .="</div>";
+    
+// GET USER END
+$text = str_replace("@" . $foundusers,$outputuser,$text);
+}
+}
+
+// FIND USERS IN CONTENT AND LOOP  - END
+    
+    
+return $text;    
+}
+
 $output = "";
 ?>
 
@@ -164,7 +238,7 @@ $bterm = taxonomy_term_load($buftid);
                     
                     if($node->field_os2web_base_field_image) {
                       hide($content['field_image_flexslider']);
-                        dsm($content['field_os2web_base_field_image']);
+                        
                       $output = $output . render($content['field_os2web_base_field_image']);
                       if($node->field_billedtekst) {
                         $output = $output . "<p class=\"foto-tekst\">" . $node->field_billedtekst['und'][0]['value'] . "</p>";
@@ -230,10 +304,10 @@ $bterm = taxonomy_term_load($buftid);
                 $output = $output . "<!-- TEKSTINDHOLD START -->";
                 hide($content['comments']);
                 hide($content['links']);
-                $output = $output . render($content);
-                $output = $output . "<!-- TEKSTINDHOLD SLUT -->";
-                
-                
+
+$output = $output . findusersbytags($content);
+             $output = $output . "<!-- TEKSTINDHOLD SLUT -->";
+                              
                 // MIKROARTIKLER
                 $output = $output . "<!-- MIKROARTIKLER START -->";
                 if($node->field_mikroartikler_titel1 or 
@@ -349,7 +423,10 @@ $bterm = taxonomy_term_load($buftid);
                   }
 
                   $mikroartikel = $mikroartikel . "</div>";
-                  $output = $output . $mikroartikel;	
+                    
+                    $output = $output . findusersbytags($mikroartikel);
+                    
+                 // $output = $output . $mikroartikel;	
                 }
                 $output = $output . "<!-- MIKROARTIKLER SLUT -->";
 
@@ -382,8 +459,6 @@ $bterm = taxonomy_term_load($buftid);
                 // ------------------------------------------------- //
                 //  S P E C I F I K K E   I N D H O L D S T Y P E R  //
                 // ------------------------------------------------- //
-
-
 
 
 
@@ -425,25 +500,7 @@ $bterm = taxonomy_term_load($buftid);
                 $output = $output . "<!-- LÆS OGSÅ SLUT -->";
 
 
-                // HVAD SIGER LOVEN?
-                $output = $output . "<!-- HVAD SIGER LOVEN? START -->";
-                if($node->field_url_2) {
-                  if(($node->field_url) or ($node->field_diverse_boks)) {
-                    $output = $output . "<hr>";
-                  }
-                  $output = $output . "<h2>Hvad siger loven?</h2>";
-                  $output = $output . "<ul>";
-                  foreach ($node->field_url_2['und'] as $value) {
-                    $output = $output . "<li>";
-                      $output = $output . "<a href=\"" . $value['url'] . "\" title=\"" . $value['title'] . "\">";
-                        $output = $output . $value['title'];
-                      $output = $output . "</a>";
-                    $output = $output . "</li>";
-                  }
-                  $output = $output . "</ul>";
-                }
-                $output = $output . "<!-- HVAD SIGER LOVEN? SLUT -->";
-                
+               
                 
 
 
@@ -480,7 +537,7 @@ $bterm = taxonomy_term_load($buftid);
                 $output = $output . "<div class=\"grid-third\">";
 
                   // FORFATTER INFORMATION
-                  $output .= "<div class=\"forfatter\"><p><em>Skrevet af:</em></p>" . views_embed_view('forfatter','default', $node->nid) . "</div>"; 
+                  $output .= "<div class=\"forfatter-container\"><div class=\"forfatter\"><p><em>Skrevet af:</em></p>" . views_embed_view('forfatter','default', $node->nid) . "</div></div>"; 
                 
                 // HVIS DER ER VALGT EN INDHOLDSTYPE VED "OPRET INDHOLD"
                 if($node->field_indholdstype) {
@@ -498,20 +555,43 @@ $bterm = taxonomy_term_load($buftid);
                     $output = $output . "<!-- DIVERSE BOKS SLUT -->";
                   }
 
-
-                    
-                    // MENU TIL UNDERSIDER START
-                    $output = $output . "<nav class=\"menu-underside\">";
-                 
- // http://stackoverflow.com/questions/4731420/how-to-insert-a-block-into-a-node-or-template-in-drupal-7
-//                    $block = module_invoke('module_name', 'block_view', 'block_delta');
-               //     $block = module_invoke('menu_block', 'block_view', '4');
-                //    $output.= render($block['content']);
+                // VÆRKTØJER START
+                $output = $output . "<!-- VÆRKTØJER START -->";
+                if($node->field_url_2) {
+                     $output = $output . "<nav class=\"menu-underside\">";
                     $output = $output . "<ul class=\"menu\">";
                       $output = $output . "<li class=\"first expanded active-trail\">";
-                        $output = $output . "<a href=\"#\">" . $node->title . "</a>";
-                        $output = $output . "<ul class=\"menu\">";
-                        $a = taxonomy_select_nodes($node->field_os2web_base_field_kle_ref['und'], $pager = FALSE); 
+                        $output = $output . "<a href=\"#\">VÆRKTØJER</a></li>";
+                    
+                 
+                  foreach ($node->field_url_2['und'] as $value) {
+                    $output = $output . "<li><a href=\"" . $value['url']  . "\" title=\"" . $value['title'] . "\">" . $value['title'] . "</a></li>"; 
+                    
+                    
+                  }
+                   $output = $output . "</ul>";
+                    $output = $output . "</nav>";
+                }
+                $output = $output . "<!-- VÆRKTØJER SLUT -->";
+                
+                  
+
+
+                
+                  
+                  
+ 
+                // ANDEN KLE MENU START
+                $output = $output . "<!-- ANDEN KLE START -->";
+                if($node->field_anden_kle_menu) {
+                     $output = $output . "<nav class=\"menu-underside\">";
+                    $output = $output . "<ul class=\"menu\">";
+                      $output = $output . "<li class=\"first expanded active-trail\">";
+                    $termandelkle = taxonomy_term_load($node->field_anden_kle_menu['und'][0]['tid']);
+               
+                    $output = $output . "<a href=\"#\">" . $termandelkle->description . "</a></li>";
+                  
+                   $a = taxonomy_select_nodes($node->field_anden_kle_menu['und'], $pager = FALSE); 
                         $nodes = array();
                         foreach($a as $nid) {
                           $checkifitis = 0;
@@ -520,6 +600,40 @@ $bterm = taxonomy_term_load($buftid);
                               $checkifitis = 1;
                             }
                           }
+                          if ($checkifitis == 0) {
+                            $nodes[] = node_load($nid);
+                          }
+                        }
+                        usort($nodes, 'sortByTitle');
+                        foreach($nodes as $nid1) {
+                          if ($node->nid != $nid1->nid) {
+                            $output = $output . "<li><a href=\"" . url('node/' . $nid1->nid) . "\" title=\"" . $nid1->title . "\">" . $nid1->title . "</a></li>"; 
+                          }
+                        }
+                    
+                    
+                    
+                   $output = $output . "</ul>";
+                    $output = $output . "</nav>";
+                }
+                $output = $output . "<!-- ANDEN KLE SLUT -->";                    
+                    $a1 = array();
+                    // MENU TIL UNDERSIDER START
+                    $output = $output . "<nav class=\"menu-underside\">";
+                   $output = $output . "<ul class=\"menu\">";
+                      $output = $output . "<li class=\"first expanded active-trail\">";
+                        $output = $output . "<a href=\"#\">" . $node->title . "</a>";
+                        $output = $output . "<ul class=\"menu\">";
+                        $a1 = taxonomy_select_nodes($node->field_os2web_base_field_kle_ref['und'], $pager = FALSE); 
+                        $nodes = array();
+                        foreach($a1 as $nid) {
+                          $checkifitis = 0;
+                          foreach($nodes as $n) {
+                            if ($n->nid == $nid) {
+                              $checkifitis = 1;
+                            }
+                          }
+                        
                           if ($checkifitis == 0) {
                             $nodes[] = node_load($nid);
                           }
@@ -545,6 +659,12 @@ $bterm = taxonomy_term_load($buftid);
                             $checkifitis = 1;
                           }
                         }
+                         // TJEK AGAIN
+                          foreach($a1 as $n1) {
+                          if ($n1 == $nid2) {
+                              $checkifitis = 1;
+                            }
+                          }    
                         if ($checkifitis == 0) {
                           $nodes[] = node_load($nid2);
                         }
@@ -552,7 +672,7 @@ $bterm = taxonomy_term_load($buftid);
                       usort($nodes, 'sortByTitle');
                       foreach($nodes as $nid1) {
                         if ($node->nid != $nid1->nid) {
-                          $output = $output . "<li class=\"collapsed\"><a href=\"" . url('node/' . $nid1->nid) . "\" title=\"" . $nid1->title . "\">" . $nid1->title . "</a><li>";
+                         $output = $output . "<li class=\"collapsed\"><a href=\"" . url('node/' . $nid1->nid) . "\" title=\"" . $nid1->title . "\">" . $nid1->title . "</a><li>";
                         }
                       }
                       $output = $output . "</ul>";                  
@@ -563,6 +683,25 @@ $bterm = taxonomy_term_load($buftid);
                     $output = $output . "</nav>";
                     // MENU TIL UNDERSIDER SLUT                  
                 }
+                
+                
+                  // HVIS NODEN ER EN NYHED MED EN REFERENCE TIL ET NYHEDSBREV
+                  $output .= "<!-- NYHEDER FRA SAMME NYHEDSBREV START -->";
+                  if($node->field_nyhedsbrev) {
+                    $output .= "<nav class=\"menu-underside\">";
+                      $output .= "<p class=\"menu-header\">". taxonomy_term_load($node->field_nyhedsbrev['und'][0]['tid'])->name . "</p>";
+                      $output .= "<ul class=\"menu\">";
+                        $output .= "<li class=\"first expanded active-trail\">";
+                          $output .= "<ul class=\"menu\">";
+                            $output .= views_embed_view('nyhedsliste','boks_nyheder_fra_samme_nyhedsbrev', $node->field_nyhedsbrev['und'][0]['tid']);
+                          $output .= "</ul>";
+                        $output .= "</li>";
+                      $output .= "</ul>";
+                    $output .= "</nav>";
+                  }
+                  $output .= "<!-- NYHEDER FRA SAMME NYHEDSBREV START -->";
+                
+                
 
                 $output = $output . "</div>";
               }

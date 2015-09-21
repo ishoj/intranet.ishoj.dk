@@ -35,4 +35,4 @@ regions[krisekommunikation]	= Krisekommunikation
 
 
 ; PLUGINS
-;plugins[panels][layouts] = 'panels/layouts'
+plugins[panels][layouts] = 'panels/layouts'

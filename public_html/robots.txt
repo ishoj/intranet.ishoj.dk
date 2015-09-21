@@ -18,4 +18,4 @@
 
 
 User-agent: *
-Disallow:
+Disallow: /

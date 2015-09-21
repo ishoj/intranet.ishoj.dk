@@ -163,6 +163,8 @@ function sortByTitle($a, $b){
   }
 
 
+
+
   // ----------------------------------- //
   //  S I D E N   A K T I V I T E T E R  //
   // ----------------------------------- //
@@ -197,7 +199,153 @@ function sortByTitle($a, $b){
      $output .= "<h1>Bingo!!!!</h1>";
   }
 
+// ORGAN //
+// ----- //
+//------//
 
+ 
+ if($term->vocabulary_machine_name == "os2web_taxonomies_tax_org") {
+ $output .= "<!-- ARTIKEL START -->";
+      $output .= "<section id=\"taxonomy-term-" . $term->tid . "\" class=\"" . $classes . " artikel\">";
+        $output .= "<div class=\"container\">";
+           
+         // Brødkrummesti
+          $output .= "<div class=\"row\">";
+            $output .= "<div class=\"grid-two-thirds\">";
+              $output .= "<p class=\"breadcrumbs\">" . theme('breadcrumb', array('breadcrumb'=>drupal_get_breadcrumb())) . " / " . $term_name . "</p>";
+            $output .= "</div>";
+          $output .= "</div>";
+           
+          $output .= "<div class=\"row second\">";
+            $output .= "<div class=\"grid-two-thirds\">";
+              $output .= "<h1>" . $term_name . "</h1>";
+            $output .= "</div>";
+            $output .= "<div class=\"grid-third sociale-medier social-desktop\"></div>";
+          $output .= "</div>";
+  
+          $output .= "<div class=\"row second\">";
+            $output .= "<div class=\"grid-two-thirds\">";
+
+              $output .= "<!-- ARTIKEL TOP START -->";
+              $output .= "<div class=\"artikel-top\">";
+              $output .= "</div>";
+              $output .= "<!-- ARTIKEL TOP SLUT -->";
+
+ // UNDEROVERSKRIFT
+                if($term->field_os2web_base_field_summary) {
+                  $output .= "<h2>" . $term->field_os2web_base_field_summary['und'][0]['value'] . "</h2>";
+                }
+                
+                // BODY 
+                if($term->description) {
+                  $output .= $term->description;
+                }
+                
+                
+                // REDIGÉR-KNAP
+               /* if($logged_in) {
+                  $output .= "<div style=\"position: relative; width: 100%; margin-bottom: 5.5em;\">";
+                  $output .= "<div class=\"edit-node\"><a href=\"/taxonomy/term/" . $term->tid . "/edit\" title=\"Ret indhold\"><span>Ret indhold</span></a></div>";
+                  $output .= "</div>";
+                }
+                */
+
+            
+
+// GET USERS FROM TERM REF - START
+  $query = new EntityFieldQuery;
+  $query->entityCondition('entity_type', 'user')->fieldCondition('field_afdeling', 'tid', $term->tid)->fieldOrderBy('field_kaldenavn', 'value', 'ASC');
+
+ $results = $query->execute();
+
+  if (isset($results['user'])) {
+$termusers = user_load_multiple(array_keys($results['user']));    
+  }
+foreach ($termusers as $a_user) {
+// GET USER START  - FROM USERNAME NOT UID
+if($a_user){
+$outputuser = "";
+$outputuser .= "<div class=\"forfatter\">";
+$outputuser .= "<ul class=\"search-employees show\">";
+$outputuser .= "<li>";
+// KALDENNAVN - FOR- OG EFTERNAVN
+if ($a_user->field_kaldenavn['und'][0]['safe_value'] != '') {
+$name = $a_user->field_kaldenavn['und'][0]['safe_value'];   
+} 
+else {
+$name = $a_user->field_fornavn['und'][0]['safe_value'] . ' ' . $a_user->field_efternavn['und'][0]['safe_value'];  
+}
+if($a_user->field_fornavn and $a_user->field_efternavn) {
+$outputuser .= "<a href=\"/users/" . $a_user->name . "\" titel=\"\"><span class=\"navn\">" . $name . "</span></a>";
+}
+$outputuser .= "<div class=\"foto\">";
+$outputuser .= "<a class=\"foto\" href=\"/users/" . $a_user->name . "\" titel=\"" . $name . "\">";
+// FOTO
+if($a_user->picture) {
+$outputuser .= "<img alt=\"" . $name . "\" src=\"" . image_style_url('profilfoto_lille', $a_user->picture->uri) . "\" />";
+}
+else {
+$outputuser .= "<img alt=\"" . $name . "\" src=\"/sites/all/themes/ishoj/dist/img/sprites-no/nopic.png\" />";
+}
+
+// LEDIG/OPTAGET
+//$output .= "<span class=\"optaget\"></span>";
+$outputuser .= "</a>";
+$outputuser .= "</div>";
+$outputuser .= "<div class=\"details\">";
+// STILLING
+// field_titel_stilling['und'][0]['tid']
+if($a_user->field_titel_stilling) {
+$outputuser .= "<a href=\"" . url('taxonomy/term/' . $a_user->field_titel_stilling['und'][0]['tid']) . "\" titel=\"" . taxonomy_term_load($a_user->field_titel_stilling['und'][0]['tid'])->name . "\"><span class=\"titel\">" . taxonomy_term_load($a_user->field_titel_stilling['und'][0]['tid'])->name . "</span></a><br />";
+}
+// AFDELING
+if($a_user->field_afdeling) {
+ $outputuser .= "<a href=\"" . url('taxonomy/term/' . $a_user->field_afdeling['und'][0]['tid']) . "\" titel=\"" . taxonomy_term_load($a_user->field_afdeling['und'][0]['tid'])->name . "\"><span class=\"afdeling\">" . taxonomy_term_load($a_user->field_afdeling['und'][0]['tid'])->name . "</span></a><br />";
+}
+// TELEFON
+if($a_user->field_direkte_telefon) {
+$outputuser .= "<span class=\"telefon\">" . $a_user->field_direkte_telefon['und'][0]['safe_value'] . "</span><br />";
+}
+// E-MAIL
+if($a_user->mail) {
+ $outputuser .= "<a href=\"mailto:" . $a_user->mail . "\" titel=\"Send en mail til " . $name . "\"><span class=\"email\">" . $a_user->mail . "</span></a>";
+}
+$outputuser .= "</div>";
+$outputuser .= "</li>";
+$outputuser .= "</ul>";
+$outputuser  .="</div>";
+    
+// GET USER END
+$output .= $outputuser;
+}
+}
+  $output .= render($content);
+// GET USERS FROM TERM REF - END
+   // SENEST OPDATERET
+              $output .= "<!-- SENEST OPDATERET START -->";
+//              $output .= "<p class=\"last-updated\">Senest opdateret " . format_date($node->changed, 'senest_redigeret') . "</p>";
+              $output .= "<!-- SENEST OPDATERET SLUT -->";
+
+            $output .= "</div>";
+    
+            $output .= "<div class=\"grid-third\">";
+    
+            
+                // MENU TIL UNDERSIDER START
+                //$output .= "<nav class=\"menu-underside\">";                    
+                //$block = module_invoke('menu_block', 'block_view', '4');
+                //$output .= render($block['content']);
+                //$output .= "</nav>";
+                // MENU TIL UNDERSIDER SLUT
+             
+            $output .= "</div>";              
+
+        $output .= "</div>";
+      $output .= "</div>";
+    $output .= "</section>";
+    $output .= "<!-- ARTIKEL SLUT -->";     
+     
+ }
 
   // --------------- //
   //  D E F A U L T  //
