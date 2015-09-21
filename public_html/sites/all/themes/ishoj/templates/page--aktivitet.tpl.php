@@ -71,8 +71,42 @@
  *
  * @ingroup themeable
  */
+global $user;
+$name = '';
+$showuser = user_load($user->uid);
+if ($showuser->field_kaldenavn['und'][0]['safe_value'] != '') {
+  $name = $showuser->field_kaldenavn['und'][0]['safe_value'];   
+} 
+else {
+  $name = $showuser->field_fornavn['und'][0]['safe_value'] . ' ' . $showuser->field_efternavn['und'][0]['safe_value'];  
+}
+
 ?>
-  
+    <!-- BRUGER BAR START -->
+    <section class="bruger-bar">
+      <div class="container">
+        <div class="row">
+          <div class="grid-full">
+<?php 
+            $brugerbar = "";
+            if($logged_in) {
+              $brugerbar .= "<a href=\"/user\" title=\"Din brugerprofil\">" . $name . "</a>";
+              $brugerbar .= " &nbsp;&nbsp;&nbsp; ";
+              $brugerbar .= "<a href=\"/user/logout\" title=\"Log ud\">Log ud</a>";
+            }
+            else {
+              $brugerbar .= "<a href=\"/user\" title=\"Log ind\">Log ind</a>";
+            }
+            print $brugerbar;
+
+?>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- BRUGER BAR SLUT -->
+      
   
     <!-- HEADER START -->
     <header data-role="header">
@@ -90,6 +124,11 @@
               <i class="header-kryds hide-me" title="Skjul menu"></i>
 <!--              <i class="icon icon-search btn-search"  title="Søg"></i>-->
               <i class="header-search" title="Søg"></i>
+              <?php 
+                if($logged_in) {
+                  print "<i class=\"header-plus\" title=\"Tilføj nyt indhold\"></i>";
+                }
+              ?>
               <!-- IKONER SLUT -->
               
               <!-- MENU START -->
@@ -130,6 +169,45 @@
         <?php print render($page['menu_mobile']); ?>
       </nav>
       <!-- MOBILMENU SLUT -->
+
+      <?php 
+      if($logged_in) {
+        print "<!-- TILFØJ INDHOLD START -->";    
+        print "<section class=\"tilfoej-indhold\">";
+          print "<div class=\"container\">";
+            print "<div class=\"row\">";
+              print "<div class=\"grid-full\">";
+                print "<h2>Opret nyt indhold</h2>";
+              print "</div>";
+              print "<ul>";
+  //<!--
+  //              <li>
+  //                <a href="/node/add/aktivitet" title="">
+  //                  <span class="cat-icon"></span>
+  //                  <span class="cat-text">Aktivitet</span>
+  //                </a>
+  //              </li>
+  //-->
+                print "<li>";
+                  print "<a href=\"/node/add/os2web-base-contentpage\" title=\"\">";
+                    print "<span class=\"cat-icon\"></span>";
+                    print "<span class=\"cat-text\">Indholdsside</span>";
+                  print "</a>";
+                print "</li>";
+                print "<li>";
+                  print "<a href=\"/node/add/nyheder\" title=\"\">";
+                    print "<span class=\"cat-icon\"></span>";
+                    print "<span class=\"cat-text\">Nyhed</span>";
+                  print "</a>";
+                print "</li>";
+              print "</ul>";
+            print "</div>";
+          print "</div>";
+        print "</section>";
+        print "<!-- TILFØJ INDHOLD SLUT -->";  
+      }
+      ?>
+                                               
                   
       <!-- SØGEBAR START -->
       <section class="soegebar">
@@ -173,23 +251,25 @@
       <!-- DRUPAL MESSAGES SLUT -->
       
       
-      <?php if($logged_in): ?>
+      <?php //if($logged_in): ?>
         <!-- REDAKTØRMENU START -->        
+<!--
         <section class="redaktormenu">
           <div class="container">
             <div class="row">
               <div class="grid-full">
                 <div class="editor">
                   <div class="editorInner">
-                    <?php print render($page['editor']); ?>
+                    <?php //print render($page['editor']); ?>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
+-->
         <!-- REDAKTØRMENU SLUT -->
-      <?php endif; ?>
+      <?php //endif; ?>
 
       
       <!-- CONTENT START -->

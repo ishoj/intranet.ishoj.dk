@@ -580,7 +580,6 @@ function _piwik_contains_forbidden_token($token_string) {
     ':current-user:original]',
     ':fid]',
     ':mail]',
-    ':name]',
     ':uid]',
     ':one-time-login-url]',
     ':owner]',

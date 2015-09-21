@@ -89,7 +89,22 @@ function ishoj_preprocess_page(&$variables) {
   } 
   
   switch ($urlPath) {
-    
+  
+    case 'infotv':
+      drupal_static_reset('drupal_add_css');
+      drupal_static_reset('drupal_add_js');
+
+      // Tilføjer styelsheets
+      drupal_add_css($variables['path_to_theme'] . 'dist/css/infotv/infotv_reset.css', array('group' => CSS_THEME, 'weight' => 100));
+      drupal_add_css($variables['path_to_theme'] . 'dist/css/infotv/infotv_flexslider.css', array('group' => CSS_THEME, 'weight' => 100));
+      drupal_add_css($variables['path_to_theme'] . 'dist/css/infotv/infotv.css', array('group' => CSS_THEME, 'weight' => 100));
+      // Tilføjer javascripts
+      drupal_add_js($variables['path_to_theme'] . 'dist/js/jquery-1.11.2.min.js', array('weight' => 1000));
+      drupal_add_js($variables['path_to_theme'] . 'dist/js/jquery.flexslider-udv.js', array('weight' => 1000));
+      drupal_add_js($variables['path_to_theme'] . 'dist/js/jquery.easing.1.3.js', array('weight' => 1000));
+      drupal_add_js($variables['path_to_theme'] . 'dist/js/infotv.js', array('weight' => 1000));
+      break;	
+
     case 'uglentopnyheder':
       // Tilføjer styelsheets
 //      drupal_add_css($variables['path_to_theme'] . 'css/infotv/infotv_reset.css', array('group' => CSS_THEME, 'weight' => 100));

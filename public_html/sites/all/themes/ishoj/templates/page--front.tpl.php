@@ -78,9 +78,45 @@
 
 // Sætter metatags på forsiden
 print render($page['content']['metatags']); 
+global $user;
+$name = '';
+$showuser = user_load($user->uid);
+$firstname = $showuser->field_fornavn['und'][0]['safe_value'];
+if ($showuser->field_kaldenavn['und'][0]['safe_value'] != '') {
+  $name = $showuser->field_kaldenavn['und'][0]['safe_value'];   
+} 
+else {
+  $name = $showuser->field_fornavn['und'][0]['safe_value'] . ' ' . $showuser->field_efternavn['und'][0]['safe_value'];  
+}
+
 
 ?>
-  
+    <!-- BRUGER BAR START -->
+    <section class="bruger-bar">
+      <div class="container">
+        <div class="row">
+          <div class="grid-full">
+<?php 
+            $brugerbar = "";
+            if($logged_in) {
+              $brugerbar .= "<a href=\"/user\" title=\"Din brugerprofil\">" . $name . "</a>";
+              $brugerbar .= " &nbsp;&nbsp;&nbsp; ";
+              $brugerbar .= "<a href=\"/user/logout\" title=\"Log ud\">Log ud</a>";
+            }
+            else {
+              $brugerbar .= "<a href=\"/user\" title=\"Log ind\">Log ind</a>";
+            }
+            print $brugerbar;
+
+?>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- BRUGER BAR SLUT -->
+    
+    
     <!-- HEADER START -->
     <header data-role="header">
       
@@ -97,6 +133,11 @@ print render($page['content']['metatags']);
               <i class="header-kryds hide-me" title="Skjul menu"></i>
 <!--              <i class="icon icon-search btn-search"  title="Søg"></i>-->
               <i class="header-search" title="Søg"></i>
+              <?php 
+                if($logged_in) {
+                  print "<i class=\"header-plus\" title=\"Tilføj nyt indhold\"></i>";
+                }
+              ?>
               <!-- IKONER SLUT -->
               
               <!-- MENU START -->
@@ -138,17 +179,71 @@ print render($page['content']['metatags']);
       </nav>
       <!-- MOBILMENU SLUT -->
                  
-                  
+      <?php 
+      if($logged_in) {
+        print "<!-- TILFØJ INDHOLD START -->";    
+        print "<section class=\"tilfoej-indhold\">";
+          print "<div class=\"container\">";
+            print "<div class=\"row\">";
+              print "<div class=\"grid-full\">";
+                print "<h2>Opret nyt indhold</h2>";
+              print "</div>";
+              print "<ul>";
+  //<!--
+  //              <li>
+  //                <a href="/node/add/aktivitet" title="">
+  //                  <span class="cat-icon"></span>
+  //                  <span class="cat-text">Aktivitet</span>
+  //                </a>
+  //              </li>
+  //-->
+                print "<li>";
+                  print "<a href=\"/node/add/os2web-base-contentpage\" title=\"\">";
+                    print "<span class=\"cat-icon\"></span>";
+                    print "<span class=\"cat-text\">Indholdsside</span>";
+                  print "</a>";
+                print "</li>";
+                print "<li>";
+                  print "<a href=\"/node/add/nyheder\" title=\"\">";
+                    print "<span class=\"cat-icon\"></span>";
+                    print "<span class=\"cat-text\">Nyhed</span>";
+                  print "</a>";
+                print "</li>";
+              print "</ul>";
+            print "</div>";
+          print "</div>";
+        print "</section>";
+        print "<!-- TILFØJ INDHOLD SLUT -->";  
+      }
+      ?>
+                                               
       <!-- SØGEBAR START -->
       <section class="soegebar animate bg-<?php echo mt_rand(1,9); ?>">
         <div class="container">
           <div class="row formular">
             <div class="grid-full">
-              <h1>Hvad søger du?</h1>
-              <form action="/" method="post" accept-charset="UTF-8">
+                <?php 
+                if($logged_in) { 
+//print "<h1>Hej " . $firstname .  " hvad søger du?</h1>";
+print "<h1>Hvad søger du?</h1>";
+} else {
+print "<h1>Hvad søger du?</h1>";   
+}
+?>           
+              <form id="sogeformen" action="/" method="post" accept-charset="UTF-8">
                 <label class="" for="soegefelt">Søg</label>
-                <input id="soegefelt" placeholder="Indtast dit søgeord"/>
-              </form>
+                  <?php 
+if($logged_in) { 
+print '<input id="soegefelt" placeholder="Indtast dine søgeord"/>';
+} else {
+print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';   
+}
+    
+                      
+                      
+                  ?>
+ </form>
+<!--
               <div class="search-filter">
                 <div class="filter-lines"></div>
                 <div class="add-filter-line">
@@ -169,6 +264,7 @@ print render($page['content']['metatags']);
         
                 </div>
               </div>
+-->
             </div>
           </div>
         </div>
@@ -176,161 +272,16 @@ print render($page['content']['metatags']);
       <!-- SØGEBAR SLUT -->      
 
       <!-- SØGEFANER START -->      
-
       <section class="soegebar-faner medarbejdere">
-<!--        <div class="container">
-          <div class="row">
-            <div class="grid-half medarbejdere">Medarbejdere <span title="7 søgeresultater">7</span></div>  
-            <div class="grid-half indhold">Indhold <span title="1200 søgeresultater">1200</span></div>  
-          </div>
-        </div>-->
       </section>
-
       <!-- SØGEFANER SLUT -->      
       
       <!-- SØGERESULTATER START -->
-
       <section class="soegebar-resultater">
-<!--        <div class="container">
-          <div class="row search-results show">
--->
- 
-            <!-- INDHOLD -->
-<!--
-            <h2 class="indhold">Indhold <span title="1200 søgeresultater">1200</span></h2>
-            
-            <ul class="search-content">
-              <li>
-                <a href="" titel="Thomas Mikkel Jensen"><span class="navn">En side om et eller andet</span></a>
-                <div class="details">
-                  <span class="beskrivelse">Lorem ipsum dolor sit amet, consectetur adipiscing elit</span>
-                  <a href="" title=""><span class="kategori"><span>Akutte skader</span></span></a>
--->
-<!--
-                </div>
-              </li>
-              <li>
-                <a href="" titel="Thomas Mikkel Jensen"><span class="navn">Meget spændende indhold</span></a>
-                <div class="details">
-                  <span class="beskrivelse">Phasellus quis lectus metus, at posuere neque.</span>
-                  <a href="" title=""><span class="kategori"><span>Akutte skader</span></span></a>
--->
-<!--
-                </div>
-              </li>
-              <li>
-                <a href="" titel="Thomas Mikkel Jensen"><span class="navn">Gratis kage til alle</span></a>
-                <div class="details">
-                  <span class="beskrivelse">Sed blandit augue vitae.</span>
-                  <a href="" title=""><span class="kategori"><span>Arbejdsskader</span></span></a>
--->
-<!--
-                </div>
-              </li>
-            </ul>           
--->
-
-                                         
-            <!-- MEDARBEJDERE -->
-<!--
-            <h2 class="medarbejdere action">Medarbejdere <span title="7 søgeresultater">7</span></h2>
-            
-            <ul class="search-employees show">
-              <li>
-                <a href="" titel="Thomas Mikkel Jensen"><span class="navn">Thomas Mikkel Jensen</span></a>
-                <div class="foto">
-                  <a class="foto" href="" titel="Thomas Mikkel Jensen">
-                    <img src="http://intranet.ishoj.bellcom.dk/sites/default/files/pictures/picture-40-1433354383.jpg" alt="Thomas Mikkel Jensen">
-                    <span class="optaget"></span>
-                  </a>
-                </div>
-                <div class="details">
-                  <a href="" titel="Multimediedesigner"><span class="titel">Multimediedesigner</span></a><br />
-                  
-                  <a href="" titel="Kommunikation"><span class="afdeling">Kommunikation</span></a><br />
-                  <span class="telefon">43 57 62 04</span><br />
-                  <a href="mailto:tho@ishoj.dk" titel="Send en mail til Thomas"><span class="email">tho@ishoj.dk</span></a>
-                </div>
-              </li>
-              <li>
-                <a href="" titel="Thomas Mikkel Jensen"><span class="navn">Connie Susanne Skjødt Pedersen</span></a>
-                <div class="foto">
-                  <a class="foto" href="" titel="Thomas Mikkel Jensen">
-                    <img src="http://intranet.ishoj.bellcom.dk/sites/all/themes/ishoj/dist/img/sprites-no/nopic.png" alt="Thomas Mikkel Jensen">
-                    <span class="optaget"></span>
-                  </a>
-                </div>
-                <div class="details">
-                  <a href="" titel="Multimediedesigner"><span class="titel">Multimediedesigner</span></a><br />
-                  <a href="" titel="Kommunikation"><span class="afdeling">Kommunikation</span></a><br />
-                  <span class="telefon">43 57 62 04</span><br />
-                  <a href="mailto:tho@ishoj.dk" titel="Send en mail til Thomas"><span class="email">tho@ishoj.dk</span></a>
-                </div>
-              </li>
-              <li>
-                <a href="" titel="Thomas Mikkel Jensen"><span class="navn">Thomas Mikkel Jensen</span></a>
-                <div class="foto">
-                  <a class="foto" href="" titel="Thomas Mikkel Jensen">
-                    <span class="ledig"></span>
-                  </a>
-                </div>
-                <div class="details">
-                  <a href="" titel="Multimediedesigner"><span class="titel">Multimediedesigner</span></a><br />
-                  <a href="" titel="Kommunikation"><span class="afdeling">Kommunikation</span></a><br />
-                  <span class="telefon">43 57 62 04</span><br />
-                  <a href="mailto:tho@ishoj.dk" titel="Send en mail til Thomas"><span class="email">tho@ishoj.dk</span></a>
-                </div>
-              </li>
-              <li>
-                <a href="" titel="Thomas Mikkel Jensen"><span class="navn">Thomas Mikkel Jensen</span></a>
-                <div class="foto">
-                  <a class="foto" href="" titel="Thomas Mikkel Jensen">
-                    <img src="http://intranet.ishoj.bellcom.dk/sites/default/files/pictures/picture-40-1433354383.jpg" alt="Thomas Mikkel Jensen">
-                    <span class="optaget"></span>
-                  </a>
-                </div>
-                <div class="details">
-                  <a href="" titel="Multimediedesigner"><span class="titel">Multimediedesigner</span></a><br />
-                  <a href="" titel="Kommunikation"><span class="afdeling">Kommunikation</span></a><br />
-                  <span class="telefon">43 57 62 04</span><br />
-                  <a href="mailto:tho@ishoj.dk" titel="Send en mail til Thomas"><span class="email">tho@ishoj.dk</span></a>
-                </div>
-              </li>
-              <li>
-                <a href="" titel="Thomas Mikkel Jensen"><span class="navn">Connie Susanne Skjødt Pedersen</span></a>
-                <div class="foto">
-                  <a class="foto" href="" titel="Thomas Mikkel Jensen">
-                    <span class="ledig"></span>
-                  </a>
-                </div>
-                <div class="details">
-                  <a href="" titel="Multimediedesigner"><span class="titel">Multimediedesigner</span></a><br />
-                  <a href="" titel="Kommunikation"><span class="afdeling">Kommunikation</span></a><br />
-                  <span class="telefon">43 57 62 04</span><br />
-                  <a href="mailto:tho@ishoj.dk" titel="Send en mail til Thomas"><span class="email">tho@ishoj.dk</span></a>
-                </div>
-              </li>
-              <li>
-                <a href="" titel="Thomas Mikkel Jensen"><span class="navn">Thomas Mikkel Jensen</span></a>
-                <div class="foto">
-                  <a class="foto" href="" titel="Thomas Mikkel Jensen">
-                    <span class="ledig"></span>
-                  </a>
-                </div>
-                <div class="details">
-                  <a href="" titel="Multimediedesigner"><span class="titel">Multimediedesigner</span></a><br />
-                  <a href="" titel="Kommunikation"><span class="afdeling">Kommunikation</span></a><br />
-                  <span class="telefon">43 57 62 04</span><br />
-                  <a href="mailto:tho@ishoj.dk" titel="Send en mail til Thomas"><span class="email">tho@ishoj.dk</span></a>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>-->
       </section>
-
       <!-- SØGERESULTATER SLUT -->
-      
+
+                  
     </header>
     <!-- HEADER SLUT --> 
     
@@ -355,24 +306,26 @@ print render($page['content']['metatags']);
       <?php endif; ?>
     
         
-      <?php if($page['editor'] and $logged_in): ?>
+      <?php //if($page['editor'] and $logged_in): ?>
       <?php //if($logged_in): ?>
         <!-- REDAKTØRMENU START -->        
+<!--
         <section class="redaktormenu">
           <div class="container">
             <div class="row">
               <div class="grid-full">
                 <div class="editor">
                   <div class="editorInner">
-                    <?php print render($page['editor']); ?>
+                    <?php //print render($page['editor']); ?>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
+-->
         <!-- REDAKTØRMENU SLUT -->
-      <?php endif; ?>
+      <?php //endif; ?>
       
       
       
@@ -402,6 +355,9 @@ print render($page['content']['metatags']);
     case "3013":
      //  DONT SHOW
         break;
+    case "3896": 
+     //  DONT SHOW
+        break;
     default:
       $output = $output . "<li><a href=\"" . url('taxonomy/term/' . $term->tid) . "\" title=\"" . $term->name . "\"><span class=\"cat-icon\"></span><span class=\"cat-text\">" . $term->name . "</span></a></li>";
 }
@@ -427,7 +383,7 @@ print render($page['content']['metatags']);
             <!-- Nyheder -->
             <div class="row">
               <div class="grid-full">
-                <h2>Aktuelt</h2>
+                <h2>Nyheder</h2>
                 <div class="swiper-container-news">
                   <div class="swiper-wrapper">
                     <?php print views_embed_view('nyhedsliste','panel_pane_2', $node->nid); ?>
@@ -478,14 +434,15 @@ print render($page['content']['metatags']);
         <!-- NYHEDER SLUT -->
 
         <!-- AKTIVITER START -->
-        <section class="activities">
+<!--
+        <section class="activities" id="thomastester">
           <div class="container">
             <div class="row">
               <div class="grid-full">
                 <h2>Aktiviteter</h2>
                 <div class="swiper-container-activities">
                   <div class="swiper-wrapper">
-                    <?php print views_embed_view('aktiviteter','aktivitet_forside'); ?>
+                    <?php // print views_embed_view('aktiviteter','aktivitet_forside'); ?>
                   </div>
                 </div>        
                 <div class="activities-swiper-button-container">
@@ -499,6 +456,7 @@ print render($page['content']['metatags']);
             </div>
           </div>
         </section>
+-->
         <!-- AKTIVITER SLUT -->
 
                         

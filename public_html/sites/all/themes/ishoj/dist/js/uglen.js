@@ -11,6 +11,13 @@
  * @version 2.1.1
  */
 ;(function(f){"use strict";"function"===typeof define&&define.amd?define(["jquery"],f):"undefined"!==typeof module&&module.exports?module.exports=f(require("jquery")):f(jQuery)})(function($){"use strict";function n(a){return!a.nodeName||-1!==$.inArray(a.nodeName.toLowerCase(),["iframe","#document","html","body"])}function h(a){return $.isFunction(a)||$.isPlainObject(a)?a:{top:a,left:a}}var p=$.scrollTo=function(a,d,b){return $(window).scrollTo(a,d,b)};p.defaults={axis:"xy",duration:0,limit:!0};$.fn.scrollTo=function(a,d,b){"object"=== typeof d&&(b=d,d=0);"function"===typeof b&&(b={onAfter:b});"max"===a&&(a=9E9);b=$.extend({},p.defaults,b);d=d||b.duration;var u=b.queue&&1<b.axis.length;u&&(d/=2);b.offset=h(b.offset);b.over=h(b.over);return this.each(function(){function k(a){var k=$.extend({},b,{queue:!0,duration:d,complete:a&&function(){a.call(q,e,b)}});r.animate(f,k)}if(null!==a){var l=n(this),q=l?this.contentWindow||window:this,r=$(q),e=a,f={},t;switch(typeof e){case "number":case "string":if(/^([+-]=?)?\d+(\.\d+)?(px|%)?$/.test(e)){e= h(e);break}e=l?$(e):$(e,q);if(!e.length)return;case "object":if(e.is||e.style)t=(e=$(e)).offset()}var v=$.isFunction(b.offset)&&b.offset(q,e)||b.offset;$.each(b.axis.split(""),function(a,c){var d="x"===c?"Left":"Top",m=d.toLowerCase(),g="scroll"+d,h=r[g](),n=p.max(q,c);t?(f[g]=t[m]+(l?0:h-r.offset()[m]),b.margin&&(f[g]-=parseInt(e.css("margin"+d),10)||0,f[g]-=parseInt(e.css("border"+d+"Width"),10)||0),f[g]+=v[m]||0,b.over[m]&&(f[g]+=e["x"===c?"width":"height"]()*b.over[m])):(d=e[m],f[g]=d.slice&& "%"===d.slice(-1)?parseFloat(d)/100*n:d);b.limit&&/^\d+$/.test(f[g])&&(f[g]=0>=f[g]?0:Math.min(f[g],n));!a&&1<b.axis.length&&(h===f[g]?f={}:u&&(k(b.onAfterFirst),f={}))});k(b.onAfter)}})};p.max=function(a,d){var b="x"===d?"Width":"Height",h="scroll"+b;if(!n(a))return a[h]-$(a)[b.toLowerCase()]();var b="client"+b,k=a.ownerDocument||a.document,l=k.documentElement,k=k.body;return Math.max(l[h],k[h])-Math.min(l[b],k[b])};$.Tween.propHooks.scrollLeft=$.Tween.propHooks.scrollTop={get:function(a){return $(a.elem)[a.prop]()}, set:function(a){var d=this.get(a);if(a.options.interrupt&&a._last&&a._last!==d)return $(a.elem).stop();var b=Math.round(a.now);d!==b&&($(a.elem)[a.prop](b),a._last=this.get(a))}};return p});
+/*!
+Waypoints - 4.0.0
+Copyright © 2011-2015 Caleb Troughton
+Licensed under the MIT license.
+https://github.com/imakewebthings/waypoints/blog/master/licenses.txt
+*/
+!function(){"use strict";function t(o){if(!o)throw new Error("No options passed to Waypoint constructor");if(!o.element)throw new Error("No element option passed to Waypoint constructor");if(!o.handler)throw new Error("No handler option passed to Waypoint constructor");this.key="waypoint-"+e,this.options=t.Adapter.extend({},t.defaults,o),this.element=this.options.element,this.adapter=new t.Adapter(this.element),this.callback=o.handler,this.axis=this.options.horizontal?"horizontal":"vertical",this.enabled=this.options.enabled,this.triggerPoint=null,this.group=t.Group.findOrCreate({name:this.options.group,axis:this.axis}),this.context=t.Context.findOrCreateByElement(this.options.context),t.offsetAliases[this.options.offset]&&(this.options.offset=t.offsetAliases[this.options.offset]),this.group.add(this),this.context.add(this),i[this.key]=this,e+=1}var e=0,i={};t.prototype.queueTrigger=function(t){this.group.queueTrigger(this,t)},t.prototype.trigger=function(t){this.enabled&&this.callback&&this.callback.apply(this,t)},t.prototype.destroy=function(){this.context.remove(this),this.group.remove(this),delete i[this.key]},t.prototype.disable=function(){return this.enabled=!1,this},t.prototype.enable=function(){return this.context.refresh(),this.enabled=!0,this},t.prototype.next=function(){return this.group.next(this)},t.prototype.previous=function(){return this.group.previous(this)},t.invokeAll=function(t){var e=[];for(var o in i)e.push(i[o]);for(var n=0,r=e.length;r>n;n++)e[n][t]()},t.destroyAll=function(){t.invokeAll("destroy")},t.disableAll=function(){t.invokeAll("disable")},t.enableAll=function(){t.invokeAll("enable")},t.refreshAll=function(){t.Context.refreshAll()},t.viewportHeight=function(){return window.innerHeight||document.documentElement.clientHeight},t.viewportWidth=function(){return document.documentElement.clientWidth},t.adapters=[],t.defaults={context:window,continuous:!0,enabled:!0,group:"default",horizontal:!1,offset:0},t.offsetAliases={"bottom-in-view":function(){return this.context.innerHeight()-this.adapter.outerHeight()},"right-in-view":function(){return this.context.innerWidth()-this.adapter.outerWidth()}},window.Waypoint=t}(),function(){"use strict";function t(t){window.setTimeout(t,1e3/60)}function e(t){this.element=t,this.Adapter=n.Adapter,this.adapter=new this.Adapter(t),this.key="waypoint-context-"+i,this.didScroll=!1,this.didResize=!1,this.oldScroll={x:this.adapter.scrollLeft(),y:this.adapter.scrollTop()},this.waypoints={vertical:{},horizontal:{}},t.waypointContextKey=this.key,o[t.waypointContextKey]=this,i+=1,this.createThrottledScrollHandler(),this.createThrottledResizeHandler()}var i=0,o={},n=window.Waypoint,r=window.onload;e.prototype.add=function(t){var e=t.options.horizontal?"horizontal":"vertical";this.waypoints[e][t.key]=t,this.refresh()},e.prototype.checkEmpty=function(){var t=this.Adapter.isEmptyObject(this.waypoints.horizontal),e=this.Adapter.isEmptyObject(this.waypoints.vertical);t&&e&&(this.adapter.off(".waypoints"),delete o[this.key])},e.prototype.createThrottledResizeHandler=function(){function t(){e.handleResize(),e.didResize=!1}var e=this;this.adapter.on("resize.waypoints",function(){e.didResize||(e.didResize=!0,n.requestAnimationFrame(t))})},e.prototype.createThrottledScrollHandler=function(){function t(){e.handleScroll(),e.didScroll=!1}var e=this;this.adapter.on("scroll.waypoints",function(){(!e.didScroll||n.isTouch)&&(e.didScroll=!0,n.requestAnimationFrame(t))})},e.prototype.handleResize=function(){n.Context.refreshAll()},e.prototype.handleScroll=function(){var t={},e={horizontal:{newScroll:this.adapter.scrollLeft(),oldScroll:this.oldScroll.x,forward:"right",backward:"left"},vertical:{newScroll:this.adapter.scrollTop(),oldScroll:this.oldScroll.y,forward:"down",backward:"up"}};for(var i in e){var o=e[i],n=o.newScroll>o.oldScroll,r=n?o.forward:o.backward;for(var s in this.waypoints[i]){var a=this.waypoints[i][s],l=o.oldScroll<a.triggerPoint,h=o.newScroll>=a.triggerPoint,p=l&&h,u=!l&&!h;(p||u)&&(a.queueTrigger(r),t[a.group.id]=a.group)}}for(var c in t)t[c].flushTriggers();this.oldScroll={x:e.horizontal.newScroll,y:e.vertical.newScroll}},e.prototype.innerHeight=function(){return this.element==this.element.window?n.viewportHeight():this.adapter.innerHeight()},e.prototype.remove=function(t){delete this.waypoints[t.axis][t.key],this.checkEmpty()},e.prototype.innerWidth=function(){return this.element==this.element.window?n.viewportWidth():this.adapter.innerWidth()},e.prototype.destroy=function(){var t=[];for(var e in this.waypoints)for(var i in this.waypoints[e])t.push(this.waypoints[e][i]);for(var o=0,n=t.length;n>o;o++)t[o].destroy()},e.prototype.refresh=function(){var t,e=this.element==this.element.window,i=e?void 0:this.adapter.offset(),o={};this.handleScroll(),t={horizontal:{contextOffset:e?0:i.left,contextScroll:e?0:this.oldScroll.x,contextDimension:this.innerWidth(),oldScroll:this.oldScroll.x,forward:"right",backward:"left",offsetProp:"left"},vertical:{contextOffset:e?0:i.top,contextScroll:e?0:this.oldScroll.y,contextDimension:this.innerHeight(),oldScroll:this.oldScroll.y,forward:"down",backward:"up",offsetProp:"top"}};for(var r in t){var s=t[r];for(var a in this.waypoints[r]){var l,h,p,u,c,d=this.waypoints[r][a],f=d.options.offset,w=d.triggerPoint,y=0,g=null==w;d.element!==d.element.window&&(y=d.adapter.offset()[s.offsetProp]),"function"==typeof f?f=f.apply(d):"string"==typeof f&&(f=parseFloat(f),d.options.offset.indexOf("%")>-1&&(f=Math.ceil(s.contextDimension*f/100))),l=s.contextScroll-s.contextOffset,d.triggerPoint=y+l-f,h=w<s.oldScroll,p=d.triggerPoint>=s.oldScroll,u=h&&p,c=!h&&!p,!g&&u?(d.queueTrigger(s.backward),o[d.group.id]=d.group):!g&&c?(d.queueTrigger(s.forward),o[d.group.id]=d.group):g&&s.oldScroll>=d.triggerPoint&&(d.queueTrigger(s.forward),o[d.group.id]=d.group)}}return n.requestAnimationFrame(function(){for(var t in o)o[t].flushTriggers()}),this},e.findOrCreateByElement=function(t){return e.findByElement(t)||new e(t)},e.refreshAll=function(){for(var t in o)o[t].refresh()},e.findByElement=function(t){return o[t.waypointContextKey]},window.onload=function(){r&&r(),e.refreshAll()},n.requestAnimationFrame=function(e){var i=window.requestAnimationFrame||window.mozRequestAnimationFrame||window.webkitRequestAnimationFrame||t;i.call(window,e)},n.Context=e}(),function(){"use strict";function t(t,e){return t.triggerPoint-e.triggerPoint}function e(t,e){return e.triggerPoint-t.triggerPoint}function i(t){this.name=t.name,this.axis=t.axis,this.id=this.name+"-"+this.axis,this.waypoints=[],this.clearTriggerQueues(),o[this.axis][this.name]=this}var o={vertical:{},horizontal:{}},n=window.Waypoint;i.prototype.add=function(t){this.waypoints.push(t)},i.prototype.clearTriggerQueues=function(){this.triggerQueues={up:[],down:[],left:[],right:[]}},i.prototype.flushTriggers=function(){for(var i in this.triggerQueues){var o=this.triggerQueues[i],n="up"===i||"left"===i;o.sort(n?e:t);for(var r=0,s=o.length;s>r;r+=1){var a=o[r];(a.options.continuous||r===o.length-1)&&a.trigger([i])}}this.clearTriggerQueues()},i.prototype.next=function(e){this.waypoints.sort(t);var i=n.Adapter.inArray(e,this.waypoints),o=i===this.waypoints.length-1;return o?null:this.waypoints[i+1]},i.prototype.previous=function(e){this.waypoints.sort(t);var i=n.Adapter.inArray(e,this.waypoints);return i?this.waypoints[i-1]:null},i.prototype.queueTrigger=function(t,e){this.triggerQueues[e].push(t)},i.prototype.remove=function(t){var e=n.Adapter.inArray(t,this.waypoints);e>-1&&this.waypoints.splice(e,1)},i.prototype.first=function(){return this.waypoints[0]},i.prototype.last=function(){return this.waypoints[this.waypoints.length-1]},i.findOrCreate=function(t){return o[t.axis][t.name]||new i(t)},n.Group=i}(),function(){"use strict";function t(t){this.$element=e(t)}var e=window.jQuery,i=window.Waypoint;e.each(["innerHeight","innerWidth","off","offset","on","outerHeight","outerWidth","scrollLeft","scrollTop"],function(e,i){t.prototype[i]=function(){var t=Array.prototype.slice.call(arguments);return this.$element[i].apply(this.$element,t)}}),e.each(["extend","inArray","isEmptyObject"],function(i,o){t[o]=e[o]}),i.adapters.push({name:"jquery",Adapter:t}),i.Adapter=t}(),function(){"use strict";function t(t){return function(){var i=[],o=arguments[0];return t.isFunction(arguments[0])&&(o=t.extend({},arguments[1]),o.handler=arguments[0]),this.each(function(){var n=t.extend({},o,{element:this});"string"==typeof n.context&&(n.context=t(this).closest(n.context)[0]),i.push(new e(n))}),i}}var e=window.Waypoint;window.jQuery&&(window.jQuery.fn.waypoint=t(window.jQuery)),window.Zepto&&(window.Zepto.fn.waypoint=t(window.Zepto))}();
 /**
  * Swiper 3.0.5
  * Most modern mobile touch slider and framework with hardware accelerated transitions
@@ -3010,6 +3017,18 @@ else if (typeof define === 'function' && define.amd) {
   
   $(document).ready(function() {
 
+    
+    
+
+
+//var waypoints = $("#waypoints-trigger-medarbejder").waypoint({
+//  handler: function(direction) {
+//    console.log("BUNDEN ER NÅET!!!!");
+//  }
+////  offset: 'bottom-in-view'
+//});
+    
+    
     /*********************/
     /*** SET STRUCTURE ***/
     /*********************/
@@ -3031,25 +3050,25 @@ else if (typeof define === 'function' && define.amd) {
         }
       }
 
-      if(windowWidth < 960) { 
-        // SØGNING
-        if(!i) {
-          findLatestShownUgleResult("mobile");
-          console.log("Funktionen findLatestShownUgleResult(mobile) kaldt responsivt");
-        }
-      }
-        
+//      if(windowWidth < 960) { 
+//        // SØGNING
+//        if(!i) {
+//          findLatestShownUgleResult("mobile");
+//          console.log("Funktionen findLatestShownUgleResult(mobile) kaldt responsivt");
+//        }
+//      }
+//        
       if(windowWidth >= 960) { 
-        if(menuStatus) {
-          // MENUKNAP
-          $(".header-menu").removeClass("hide-me");
-          $(".header-kryds").addClass("hide-me");
-          $("[data-role='mobilenav']").removeClass("animate");
-          $(".arrow").removeClass("left");
-          menuStatus = false;
-          // SØGEBAR
-          $(".arrow").removeClass("action");
-        }
+//        if(menuStatus) {
+//          // MENUKNAP
+//          $(".header-menu").removeClass("hide-me");
+//          $(".header-kryds").addClass("hide-me");
+//          $("[data-role='mobilenav']").removeClass("animate");
+//          $(".arrow").removeClass("left");
+//          menuStatus = false;
+//          // SØGEBAR
+//          $(".arrow").removeClass("action");
+//        }
 
         // DEL PÅ SOCIALE MEDIER
         if($(".delsiden")[0] && !$(".sprite-printer")[0]) {
@@ -3057,12 +3076,12 @@ else if (typeof define === 'function' && define.amd) {
         }
         
         // SØGNING
-        if(!i) {
-          findLatestShownUgleResult("desktop");
-//          console.log("Funktionen findLatestShownUgleResult(desktop) kaldt responsivt");
-          
-
-        }
+//        if(!i) {
+//          findLatestShownUgleResult("desktop");
+////          console.log("Funktionen findLatestShownUgleResult(desktop) kaldt responsivt");
+//          
+//
+//        }
       }
       else {
 
@@ -3104,128 +3123,122 @@ else if (typeof define === 'function' && define.amd) {
     });
 
 
-    /************************/
-    /*** KLIK PÅ MENUKNAP ***/
-    /************************/
-    var menuStatus = false;
-
-    // Når der klikkes på mobilmenu-knappen
-    $(".header-menu").click(function() {
-      if(!menuStatus) { 
-        // Hvis søgebaren er aktiv, vent med at vise mobilmenuen, indtil søgebaren er skjult
-        if(searchBarStatus) {
-          setTimeout(function() {      
-            $(".header-menu").addClass("hide-me");
-            $(".header-kryds").removeClass("hide-me");
-            $("[data-role='mobilenav']").addClass("animate");
-            $(".arrow").addClass("left");
-            menuStatus = true;            
-          }, 300);
-        }
-        else {
-          $(".header-menu").addClass("hide-me");
-          $(".header-kryds").removeClass("hide-me");
-          $("[data-role='mobilenav']").addClass("animate");
-          $(".arrow").addClass("left");
-          menuStatus = true;
-        }
-        
-        // SØGEBAR 
-        $(".soegebar").removeClass("animate");
-        $(".arrow").addClass("action");
-//        removeSearchResults(2);  // Midlertidig deaktivering. Funktionen ligger i test.js
-        setTimeout(function(){
-          $( ".soegebar form > div > input" ).val("");
-        },300);
-        searchBarStatus = false;
-      }
-    });	
-    // Når der klikkes på skjul-mobilmenu-knappen
-    $(".header-kryds").click(function() {
-      if(menuStatus) {
-        $(".header-menu").removeClass("hide-me");
-        $(this).addClass("hide-me");
-        $("[data-role='mobilenav']").removeClass("animate");
-        $(".arrow").removeClass("left");
-        menuStatus = false;
-
-        // SØGEBAR
-        $(".arrow").removeClass("action");
-//        removeSearchResults(2);  // Midlertidig deaktivering. Funktionen ligger i test.js
-        setTimeout(function(){
-          $( ".soegebar form > div > input" ).val("");
-        },300);
-      }
-    });
-      
-
-    /************************/
-    /*** KLIK PÅ SØGEKNAP ***/
-    /************************/    
-    var searchBarStatus = false;
-    
-    if($("body").hasClass("front")) { // Tilføj drupals page-klasser for de tre forsider (.front er en af dem)
-//        $(".soegebar input[type=submit]").removeAttr("disabled");
-        setTimeout(function(){
-//          $(".soegebar form > div > input").focus();
-          $(".soegebar form input").focus();
-        },300);
-        searchBarStatus = true;
-    }
-//    else {
-//      $(".soegebar input[type=submit]").attr("disabled","disabled");
-//    }
-    
-    $(".header-search").click(function() {
-      // NÅR DEN SKAL VISES
-      if(!searchBarStatus) {
-        // Hvis mobilmenuen er aktiv, vent med at vise søgebaren, indtil mobilmenuen er skjult
-        if(menuStatus) {
-          setTimeout(function() {      
-            $(".soegebar").addClass("animate"); 
-            $(".arrow").addClass("action");
-//            $(".soegebar input[type=submit]").removeAttr("disabled");
-            setTimeout(function(){
-//              $(".soegebar form > div > input").focus();
-              $(".soegebar form input").focus();
-            },300);
-            searchBarStatus = true;
-          }, 300);
-        }
-        else {
-          $(".soegebar").addClass("animate");
-          $(".arrow").addClass("action");
-//          $(".soegebar input[type=submit]").removeAttr("disabled");
-          setTimeout(function(){
-//            $(".soegebar form > div > input").focus();
-            $(".soegebar form input").focus();
-          },300);
-          searchBarStatus = true;
-        }
-        
-        // MENUKNAP
-        $(".header-menu").removeClass("hide-me");
-        $(".header-kryds").addClass("hide-me");
-        $("[data-role='mobilenav']").removeClass("animate");
-        $(".arrow").removeClass("left");
-        // FJERN SØGERESULTATER
-        $(".soegeresultat").remove();
-        $(".soegeresultat").removeClass("show");
-		menuStatus = false;
-      }
-      // NÅR DEN SKAL SKJULES
-      else {
-        $(".soegebar").removeClass("animate");
-//        removeSearchResults(2);  // Midlertidig deaktivering. Funktionen ligger i test.js
-        $(".arrow").removeClass("action");
-//        $(".soegebar input[type=submit]").attr("disabled","disabled");
-        setTimeout(function(){
+//    /************************/
+//    /*** KLIK PÅ MENUKNAP ***/
+//    /************************/
+//    var menuStatus = false;
+//
+//    // Når der klikkes på mobilmenu-knappen
+//    $(".header-menu").click(function() {
+//      if(!menuStatus) { 
+//        // Hvis søgebaren er aktiv, vent med at vise mobilmenuen, indtil søgebaren er skjult
+//        if(searchBarStatus) {
+//          setTimeout(function() {      
+//            $(".header-menu").addClass("hide-me");
+//            $(".header-kryds").removeClass("hide-me");
+//            $("[data-role='mobilenav']").addClass("animate");
+//            $(".arrow").addClass("left");
+//            menuStatus = true;            
+//          }, 300);
+//        }
+//        else {
+//          $(".header-menu").addClass("hide-me");
+//          $(".header-kryds").removeClass("hide-me");
+//          $("[data-role='mobilenav']").addClass("animate");
+//          $(".arrow").addClass("left");
+//          menuStatus = true;
+//        }
+//        
+//        // SØGEBAR 
+//        $(".soegebar").removeClass("animate");
+//        $(".arrow").addClass("action");
+////        removeSearchResults(2);  // Midlertidig deaktivering. Funktionen ligger i test.js
+//        setTimeout(function(){
 //          $( ".soegebar form > div > input" ).val("");
-          $( ".soegebar form input" ).val("");
-        },300);      
-        searchBarStatus = false;
-      }
-    });    
+//        },300);
+//        searchBarStatus = false;
+//      }
+//    });	
+//    // Når der klikkes på skjul-mobilmenu-knappen
+//    $(".header-kryds").click(function() {
+//      if(menuStatus) {
+//        $(".header-menu").removeClass("hide-me");
+//        $(this).addClass("hide-me");
+//        $("[data-role='mobilenav']").removeClass("animate");
+//        $(".arrow").removeClass("left");
+//        menuStatus = false;
+//
+//        // SØGEBAR
+//        $(".arrow").removeClass("action");
+////        removeSearchResults(2);  // Midlertidig deaktivering. Funktionen ligger i test.js
+//        setTimeout(function(){
+//          $( ".soegebar form > div > input" ).val("");
+//        },300);
+//      }
+//    });
+//      
+//
+//    /************************/
+//    /*** KLIK PÅ SØGEKNAP ***/
+//    /************************/    
+//    var searchBarStatus = false;
+//    
+//    if($("body").hasClass("front")) { // Tilføj drupals page-klasser for de tre forsider (.front er en af dem)
+////        $(".soegebar input[type=submit]").removeAttr("disabled");
+//        setTimeout(function(){
+//          $(".soegebar form input").focus();
+//        },300);
+//        searchBarStatus = true;
+//    }
+//    
+//    $(".header-search").click(function() {
+//      // NÅR DEN SKAL VISES
+//      if(!searchBarStatus) {
+//        // Hvis mobilmenuen er aktiv, vent med at vise søgebaren, indtil mobilmenuen er skjult
+//        if(menuStatus) {
+//          setTimeout(function() {      
+//            $(".soegebar").addClass("animate"); 
+//            $(".arrow").addClass("action");
+////            $(".soegebar input[type=submit]").removeAttr("disabled");
+//            setTimeout(function(){
+//              $(".soegebar form input").focus();
+//            },300);
+//            searchBarStatus = true;
+//          }, 300);
+//        }
+//        else {
+//          $(".soegebar").addClass("animate");
+//          $(".arrow").addClass("action");
+////          $(".soegebar input[type=submit]").removeAttr("disabled");
+//          setTimeout(function(){
+//            $(".soegebar form input").focus();
+//          },300);
+//          searchBarStatus = true;
+//        }
+//        
+//        // MENUKNAP
+//        $(".header-menu").removeClass("hide-me");
+//        $(".header-kryds").addClass("hide-me");
+//        $("[data-role='mobilenav']").removeClass("animate");
+//        $(".arrow").removeClass("left");
+//        // FJERN SØGERESULTATER
+//        $(".soegeresultat").remove();
+//        $(".soegeresultat").removeClass("show");
+//		menuStatus = false;
+//      }
+//      // NÅR DEN SKAL SKJULES
+//      else {
+//        $(".soegebar").removeClass("animate");
+////        removeSearchResults(2);  // Midlertidig deaktivering. Funktionen ligger i test.js
+//        $(".arrow").removeClass("action");
+////        $(".soegebar input[type=submit]").attr("disabled","disabled");
+//        setTimeout(function(){
+////          $( ".soegebar form > div > input" ).val("");
+//          $( ".soegebar form input" ).val("");
+//        },300);      
+//        searchBarStatus = false;
+//      }
+//    });    
     
     //////////////////////////////////////
     // VIS SØGERESULTATER INDSÆTTES HER //
@@ -3241,320 +3254,317 @@ else if (typeof define === 'function' && define.amd) {
     /**********************/
     /****  SØGEFILTER  ****/
     /**********************/
-    var searchFilterString = "";
-    var newFilterOnTheWay = 0;
-    
-    var searchFilterArr = new Array('medarbejder=1', 'indholdssider=1', 'bilag=1', 'afdeling=1', 'ansvarsområder=1', 'stilling=1');
-    var searchFilterArrBool = new Array(0, 0, 0, 0, 0, 0);
-    
-    
-    // Klik på knappen 'Tilføj søgefilter'
-    $(".add-search-filter").click(function(){
-      if(!newFilterOnTheWay) {
-        newFilterOnTheWay = 1;
-        $(".add-search-filter").addClass("hide-me");
-        $(".addFilterForm").removeClass("hide-me");
-      }
-    });
-    
-    // Tilføj søgefilter til søgestreng
-    $(function() {
-      // bind change event to select
-      $("#addFilter").bind("change", function() {
-        if($(this).val() != "0") {
-          selIndex = $(this).val();
-          
-          switch (selIndex) { 
-              
-            case 'medarbejder': 
-//              console.log(selIndex);
-              searchFilterArrBool[0] = 1;
-              break;
-              
-            case 'indholdssider': 
-//              console.log(selIndex);
-              searchFilterArrBool[1] = 1;
-              break;
-              
-            case 'bilag': 
-//              console.log(selIndex);
-              searchFilterArrBool[2] = 1;
-              break;      
-              
-            case 'afdeling': 
-//              console.log(selIndex);
-              searchFilterArrBool[3] = 1;
-              break;      
-              
-            case 'ansvarsområder': 
-//              console.log(selIndex);
-              searchFilterArrBool[4] = 1;
-              break;      
-              
-            case 'stilling': 
-//              console.log(selIndex);
-              searchFilterArrBool[5] = 1;
-              break;
-          }
-          
-          
-          // Tilføjer "slet filter"
-          var newFilter = '<span class="remove-search-filter" data-index="' + selIndex + '"><i class="search-filter-minus" title="Slet søgefilter: ' + $(this).find(":selected").text() + '" ></i><span>' + $(this).find(":selected").text() + '</span></span>';
-          $(".filter-lines").append(newFilter);
-          
-          // Skjuler den valgte option
-          $(this).find(":selected").addClass("hide-me");
-          
-          // Viser "Tilføj filter" og skjuler select-boksen
-          $(".add-search-filter").removeClass("hide-me");
-          $(".addFilterForm").addClass("hide-me");
-          
-          // "Selecter" første option, så den er klar til næste omgang "tilføj søgefiter"
-          $("#addFilter option:first-child").attr("selected", true);
-          
-          updateSearchString();
-          newFilterOnTheWay = 0;
-          
-        }
-        return false;
-      }); 
-    });
-
-    
-    // Klik på knappen 'Slet søgefilter'
-    $(document).on('click', ".remove-search-filter", function() {
-      var selIndex = $(this).attr("data-index");
-//      console.log(selIndex);
-      $(this).remove();
-      $('.addFilterForm select option[value="' + selIndex + '"]').removeClass("hide-me");
-      
-          
-      switch (selIndex) { 
-
-        case 'medarbejder': 
-          searchFilterArrBool[0] = 0;
-          break;
-
-        case 'indholdssider': 
-          searchFilterArrBool[1] = 0;
-          break;
-
-        case 'bilag': 
-          searchFilterArrBool[2] = 0;
-          break;      
-
-        case 'afdeling': 
-          searchFilterArrBool[3] = 0;
-          break;      
-
-        case 'ansvarsområder': 
-          searchFilterArrBool[4] = 0;
-          break;      
-
-        case 'stilling': 
-          searchFilterArrBool[5] = 0;
-          break;
-      }
-      
-      updateSearchString();
-    
-    });
-    
-    
-    function updateSearchString() {
-      
-      searchFilterString = "";
-      var mereEndEn = 0;
-      
-      for(i = 0; i < searchFilterArrBool.length; i++) {
-        if(searchFilterArrBool[i] == 1) {
-          if(mereEndEn > 0) {
-            searchFilterString += "&" + searchFilterArr[i];
-          }
-          else {
-            searchFilterString += searchFilterArr[i];
-          }
-          mereEndEn++;
-        }
-      }
-      
-      console.log( searchFilterString );
-    
-    }
-    
-
-    /**** SØGEVARIABLER ****/
-    var hasEmployees = 0,
-        hasContent   = 0,
-        latestShown  = "";
-    
-    
-//    function showUgleResults() {
-//      // Hvis resultat i begge søgninger
-//      if(hasEmployees && hasContent) {
-//        
-//        latestShown = "medarbejdere";
+//    var searchFilterString = "";
+//    var newFilterOnTheWay = 0;
+//    
+//    var searchFilterArr = new Array('medarbejder=1', 'indholdssider=1', 'bilag=1', 'afdeling=1', 'ansvarsområder=1', 'stilling=1');
+//    var searchFilterArrBool = new Array(0, 0, 0, 0, 0, 0);
+//    
+//    
+//    // Klik på knappen 'Tilføj søgefilter'
+//    $(".add-search-filter").click(function(){
+//      if(!newFilterOnTheWay) {
+//        newFilterOnTheWay = 1;
+//        $(".add-search-filter").addClass("hide-me");
+//        $(".addFilterForm").removeClass("hide-me");
 //      }
-//      // Hvis resultat kun i medarbejder-søgning
-//      if(hasEmployees && !hasContent) {
-//        
-//        latestShown = "medarbejdere";
+//    });
+//    
+//    // Tilføj søgefilter til søgestreng
+//    $(function() {
+//      // bind change event to select
+//      $("#addFilter").bind("change", function() {
+//        if($(this).val() != "0") {
+//          selIndex = $(this).val();
+//          
+//          switch (selIndex) { 
+//              
+//            case 'medarbejder': 
+////              console.log(selIndex);
+//              searchFilterArrBool[0] = 1;
+//              break;
+//              
+//            case 'indholdssider': 
+////              console.log(selIndex);
+//              searchFilterArrBool[1] = 1;
+//              break;
+//              
+//            case 'bilag': 
+////              console.log(selIndex);
+//              searchFilterArrBool[2] = 1;
+//              break;      
+//              
+//            case 'afdeling': 
+////              console.log(selIndex);
+//              searchFilterArrBool[3] = 1;
+//              break;      
+//              
+//            case 'ansvarsområder': 
+////              console.log(selIndex);
+//              searchFilterArrBool[4] = 1;
+//              break;      
+//              
+//            case 'stilling': 
+////              console.log(selIndex);
+//              searchFilterArrBool[5] = 1;
+//              break;
+//          }
+//          
+//          
+//          // Tilføjer "slet filter"
+//          var newFilter = '<span class="remove-search-filter" data-index="' + selIndex + '"><i class="search-filter-minus" title="Slet søgefilter: ' + $(this).find(":selected").text() + '" ></i><span>' + $(this).find(":selected").text() + '</span></span>';
+//          $(".filter-lines").append(newFilter);
+//          
+//          // Skjuler den valgte option
+//          $(this).find(":selected").addClass("hide-me");
+//          
+//          // Viser "Tilføj filter" og skjuler select-boksen
+//          $(".add-search-filter").removeClass("hide-me");
+//          $(".addFilterForm").addClass("hide-me");
+//          
+//          // "Selecter" første option, så den er klar til næste omgang "tilføj søgefiter"
+//          $("#addFilter option:first-child").attr("selected", true);
+//          
+//          updateSearchString();
+//          newFilterOnTheWay = 0;
+//          
+//        }
+//        return false;
+//      }); 
+//    });
+//
+//    
+//    // Klik på knappen 'Slet søgefilter'
+//    $(document).on('click', ".remove-search-filter", function() {
+//      var selIndex = $(this).attr("data-index");
+////      console.log(selIndex);
+//      $(this).remove();
+//      $('.addFilterForm select option[value="' + selIndex + '"]').removeClass("hide-me");
+//      
+//          
+//      switch (selIndex) { 
+//
+//        case 'medarbejder': 
+//          searchFilterArrBool[0] = 0;
+//          break;
+//
+//        case 'indholdssider': 
+//          searchFilterArrBool[1] = 0;
+//          break;
+//
+//        case 'bilag': 
+//          searchFilterArrBool[2] = 0;
+//          break;      
+//
+//        case 'afdeling': 
+//          searchFilterArrBool[3] = 0;
+//          break;      
+//
+//        case 'ansvarsområder': 
+//          searchFilterArrBool[4] = 0;
+//          break;      
+//
+//        case 'stilling': 
+//          searchFilterArrBool[5] = 0;
+//          break;
 //      }
-//      // Hvis resultat kun i indholds-søgning
-//      if(!hasEmployees && hasContent) {
-//        
-//        latestShown = "indhold";
+//      
+//      updateSearchString();
+//    
+//    });
+//    
+//    
+//    function updateSearchString() {
+//      
+//      searchFilterString = "";
+//      var mereEndEn = 0;
+//      
+//      for(i = 0; i < searchFilterArrBool.length; i++) {
+//        if(searchFilterArrBool[i] == 1) {
+//          if(mereEndEn > 0) {
+//            searchFilterString += "&" + searchFilterArr[i];
+//          }
+//          else {
+//            searchFilterString += searchFilterArr[i];
+//          }
+//          mereEndEn++;
+//        }
 //      }
+//      
+//      console.log( searchFilterString );
+//    
 //    }
     
-    
-    // Responsiv funktion der tjekker om hvilken søgning, der sidst er vist. Bruges når der skiftes fra mobil visning til desktop visning
-    function findLatestShownUgleResult(s) {
-      
-      switch (s) {
-          
-        case "mobile":
-          
-          if(latestShown == "medarbejdere") {
-            $(".search-results h2.medarbejdere").addClass("action");
-          }
-          if(latestShown == "indhold") {
-            $(".search-results h2.indhold").addClass("action");
-          }
-          break;
-          
-        case "desktop":
-          
-          // Medarbejdere
-          if(latestShown == "medarbejdere") { 
-            // Desktop
-            $(".soegebar-faner").removeClass("indhold").addClass("medarbejdere");
-            $(".search-content").removeClass("show");
-            $(".search-employees").addClass("show");
-            $(".search-results h2.indhold").removeClass("action");            
-          }
-          // Indhold
-          if(latestShown == "indhold") { 
-            // Desktop
-            $(".soegebar-faner").removeClass("medarbejdere").addClass("indhold");
-            $(".search-employees").removeClass("show");
-            $(".search-content").addClass("show");
-            $(".search-results h2.medarbejdere").removeClass("action");            
-          }
-          break;
-//        default:
-//          default code block
-      }
-      
-    }
-    
-    
-    
-    
-    // Klik på søgeresultat-header (medarbejdere eller indhold)
-    
-    $(".soegebar-resultater").on('click', ".search-results h2", function () {
-//    $(".search-results h2").click(function(){
-      $(this).toggleClass("action");
-      
-      // Medarbejdere
-      if($(this).hasClass("medarbejdere")) {
-        if($(this).hasClass("action")) {
-          if(!$(".search-employees").hasClass("show")) {
-            $(".search-employees").addClass("show");
-            latestShown = "medarbejdere";
-            // Desktop
-            $(".soegebar-faner").removeClass("indhold").addClass("medarbejdere");        
-          }
-        }
-        else {
-          $(".search-employees").removeClass("show");
-          latestShown = "medarbejdere";
-        }
-      }
-      
-      // Indhold
-      if($(this).hasClass("indhold")) {
-        if($(this).hasClass("action")) {
-          if(!$(".search-content").hasClass("show")) {
-            $(".search-content").addClass("show");
-            latestShown = "indhold";
-            // Desktop
-            $(".soegebar-faner").removeClass("medarbejdere").addClass("indhold");   
-          }
-        }
-        else {
-          $(".search-content").removeClass("show");
-          latestShown = "indhold";
-        }
-      }
-      
-    });    
 
-    // Klik på soegebar-faner (medarbejdere eller indhold)
-//    $(".soegebar-faner .row div").on('click mouseover', function () {
-    $(".soegebar-faner").on('click mouseover', ".row div", function () {
-//    $(".soegebar-faner .row div").click(function() {
-      
-      // Medarbejdere
-      if($(this).hasClass("medarbejdere")) {
-        if(!$(".soegebar-faner").hasClass("medarbejdere")) {
-          // Desktop
-          $(".soegebar-faner").removeClass("indhold").addClass("medarbejdere");
-          $(".search-content").removeClass("show");
-          $(".search-employees").addClass("show");
-          // Mobil
-          $(".search-results h2.medarbejdere").addClass("action");
-          $(".search-results h2.indhold").removeClass("action");
-          
-          latestShown = "medarbejdere";
-        }
-      }
-      
-      // Indhold
-      if($(this).hasClass("indhold")) {
-        if(!$(".soegebar-faner").hasClass("indhold")) {
-          // Desktop
-          $(".soegebar-faner").removeClass("medarbejdere").addClass("indhold");
-          $(".search-employees").removeClass("show");
-          $(".search-content").addClass("show");
-          // Mobil
-          $(".search-results h2.medarbejdere").removeClass("action");
-          $(".search-results h2.indhold").addClass("action");
-          
-          latestShown = "indhold";
-        }
-      }
-      
-    });    
-    
-    // Scroll til toppen, når der fokus på søgefeltet, eller når der tastes i søgefeltet
-    // Bruger scrollTo-plugin'et
-    var soegefeltFokus = 0;
-    var soegefeltIsTop = 0;
-    $('#soegefelt').on({
-      'focus': function() {
-        if (soegefeltFokus) {
-          $.scrollTo( ($(this).offset().top - 50), 300);
-          soegefeltFokus = 1;
-          soegefeltIsTop = 1;
-        }
-      },
-      'blur': function() {
-        if (!soegefeltFokus) {
-          soegefeltFokus = 1;
-          soegefeltIsTop = 0;
-        }
-      },
-      'keyup': function() {
-        console.log("\nKeyup triggered");
-          $.scrollTo( ($(this).offset().top - 50), 300);
-          soegefeltIsTop = 1;
-      },
-    });
-    
-    
-   
+//    /**** SØGEVARIABLER ****/
+//    var hasEmployees = 0,
+//        hasContent   = 0,
+//        latestShown  = "";
+//    
+//    
+////    function showUgleResults() {
+////      // Hvis resultat i begge søgninger
+////      if(hasEmployees && hasContent) {
+////        
+////        latestShown = "medarbejdere";
+////      }
+////      // Hvis resultat kun i medarbejder-søgning
+////      if(hasEmployees && !hasContent) {
+////        
+////        latestShown = "medarbejdere";
+////      }
+////      // Hvis resultat kun i indholds-søgning
+////      if(!hasEmployees && hasContent) {
+////        
+////        latestShown = "indhold";
+////      }
+////    }
+//    
+//    
+//    // Responsiv funktion der tjekker om hvilken søgning, der sidst er vist. Bruges når der skiftes fra mobil visning til desktop visning
+//    function findLatestShownUgleResult(s) {
+//      
+//      switch (s) {
+//          
+//        case "mobile":
+//          
+//          if(latestShown == "medarbejdere") {
+//            $(".search-results h2.medarbejdere").addClass("action");
+//          }
+//          if(latestShown == "indhold") {
+//            $(".search-results h2.indhold").addClass("action");
+//          }
+//          break;
+//          
+//        case "desktop":
+//          
+//          // Medarbejdere
+//          if(latestShown == "medarbejdere") { 
+//            // Desktop
+//            $(".soegebar-faner").removeClass("indhold").addClass("medarbejdere");
+//            $(".search-content").removeClass("show");
+//            $(".search-employees").addClass("show");
+//            $(".search-results h2.indhold").removeClass("action");            
+//          }
+//          // Indhold
+//          if(latestShown == "indhold") { 
+//            // Desktop
+//            $(".soegebar-faner").removeClass("medarbejdere").addClass("indhold");
+//            $(".search-employees").removeClass("show");
+//            $(".search-content").addClass("show");
+//            $(".search-results h2.medarbejdere").removeClass("action");            
+//          }
+//          break;
+////        default:
+////          default code block
+//      }
+//      
+//    }
+//    
+//    
+//    
+//    
+//    // Klik på søgeresultat-header (medarbejdere eller indhold)
+//        $(".soegebar-resultater").on('click', ".search-results h2", function () {
+//      $(this).toggleClass("action");
+//      
+//      // Medarbejdere
+//      if($(this).hasClass("medarbejdere")) {
+//        if($(this).hasClass("action")) {
+//          if(!$(".search-employees").hasClass("show")) {
+//            $(".search-employees").addClass("show");
+//            latestShown = "medarbejdere";
+//            // Desktop
+//            $(".soegebar-faner").removeClass("indhold").addClass("medarbejdere");        
+//          }
+//        }
+//        else {
+//          $(".search-employees").removeClass("show");
+//          latestShown = "medarbejdere";
+//        }
+//      }
+//      
+//      // Indhold
+//      if($(this).hasClass("indhold")) {
+//        if($(this).hasClass("action")) {
+//          if(!$(".search-content").hasClass("show")) {
+//            $(".search-content").addClass("show");
+//            latestShown = "indhold";
+//            // Desktop
+//            $(".soegebar-faner").removeClass("medarbejdere").addClass("indhold");   
+//          }
+//        }
+//        else {
+//          $(".search-content").removeClass("show");
+//          latestShown = "indhold";
+//        }
+//      }
+//      
+//    });    
+//
+//    // Klik/mouseover på soegebar-faner (medarbejdere eller indhold)
+//    $(".soegebar-faner").on('click mouseover', ".row div", function () {
+//      
+//      // Medarbejdere
+//      if($(this).hasClass("medarbejdere")) {
+//        console.log("uglen.js: " + countEmployees);
+//        if(!$(".soegebar-faner").hasClass("medarbejdere")) {
+//          // Desktop
+//          $(".soegebar-faner").removeClass("indhold").addClass("medarbejdere");
+//          $(".search-content").removeClass("show");
+//          $(".search-employees").addClass("show");
+//          // Mobil
+//          $(".search-results h2.medarbejdere").addClass("action");
+//          $(".search-results h2.indhold").removeClass("action");
+//          
+//          latestShown = "medarbejdere";
+//        }
+//      }
+//      
+//      // Indhold
+//      if($(this).hasClass("indhold")) {
+//        if(!$(".soegebar-faner").hasClass("indhold")) {
+//          // Desktop
+//          $(".soegebar-faner").removeClass("medarbejdere").addClass("indhold");
+//          $(".search-employees").removeClass("show");
+//          $(".search-content").addClass("show");
+//          // Mobil
+//          $(".search-results h2.medarbejdere").removeClass("action");
+//          $(".search-results h2.indhold").addClass("action");
+//          
+//          latestShown = "indhold";
+//        }
+//      }
+//      
+//    });    
+//    
+//    // Scroll til toppen, når der fokus på søgefeltet, eller når der tastes i søgefeltet
+//    // Bruger scrollTo-plugin'et
+//    var soegefeltFokus = 0;
+//    var soegefeltIsTop = 0;
+//    $('#soegefelt').on({
+//      'focus': function() {
+//        if (soegefeltFokus) {
+//          $.scrollTo( ($(this).offset().top - 50), 300);
+//          soegefeltFokus = 1;
+//          soegefeltIsTop = 1;
+//        }
+//      },
+//      'blur': function() {
+//        if (!soegefeltFokus) {
+//          soegefeltFokus = 1;
+//          soegefeltIsTop = 0;
+//        }
+//      },
+//      'keyup': function() {
+//        console.log("\nKeyup triggered");
+//          $.scrollTo( ($(this).offset().top - 50), 300);
+//          soegefeltIsTop = 1;
+//      },
+//    });
+//    
+//    
+//   
     
     
     
@@ -3651,7 +3661,6 @@ else if (typeof define === 'function' && define.amd) {
       $(".link-url textarea").removeClass("show-bg");
       $(".link-url").removeClass("show");
       $(".link-url span").removeClass("show-bg");
-      
     });  
     
     
@@ -3791,8 +3800,13 @@ else if (typeof define === 'function' && define.amd) {
   
     
     // Tilføj h2 til Aktivitetsidens søgeboks
-    if($(".views-exposed-widgets")[0]) {
-      $(".views-exposed-widgets").prepend("<h2>Søg aktiviteter</h2>");
+//    if($(".views-exposed-widgets")[0]) {
+//      $(".views-exposed-widgets").prepend("<h2>Søg aktiviteter</h2>");
+//    }
+    
+    // Tilføj h2 til Aktivitetsidens søgeboks
+    if($(".nyhedsside")[0]) {
+      $(".views-exposed-widgets").prepend("<h2>Søg nyheder</h2>");
     }
     
     // Tilføj måneds-friser til aktivitetslisten på Aktivitetessiden 
@@ -3826,6 +3840,19 @@ else if (typeof define === 'function' && define.amd) {
 //        responsive: true
 //      });
     }
+
+    
+    /************************/
+    /**** TILFØJ INDHOLD ****/
+    /************************/
+    if($(".tilfoej-indhold")[0]) {
+      $(".header-plus").click(function() {
+        $(".tilfoej-indhold").toggleClass("show");
+      });
+    }
+
+    
+    
     
     /**********************/
     /**** DRUPAL FIXES ****/
@@ -3839,6 +3866,9 @@ else if (typeof define === 'function' && define.amd) {
     });
     
 
+    
+    
+    
   });
 
   
@@ -3870,7 +3900,6 @@ else if (typeof define === 'function' && define.amd) {
 
   
 })(jQuery);
-
 
 
 

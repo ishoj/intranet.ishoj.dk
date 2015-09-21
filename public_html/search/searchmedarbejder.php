@@ -1,6 +1,5 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
-
 define('DRUPAL_ROOT', '/var/www/intranet.ishoj.dk/public_html');
 require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
@@ -31,4 +30,5 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array(
  
 $json = curl_exec($ch);
 print str_replace("field_titel_stilling:name","field_titel_stilling_name",str_replace("field_afdeling:name","field_afdeling_name",$json));
+
 ?>
