@@ -1,0 +1,62 @@
+{
+  "name": "Kraken",
+  "version": "6.0.0",
+  "description": "A lightweight front-end boilerplate",
+  "main": "./",
+  "author": {
+    "name": "Chris Ferdinandi",
+    "url": "http://gomakethings.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/cferdinandi/kraken.git"
+  },
+  "devDependencies": {
+    "del": "^0.1.3",
+    "gulp": "^3.8.0",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-file-include": "^0.13.7",
+    "gulp-flatten": "^0.2.0",
+    "gulp-footer": "^1.0.5",
+    "gulp-header": "^1.7.1",
+    "gulp-jshint": "^1.12.0",
+    "gulp-karma": "0.0.5",
+    "gulp-livereload": "^3.8.1",
+    "gulp-markdown": "^1.2.0",
+    "gulp-minify-css": "^1.2.1",
+    "gulp-plumber": "^1.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-ruby-sass": "^2.0.5",
+    "gulp-sass": "^2.1.0",
+    "gulp-svgmin": "^1.2.0",
+    "gulp-svgstore": "^5.0.5",
+    "gulp-tap": "^0.1.3",
+    "gulp-uglify": "^1.5.1",
+    "gulp-watch": "^4.3.5",
+    "jshint-stylish": "^2.1.0",
+    "karma-coverage": "^0.2.4",
+    "karma-htmlfile-reporter": "^0.1",
+    "karma-jasmine": "^0.2.0",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-spec-reporter": "^0.0.13",
+    "lazypipe": "^1.0.1",
+    "node-fs": "^0.1.7"
+  },
+  "gitHead": "c1de1497264d37dee0ca76a5aa69d32346af8db0",
+  "readme": "# Kraken [![Build Status](https://travis-ci.org/cferdinandi/kraken.svg)](https://travis-ci.org/cferdinandi/kraken)\nKraken is a lightweight, mobile-first boilerplate for front-end web developers. [View the demo and get started](http://cferdinandi.github.com/kraken/).\n\n\n## How to Contribute\n\nIn lieu of a formal style guide, take care to maintain the existing coding style. Don't forget to update the version number, the changelog (in the `readme.md` file), and when applicable, the documentation.\n\n\n## License\n\nKraken is free to use under the [MIT License](http://gomakethings.com/mit/).\n\n\n## Changelog\n\nKraken uses [semantic versioning](http://semver.org/).\n\n* v6.0.0 - March 6, 2015\n\t* Removed icon font support.\n* v5.6.1 - March 6, 2015\n\t* Fixed false positive from Opera Mini in SVG detection.\n* v5.6.0 - January 31, 2014\n\t* Remove opacity `filter` from `a:hover img` property. IE9+ support `opacity` so it's been deprecated.\n\t* Changed the `display` property on `.list-inline > li` from `inline-block` to `inline`.\n* v5.5.0 - January 7, 2014\n\t* Removed `:visited` and `:active` link styling to prevent specificity issues.\n* v5.4.0 - January 7, 2014\n\t* Added `$color-info` variable.\n* v5.3.0 - January 7, 2014\n\t* Added Sass line numbers.\n* v5.2.0 - December 16, 2014\n\t* Added styling for the `abbr` tag.\n* v5.1.1 - November 20, 2014\n\t* Fixed watch task.\n* v5.1.0 - November 12, 2014\n\t* Removed commented out list styles.\n\t* Moved `.text-small`, `.text-large`, and `.text-muted` to `_overrides.scss` for better cascade inheritance.\n\t* Updated SVG process to allow for multiple SVG files.\n\t* Increased `h4`, `h5`, and `h6` font size to `1em`.\n\t* Adjusted styling of `.icon` class in `_svg.scss` for less specificity and easier overriding.\n\t* Renamed `_svgs.scss` to `_svg.scss`.\n* v5.0.1 - October 24, 2014\n\t* Fixed bug with SVG feature detection and conditional displaying.\n* v5.0.0 - October 23, 2014\n\t* Updated grid pattern that adds dynamic grids for more design flexibility.\n\t* Renamed `.grid-img` to `.grid-dynamic`.\n\t* Renamed several Sass variables for better semantics.\n\t* Deprecated Slider and removed from add-ons. Linked directly to HTML5 Boilerplate version of `.htaccess` file.\n\t* Updated `.screen-reader` class with more accessible HTML5 Boilerplate implementation. Added `.screen-reader-focusable` class.\n\t* Removed general `*-space-*` classes in favor of `*-margin-*` and `*-padding-*` specific ones.\n\t* Added `.list-inline` class.\n\t* Removed `list-style` attribute from `ul` and `ol`. Let's browser defaults do their thing.\n\t* Renamed `.group` to `.clearfix`.\n\t* Added default `display: none` state to SVGs to prevent blank space from showing in unsupported browsers.\n* v4.2.0 - October 16, 2014\n\t* Updated Gulp task naming convention for better readability (action:object).\n\t* Added `gulp watch` and `gulp reload` task runners (regular and docs flavored).\n\t* Reorganized `package.json` and `gulpfile.js` packages.\n* v4.1.2 - October 15, 2014\n\t* Updated `gulp-svgstore` to version `2.x`.\n\t* Replaced `gulp-clean` with native Node `del` method.\n* v4.1.1 - October 15, 2014\n\t* Issued temporary fix for forced sourcemap generation in Sass 3.4.\n* v4.1.0 - October 15, 2014\n\t* Replaced `gulp-headerfooter` with `gulp-header` and `gulp-footer` respectively.\n* v4.0.3 - October 15, 2014\n\t* Switched to inline SVG.\n\t* Updated `paths` variables in  `gulpfile.js`.\n* v4.0.2 - October 15, 2014\n\t* Fixed Gulp script task bug.\n* v4.0.1 - October 10, 2014\n\t* Removed placeholder language from SVG section.\n\t* Fixed moz-specific styling being duplicated by auto-prefixer.\n* v4.0.0 - October 7, 2014\n\t* Updated `icons.scss` to use `@each` loops.\n\t* Changed name of CSS output from `kraken.css` to `main.css`.\n\t* Changed `.text-tall` to `.text-large` for semantic consistency.\n\t* Added support for `.sass` file type to Sass processing.\n\t* Added SVG sprite generation to build process.\n\t* Added SVG styling and feature detection.\n\t* Added documentation generator to build process.\n\t* Removed HTML5 shim (time to drop IE8 and lower optimization).\n\t* Wrapped JS detects in IIFEs for better variable scoping.\n\t* Added documentation on working with Travis CI.\n\t* Added Tarpit to add-ons.\n* v3.8.2 - September 28, 2014\n\t* Fixed JS concatenation bug.\n* v3.8.1 - August 24, 2014\n\t* Fixed unit tests path.\n\t* Added feature testing and main JS files to their own subfolders for concatenation.\n* v3.8.0 - August 12, 2014\n\t* Added `@each` loop for icons and the grid for easier maintenance.\n\t* Switched from sasslib to Ruby Sass for compiling (more compatible with Sass 3.x features).\n\t* Added variable for container width property.\n\t* Added variable to bump font-size on xlarge screens.\n* v3.7.0 - July 21, 2014\n\t* Added `[hidden]` attribute polyfill.\n\t* Converted to CSSDoc inline documentation.\n\t* Added nested media queries for better readability.\n\t* Added `:focus` and `:visited` styles for links and buttons.\n* v3.6.1 - June 24, 2014\n\t* Removed italics from h4, h5, and h6 elements.\n* v3.6.0 - June 23, 2014\n\t* Converted to gulp.js workflow.\n\t* Added unit testing.\n\t* Updated naming conventions.\n\t* Removed unused `_mixins.scss` function.\n\t* Added minified versions of files.\n\t* Converted to three number versioning.\n\t* [Replaced Google-hosted HTML5 shim with local version](https://github.com/cferdinandi/kraken/issues/60).\n\t* [Updated icon recommendations](https://github.com/cferdinandi/kraken/issues/59).\n\t* [Updated Google Analytics placeholder](https://github.com/cferdinandi/kraken/issues/66).\n* v3.5 - March 26, 2014\n\t* Added `@font-face` feature test.\n\t* Added fallback text for icons.\n* v3.4 - February 16, 2014\n\t* [Added fix for Firefox on Android button styling quirk.](https://github.com/cferdinandi/kraken/pull/36)\n* v3.3 - February 4, 2014\n\t* [Added universal box-sizing.](https://github.com/cferdinandi/kraken/issues/32)\n\t* Redesigned grid with simple percentages (made possible with universal box-sizing).\n\t* Added `grid-margins` variable that let's users change the grid margins in the `config.scss` file.\n* v3.2 - January 13, 2014\n\t* [Added word-break to long headings for better usability.](https://github.com/cferdinandi/kraken/issues/27)\n* v3.1 - December 2, 2013\n\t* [Reorganized package structure for easier usability.](https://github.com/cferdinandi/kraken/issues/21)\n* v3.0 - November 29, 2013\n\t* Added Sass integration.\n\t* Changed naming conventions from `*-blue` to `*-secondary` for better abstraction.\n\t* Updated typographic scale to a 16px base.\n\t* Redesigned grid uses fraction-based naming (`.grid-third` instead of  `.grid-2`).\n\t* Added `.active` and `.disabled` classes to buttons.\n\t* Dropped rounded corners from buttons, forms, etc.\n* v2.6 - November 13, 2013\n\t* [Added definition list styling](https://github.com/cferdinandi/kraken/issues/14).\n* v2.5 - October 21, 2013\n\t* [Added `tab-size` property to the `pre` element](https://github.com/cferdinandi/kraken/issues/12).\n\t* [Added `word-break` property to links](https://github.com/cferdinandi/kraken/issues/5) to fix convert overflow issues.\n\t* [Updated CSS Reset](https://github.com/cferdinandi/kraken/issues/8) to incorporate some improvements to Normalize.css.\n\t* [Removed IE7- hacks](https://github.com/cferdinandi/kraken/issues/7).\n\t* [Updated grid for better performance](https://github.com/cferdinandi/kraken/issues/9).\n\t* [Converted from spaces to tabs](https://github.com/cferdinandi/kraken/issues/11).\n\t* [Fixed `vertical-align` and `display: block` conflict for forms](https://github.com/cferdinandi/kraken/issues/13).\n* v2.4 - October 18, 2013\n\t* Fixed [`input-inline`](https://github.com/cferdinandi/kraken/issues/6).\n* v2.3 - August 24,2013\n\t* Minor styling update for Code section\n* v2.2 - July 29, 2013\n\t* Removed iOS Rotation Zoom Bug Fix JS (bug fixed from iOS6 on).\n* v2.1 - June 7, 2013\n\t* Switched to MIT license.\n* v2.1 - June 2, 2013\n\t* Added version numbering.\n* v2.1 - March 19,2013\n\t* Changed `.screen-reader` class to ems.\n* v2.0 - March 18, 2013\n\t* Removed gradients on buttons.\n\t* Changed `.btn-color` to `.btn-blue`, breaking previous pattern.\n* v2.0 - March 15, 2013\n\t* Changed `.unstyled` to `.list-unstyled`, breaking previous pattern.\n* v1.1 - March 14, 2013\n\t* Added print styling.\n* v1.0 - May 7, 2013\n\t* Initial release.",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/cferdinandi/kraken/issues"
+  },
+  "homepage": "https://github.com/cferdinandi/kraken#readme",
+  "_id": "Kraken@6.0.0",
+  "_shasum": "1c13c7b460a15e45407ac6d546184a6dc5edc876",
+  "_from": "cferdinandi/kraken",
+  "_resolved": "git://github.com/cferdinandi/kraken.git#c1de1497264d37dee0ca76a5aa69d32346af8db0",
+  "dependencies": {
+    "del": "^2.1.0",
+    "jquery-touchswipe": "^1.6.7"
+  }
+}

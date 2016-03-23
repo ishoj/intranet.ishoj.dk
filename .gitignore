@@ -6,3 +6,4 @@ vendor
 public_html/sites/default/files
 # Ignore configuration files that may contain sensitive information.
 public_html/sites/*/*settings*.php
+public_html/sites/all/themes/ishoj/node_modules
