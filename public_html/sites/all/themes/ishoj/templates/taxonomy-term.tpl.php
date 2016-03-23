@@ -73,7 +73,7 @@ function sortByTitle($a, $b){
         $output = $output . "<div class=\"container\">";
           $output = $output . "<div class=\"row\">";
             $output = $output . "<div class=\"grid-full\">";
-              $output = $output . "<h1>" . $term_name. "</h1>";
+              $output = $output . "<h1>test" . $term_name. "</h1>";
     
               // BRØDKRUMMESTI
               //this will be your top parent term if any was found
@@ -139,7 +139,8 @@ function sortByTitle($a, $b){
         dsm($taxo_child);    
         // UNDER KATEGORIER
          foreach($taxo_child as $termchild) {
-    $output = $output . "<li class=\"grid-fourth\"><a href=\"" . url('taxonomy/term/' . $termchild->tid) . "\" title=\"" . $termchild->name . "\"><h3><span>" . $termchild->name . "</span></h3></a><li>";    
+           
+    $output = $output . "<li class=\"grid-fourth\"><a href=\"" . url('taxonomy/term/' . $termchild->tid) . "\" title=\"" . $termchild->name . "\"><h3><span>" . $termchild->name . "</span></h3></a></li>";    
    }
         
 
@@ -147,7 +148,7 @@ function sortByTitle($a, $b){
         
   usort($nodes, 'sortByTitle');
    foreach($nodes as $nid1) {
-    $output = $output . "<li class=\"grid-fourth\"><a href=\"" . url('node/' . $nid1->nid) . "\" title=\"" . $nid1->title . "\"><h3><span>" . $nid1->title . "</span></h3></a><li>";    
+    $output = $output . "<li class=\"grid-fourth\"><a href=\"" . url('node/' . $nid1->nid) . "\" title=\"" . $nid1->title . "\"><h3><span>" . $nid1->title . "</span></h3></a></li>";    
    }
 
     
@@ -170,7 +171,6 @@ function sortByTitle($a, $b){
   // ----------------------------------- //
   if($term->vocabulary_machine_name == "kategori") {
     if($term_name == "Aktiviteter") {
-      $output .= "<section class=\"aktivitetsside\">";
         $output .= "<div class=\"container\">";
           $output .= "<div class=\"row\">";
 
@@ -487,7 +487,7 @@ $output .= $outputuser;
 <?php 
   
   // BREAKING
-  print views_embed_view('kriseinformation', 'pagevisning');
+  //print views_embed_view('kriseinformation', 'pagevisning');
 
   // OUTPUT
   print $output;

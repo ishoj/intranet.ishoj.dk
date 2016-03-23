@@ -84,7 +84,9 @@
 
 
 
-<?php dsm($node); //drupal_set_message('<pre>' . print_r($node, TRUE) . '</pre>'); 
+<?php 
+dsm($node); //drupal_set_message('<pre>' . print_r($node, TRUE) . '</pre>'); 
+include_once drupal_get_path('theme', 'ishoj') . '/includes/uglen_functions.php';
 ?>
 
 <?php
@@ -248,8 +250,9 @@ $bterm = taxonomy_term_load($buftid);
        
 
 
-          // BREAKING
-          $output .= views_embed_view('kriseinformation','nodevisning', $node->nid);
+        // BREAKING
+        // $output .= views_embed_view('kriseinformation','nodevisning', $node->nid);
+        //$output .= breaking();
 
 
         print $output;

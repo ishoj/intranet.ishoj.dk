@@ -87,6 +87,7 @@
 <?php dsm($node); //drupal_set_message('<pre>' . print_r($node, TRUE) . '</pre>'); ?>
 
 <?php
+include_once drupal_get_path('theme', 'ishoj') . '/includes/uglen_functions.php';
 $output = "";
 ?>
 
@@ -289,8 +290,9 @@ $output = "";
 
         
 
-          // BREAKING
-          $output .= views_embed_view('kriseinformation','nodevisning', $node->nid);
+        // BREAKING
+        // $output .= views_embed_view('kriseinformation','nodevisning', $node->nid);
+        //$output .= breaking();
 
 //        $output = $output . "<!-- BREAKING START -->";
 //        $output = $output . "<div class=\"breaking\">";

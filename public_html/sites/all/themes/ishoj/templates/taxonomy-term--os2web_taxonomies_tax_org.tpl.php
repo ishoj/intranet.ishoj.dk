@@ -101,7 +101,7 @@ $output .= "<!-- ARTIKEL SLUT -->";
 
 
 // BREAKING
-print views_embed_view('kriseinformation', 'pagevisning');
+//print views_embed_view('kriseinformation', 'pagevisning');
 
 // OUTPUT
 print $output;

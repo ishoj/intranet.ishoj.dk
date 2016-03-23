@@ -9,6 +9,7 @@
 function ishoj_theme() {
   
   // Theming af user login, se http://dannyenglander.com/blog/customizing-user-login-page-drupal-7
+  // https://www.drupal.org/node/350634
   $items = array();
   // create custom user-login.tpl.php
   $items['user_login'] = array(
@@ -19,8 +20,52 @@ function ishoj_theme() {
       'ishoj_preprocess_user_login'
       ),
     );
+//  $items['user_register_form'] = array(
+//    'render element' => 'form',
+//    'path' => drupal_get_path('theme', 'ishoj') . '/templates',
+//    'template' => 'user-register-form',
+//    'preprocess functions' => array(
+//      'ishoj_preprocess_user_register_form'
+//    ),
+//  );
+  $items['user_pass'] = array(
+    'render element' => 'form',
+    'path' => drupal_get_path('theme', 'ishoj') . '/templates',
+    'template' => 'user-password',
+    'preprocess functions' => array(
+      'ishoj_preprocess_user_pass'
+    ),
+  );
+  
+  $items['user_profile_form'] = array(
+    'render element' => 'form',
+    'path' => drupal_get_path('theme', 'ishoj') . '/templates',
+    'template' => 'user-profile-edit',
+    'preprocess functions' => array(
+      'ishoj_preprocess_user_profile_form'
+    ),
+  );
+  
   return $items;
+
+  
+  
+  // User edit template  
+//  return array(
+//    // The form ID.
+//    'user_profile_form' => array(
+//      // Forms always take the form argument.
+//      'arguments' => array('form' => NULL),
+//      'render element' => 'form',
+//      'template' => 'templates/user-profile-edit',
+//    ),
+//  );
+  
+  
 }
+
+
+
 
 
 /***********************/
@@ -49,7 +94,13 @@ function ishoj_preprocess_page(&$variables) {
   
   if(arg(0) == "aktivitet" and arg(1) == "tester") {
     drupal_add_js($variables['path_to_theme'] . 'dist/js/json_aktiviteter.js', array('weight' => 1000));
-  }  
+  } 
+  
+  // Page-template for alle admin-sider
+  if (arg(0) == 'admin') {
+    $variables['template_files'][] =  'page-admin';
+  }
+  
   
   // Hvis brugeren er logget på (webredaktør-rolle)
   if($variables['logged_in']) {

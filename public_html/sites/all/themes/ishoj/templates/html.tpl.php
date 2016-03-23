@@ -1,5 +1,77 @@
 <?php
+//if (empty($_GET['nologin'])) {
+$ipadd = '';
+if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
+    {
+      $ipadd=$_SERVER['HTTP_CLIENT_IP'];
+    }
+    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
+    {
+      $ipadd=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+    else
+    {
+      $ipadd=$_SERVER['REMOTE_ADDR'];
+    }
+$okloginbuf = 'test';
+if ($okloginbuf == 'test') {  
+if ($ipadd == '212.130.64.114') {
+if(user_is_logged_in()){
+} else {
+if (empty($_GET['internref'])) {
+    // no data passed by get
+   // print $_SERVER["REQUEST_URI"];
+    // /useractivation
+    // /user/logout
+    if ($_SERVER["REQUEST_URI"] != '/user' ) {
+         if ($_SERVER["REQUEST_URI"] != '/user/logout' ) {
+             if ($_SERVER["REQUEST_URI"] != '/user/password' ) {
+                 if ($_SERVER["REQUEST_URI"] != '/useractivation' ) {
+    $desurl = 'http://intranotesrv1/egnemoduler/code/uglenlogin.aspx?destination=' . $_SERVER["REQUEST_URI"];
+    header('Location: ' . $desurl, true, 303);
+die();
+                      }
+      }
+     } 
+    }
+} else {
+$usernamerem = str_replace('"','',str_replace("'","",$_GET['internref']));
+if(!user_is_logged_in()){
+if ($_GET['from'] == 'fraserver') {
+if (!empty($usernamerem)) {
+$query = new EntityFieldQuery();
+$query->entityCondition('entity_type', 'user')
+  ->fieldCondition('field_userdatatest', 'value', $usernamerem, '=');
+$results = $query->execute();
+if (!count($results) == 0 ) {
+$uidrem = "";
+foreach (array_keys($results['user']) as $value) {
+$uidrem = $value;
+}
+$urldone = 'http://uglen.ishoj.dk' . str_replace("testlog=test","",$_GET['destination']);
+$user_objrem = user_load($uidrem);
+$form_state = array();
+$form_state['uid'] = $user_objrem->uid;      
+user_login_submit(array(), $form_state);   
+header('Location: ' . $urldone, true, 303);
+die();
+  
+}
+  
+}
+    
+   
+}  
+}
+    
+}
 
+}
+    
+} 
+
+} // if testlog
+//}
 /**
  * @file
  * Default theme implementation to display the basic html structure of a single
@@ -87,7 +159,20 @@
   </div>
   <?php print $page_top; ?>
   <?php print $page; ?>
-  <?php print $page_bottom; ?>
+  <?php print $page_bottom; ?>      
+<?php 
+if($logged_in) { 
+print "<script type=\"text/javascript\">userloggedin = true;</script>";    
+} else {
+ if ($ipadd == '212.130.64.114') {
+ print "<script type=\"text/javascript\">userloggedin = true;</script>";
+ } else {
+ print "<script type=\"text/javascript\">userloggedin = false;</script>";
+ }
+
+}
     
-</body>
+?>
+    
+    </body>
 </html>

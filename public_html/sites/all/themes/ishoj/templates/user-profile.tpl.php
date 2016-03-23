@@ -38,6 +38,10 @@ $output .= "<div data-role=\"page\">";
             /////////////////////////////
             // MANGLER AT UDFYLDE DATA //
             /////////////////////////////
+                if($logged_in) {
+                if(($user->uid == $showuser->uid) or $is_admin) {
+
+  
             $mangler = 0;
             
             $mangler_output_top = "<div class=\"user-missing-data\">";
@@ -81,10 +85,10 @@ $output .= "<div data-role=\"page\">";
               $mangler++;
             }
             // Arbejdsmobil
-            if(!$showuser->field_arbejdsmobil) {
-              $mangler_output .= "<li>Arbejdsmobil</li>";
-              $mangler++;
-            }
+//            if(!$showuser->field_arbejdsmobil) {
+//              $mangler_output .= "<li>Arbejdsmobil</li>";
+//              $mangler++;
+//            }
             // Privat mobil
 //            if(!$showuser->field_privat_mobil) {
 //              $mangler_output .= "<li>Privat mobil</li>";
@@ -96,7 +100,7 @@ $output .= "<div data-role=\"page\">";
             // RET BRUGER KNAP
             if($logged_in) {
               if(($user->uid == $showuser->uid) or $is_admin) {
-                $mangler_output_bottom .= "<div style=\"float:left; width:100%; margin-bottom:1em;\"><div class=\"edit-node\"><a href=\"/user/" . $showuser->uid . "/edit\" title=\"Ret bruger\"><span>Ret bruger</span></a></div></div>";
+                $mangler_output_bottom .= "<div style=\"float:left; width:100%; margin-bottom:1em;\"><div class=\"edit-node\"><a href=\"/user/" . $showuser->uid . "/edit\" title=\"Ret bruger\"><span>Ret profil</span></a></div></div>";
               }
             }
   
@@ -114,7 +118,7 @@ $output .= "<div data-role=\"page\">";
             else {
               
               // RET BRUGER KNAP
-              global $user;
+              //global $user;
               if($logged_in) {
                 if(($user->uid == $showuser->uid) or $is_admin) {
                   $output .= "<div style=\"float:left; width:100%; margin-bottom:1em;\"><div class=\"edit-node\"><a href=\"/user/" . $showuser->uid . "/edit\" title=\"Ret bruger\"><span>Ret bruger</span></a></div></div>";
@@ -122,7 +126,9 @@ $output .= "<div data-role=\"page\">";
               }
             
             }
-            
+                  }
+              }
+          
   
 
           $output .= "</div>";
@@ -140,7 +146,10 @@ $output .= "<div data-role=\"page\">";
 //                $output .= theme('user_picture', array('account' =>$showuser));
               if($showuser->picture) {
                 $output .= "<img alt=\"" . $name . "\" src=\"" . image_style_url('profilfoto_stor', $showuser->picture->uri) . "\" />";
-              }
+                   
+               $output .= "<img class=\"hide-me\" alt=\"" . $name . "\" src=\"" . image_style_url('profilfoto_lille', $showuser->picture->uri) . "\" />";
+                }
+              
               else {
                   $output .= "<img alt=\"" . $name . "\" src=\"/sites/all/themes/ishoj/dist/img/sprites-no/nopic_big.png\" />";              
               }
@@ -159,6 +168,25 @@ $output .= "<div data-role=\"page\">";
                   $output .= "<p><strong>AFDELING:</strong> <a href=\"" . url('taxonomy/term/' . $showuser->field_afdeling['und'][0]['tid']) . "\" title=\"" . $showuser->field_afdeling['und'][0]['taxonomy_term']->name . "\">" . $showuser->field_afdeling['und'][0]['taxonomy_term']->name . "</a></p>";
                 }
 
+                // LOKATION
+                if($showuser->field_aktivitetssted) {
+                  
+                  // STED
+                  $output .= "<p><strong>LOKATION:</strong> " . taxonomy_term_load($showuser->field_aktivitetssted['und'][0]['tid'])->name;
+                  
+                  // ETAGE
+                  if($showuser->field_etage) {
+                    $output .= ", etage " . $showuser->field_etage['und'][0]['value'];  
+                  }
+                  
+                  // LOKALE NR.
+                  if($showuser->field_lokale_nr_) {
+                    $output .= ", lokale " . $showuser->field_lokale_nr_['und'][0]['value'];  
+                  }
+                  
+                  $output .= "</p>";
+                }
+
                 // E-MAIL
                 if($showuser->mail) {
                   $output .= "<p><strong>E-MAIL:</strong> <a href=\"mailto:" . $showuser->mail . "\" title=\"Send en mail til " . $name  . "\">" . $showuser->mail . "</a></p>";
@@ -166,17 +194,17 @@ $output .= "<div data-role=\"page\">";
 
                 // DIREKTE TELEFON
                 if($showuser->field_direkte_telefon) {
-                  $output .= "<p><strong>DIREKTE TELEFON:</strong> " . $showuser->field_direkte_telefon['und'][0]['safe_value'] . "</p>";
+                  $output .= "<p><strong>DIREKTE TELEFON:</strong> " . preg_replace('/\s+/', '', $showuser->field_direkte_telefon['und'][0]['safe_value']) . "</p>";
                 }
 
                 // ARBEJDSMOBIL
                 if($showuser->field_arbejdsmobil) {
-                  $output .= "<p><strong>ARBEJDSMOBIL:</strong> " . $showuser->field_arbejdsmobil['und'][0]['safe_value'] . "</p>";
+                  $output .= "<p><strong>ARBEJDSMOBIL:</strong> " . preg_replace('/\s+/', '', $showuser->field_arbejdsmobil['und'][0]['safe_value']) . "</p>";
                 }
 
                 // PRIVAT MOBIL
                 if($showuser->field_privat_mobil) {
-                  $output .= "<p><strong>PRIVAT MOBIL:</strong> " . $showuser->field_privat_mobil['und'][0]['safe_value'] . "</p>";
+                  $output .= "<p><strong>PRIVAT MOBIL:</strong> " . preg_replace('/\s+/', '', $showuser->field_privat_mobil['und'][0]['safe_value']) . "</p>";
                 }
 
               $output .= "</div>";
@@ -194,10 +222,31 @@ $output .= "<div data-role=\"page\">";
 
             // FÆRDIGHEDER
             if($showuser->field_faerdigheder) {
-              $output .= "<p><strong>FÆRDIGHEDER:</strong></p>";
+              $output .= "<p><strong>KOMPETENCER:</strong></p>";
               $output .= "<ul class=\"ansvarsomraader\">";
               foreach ($showuser->field_faerdigheder['und'] as $faerdighedKey => $faerdighedItem) {
                 $output .= "<li><a href=\"" . url('taxonomy/term/' . $faerdighedItem['tid']) . "\" title=\"" . $faerdighedItem['taxonomy_term']->name . "\">" . $faerdighedItem['taxonomy_term']->name . "</a></li>";
+              }
+              $output .= "</ul>";
+            }
+    
+    
+    // UDDANNELSE
+            if($showuser->field_user_uddannelse) {
+              $output .= "<p><strong>UDDANNELSE:</strong></p>";
+              $output .= "<ul class=\"ansvarsomraader\">";
+              foreach ($showuser->field_user_uddannelse['und'] as $uddannelseKey => $uddannelseItem) {
+                $output .= "<li><a href=\"" . url('taxonomy/term/' . $uddannelseItem['tid']) . "\" title=\"" . $uddannelseItem['taxonomy_term']->name . "\">" . $uddannelseItem['taxonomy_term']->name . "</a></li>";
+              }
+              $output .= "</ul>";
+            }
+    
+     // SPROGKUNDSKABER
+            if($showuser->field_user_sprogkundskaber) {
+              $output .= "<p><strong>SPROGKUNDSKABER:</strong></p>";
+              $output .= "<ul class=\"ansvarsomraader\">";
+              foreach ($showuser->field_user_sprogkundskaber['und'] as $sprogkundskaberKey => $sprogkundskaberItem) {
+                $output .= "<li><a href=\"" . url('taxonomy/term/' . $sprogkundskaberItem['tid']) . "\" title=\"" . $sprogkundskaberItem['taxonomy_term']->name . "\">" . $sprogkundskaberItem['taxonomy_term']->name . "</a></li>";
               }
               $output .= "</ul>";
             }
@@ -274,7 +323,7 @@ $output .= "<div data-role=\"page\">";
                 }
                 // TELEFON
                 if($afloeserItem['user']->field_direkte_telefon) {
-                  $outputuser .= "<span class=\"telefon\">" . $afloeserItem['user']->field_direkte_telefon['und'][0]['safe_value'] . "</span><br />";
+                  $outputuser .= "<span class=\"telefon\">" . preg_replace('/\s+/', '', $afloeserItem['user']->field_direkte_telefon['und'][0]['safe_value']) . "</span><br />";
                 }
                 // E-MAIL
                 if($afloeserItem['user']->mail) {
@@ -348,7 +397,7 @@ $output .= "<div data-role=\"page\">";
                 }
                 // TELEFON
                 if($overordnetItem['user']->field_direkte_telefon) {
-                  $outputuser .= "<span class=\"telefon\">" . $overordnetItem['user']->field_direkte_telefon['und'][0]['safe_value'] . "</span><br />";
+                  $outputuser .= "<span class=\"telefon\">" . preg_replace('/\s+/', '', $overordnetItem['user']->field_direkte_telefon['und'][0]['safe_value']) . "</span><br />";
                 }
                 // E-MAIL
                 if($overordnetItem['user']->mail) {

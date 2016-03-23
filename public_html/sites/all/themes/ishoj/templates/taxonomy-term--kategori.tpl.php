@@ -42,7 +42,7 @@
 ?>
 
 <?php 
-dsm($term);
+
 function sortByTitle($a, $b){
   return strcmp($a->title, $b->title);
 }
@@ -76,7 +76,7 @@ function sortBysort($a, $b){
         $output = $output . "<div class=\"container\">";
           $output = $output . "<div class=\"row\">";
             $output = $output . "<div class=\"grid-full\">";
-              $output = $output . "<h1>" . $term_name. "</h1>";
+              $output = $output . "<h1>" . $term_name . "</h1>";
     
               // BRØDKRUMMESTI
               //this will be your top parent term if any was found
@@ -117,53 +117,112 @@ function sortBysort($a, $b){
     $output = $output . "<!-- KATEGORI OVERSKRIFT SLUT -->";
 
     if($term_name != "Aktiviteter") { // kategorierne vises ikke på aktivitetssiden
-      $output = $output . "<!-- CONTENT CATEGORY START -->";
-      $output = $output . "<section class=\"content-category\">";
-        $output = $output . "<div class=\"container\">";
-          $output = $output . "<div class=\"row\">";
 
-            $output = $output . "<ul class=\"list-unstyled\">";
-            $a = taxonomy_select_nodes($term->field_os2web_base_field_kle_ref['und'], $pager = FALSE); 
+      
+      
+        $a = taxonomy_select_nodes($term->field_os2web_base_field_kle_ref['und'], $pager = FALSE); 
         $nodes = array();
         foreach($a as $nid) {
-            $checkifitis = 0;
-            // check if node are allready there
-           foreach($nodes as $n) {
-                if ($n->nid == $nid) {
-                  $checkifitis = 1;
-                }
+          $checkifitis = 0;
+          // check if node are allready there
+          foreach($nodes as $n) {
+            if ($n->nid == $nid) {
+              $checkifitis = 1;
             }
-             if ($checkifitis == 0) {
+          }
+          if ($checkifitis == 0) {
             $nodes[] = node_load($nid);
-              }
-            }
+          }
+        }
+        $taxo_child = taxonomy_get_children($tid, $vid = 0, $key = 'tid');
+      
+        usort($nodes, 'sortByTitle');
 
-    $taxo_child = taxonomy_get_children($tid, $vid = 0, $key = 'tid');
+
+//      if($term->tid != "6760") { // Vinduesudskiftnings-kategori (MIDLERTIDIG) START PÅ SCOPE
+      
+      $output = $output . "<!-- CONTENT CATEGORY START -->";
+      $output = $output . "<section class=\"content-category-ny\">";
+        $output = $output . "<div class=\"container\">";
+          $output = $output . "<div class=\"row\">";
+            
+            $output = $output . "<ul class=\"list-unstyled\">";
             
         // UNDER KATEGORIER
          foreach($taxo_child as $termchild) {
-             if ($termchild->tid != '3882') { //LØNPORTAL DIVERSE HACK
-    $output = $output . "<li class=\"grid-fourth\"><a href=\"" . url('taxonomy/term/' . $termchild->tid) . "\" title=\"" . $termchild->name . "\"><h3><span>" . $termchild->name . "</span></h3></a><li>";    
+//             if ($termchild->tid != '3882') { //LØNPORTAL DIVERSE HACK
+             if (($termchild->tid != '3882')) { //LØNPORTAL DIVERSE HACK
+               
+//    $output = $output . "<li class=\"grid-fourth\"><a href=\"" . url('taxonomy/term/' . $termchild->tid) . "\" title=\"" . $termchild->name . "\"><h3><span>" . $termchild->name . "</span></h3></a><li>";    
+    $output = $output . "<li><a href=\"" . url('taxonomy/term/' . $termchild->tid) . "\" title=\"" . $termchild->name . "\"><span class=\"cat-icon\"></span><span class=\"cat-text\">" . $termchild->name . "</span></a></li>";    
+
    }
     }    
 
         // NODER 
           
-  usort($nodes, 'sortByTitle');
   if ($term->tid == '3869') {
            // CHEART SORT
          usort($nodes, 'sortBysort');
    }  
         
-   foreach($nodes as $nid1) {
-    $output = $output . "<li class=\"grid-fourth\"><a href=\"" . url('node/' . $nid1->nid) . "\" title=\"" . $nid1->title . "\"><h3><span>" . $nid1->title . "</span></h3></a><li>";    
-   }
+  foreach($nodes as $nid1) {
+    if($nid1->type == "os2web_base_contentpage") {
+        
+      //$output = $output . "<li class=\"grid-fourth\"><a href=\"" . url('node/' . $nid1->nid) . "\" title=\"" . $nid1->title . "\"><h3><span>" . $nid1->title . "</span></h3></a><li>";    
+        $output = $output . "<li><a href=\"" . url('node/' . $nid1->nid) . "\" title=\"" . $nid1->title . "\"><span class=\"cat-icon\"></span><span class=\"cat-text\">" . $nid1->title . "</span></a></li>";
+    }
+  }
 
   
+            $output = $output . "</ul>";
           $output = $output . "</div>";
         $output = $output . "</div>";
       $output = $output . "</section>";
       $output = $output . "<!-- CONTENT CATEGORY SLUT -->";
+      
+//      } // Vinduesudskiftnings-kategori (MIDLERTIDIG) SLUT PÅ SCOPE
+    
+    
+    
+      // NYHEDER
+      $nyheds_counter = 0;
+      foreach($nodes as $nid1) {
+        if($nid1->type == "nyheder") {
+          $nyheds_counter++;
+        }
+      }
+      if($nyheds_counter > 0) { // Hvis der er nyheder med samme kle-numre 
+        $output .= "<!-- NYHEDER START -->";
+        $output .= "<section class=\"news-almindelige kategoriside\">";
+          $output .= "<div class=\"container\">";
+        
+
+            $output .= "<div class=\"row\">";
+              $output .= "<div class=\"grid-full\">";
+              if($term->tid == "6760") { // Vinduesudskiftnings-kategori
+                $output .= "<h1 class=\"text-center\">Nyt om vinduesudskiftningen</h1>";
+              }
+              else { // alle andre
+                $output .= "<h1 class=\"text-center\">Nyt fra " . $term_name . "</h1>";
+              }
+              $output .= "</div>";
+            $output .= "</div>";
+            $output .= "<div class=\"row\">";
+
+              foreach($nodes as $nid1) {
+                if($nid1->type == "nyheder") {
+                  $output .= views_embed_view('nyhedsliste','nyhedsliste_kategorisider', $nid1->nid);
+                }
+              }
+  //            $output = $output . "</div>";
+            $output = $output . "</div>";
+          $output = $output . "</div>";
+        $output = $output . "</section>";
+        $output = $output . "<!-- NYHEDER SLUT -->";
+      }      
+      
+
     }
     
   }
@@ -177,7 +236,7 @@ function sortBysort($a, $b){
 <?php 
   
   // BREAKING
-  print views_embed_view('kriseinformation', 'pagevisning');
+  //print views_embed_view('kriseinformation', 'pagevisning');
 
   // OUTPUT
   print $output;

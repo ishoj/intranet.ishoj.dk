@@ -230,7 +230,8 @@ class FeedsYoutubeParser extends FeedsParser {
 
       // Get video player URL.
       $attrs = $media->group->player->attributes();
-      $watch = str_replace('&feature=youtube_gdata_player', '', $attrs['url']);
+       $id = str_replace("yt:video:","",$entry->id);
+      $watch = 'http://www.youtube.com/watch?v=' . $id;
 
     
  
@@ -240,14 +241,13 @@ class FeedsYoutubeParser extends FeedsParser {
       $length = $attrs['seconds'];
 
       // Get video ID.
-      $id = (string) $yt->videoid;
+   
+
 
   // Get video thumbnail.
       $attrs = $media->group->thumbnail[0]->attributes();
       $thumbnail = (string) $attrs['url']; 
-// $thumbnail = 'http://i1.ytimg.com/vi/' + $id + '/maxresdefault.jpg';
 
- //  $thumbnail  = str_replace('0.jpg', 'maxresdefault.jpg', $attrs['url']);
 
       // Get video uploaded date.
       $uploaded = (string) $yt->uploaded;
@@ -340,8 +340,10 @@ class FeedsYoutubeParser extends FeedsParser {
       $updated = $atom->updated;
 
       // Get video ID.
-      $id = end(explode('/', $entry->guid));
-
+      $id = end(explode('/', $entry->id));
+    
+    
+   
       // Get nodes in media: namespace for media information.
       $media = $entry->children('http://search.yahoo.com/mrss/');
 

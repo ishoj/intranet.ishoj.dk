@@ -116,7 +116,7 @@ function sortBysort($a, $b){
     
     // NYHEDER (TOPNYHEDER)
     $output .= "<!-- NYHEDER START -->";
-    $output .= "<section class=\"news\">";
+    $output .= "<section class=\"news dark\">";
       $output .= "<div class=\"container\">";
         $output .= "<!-- Nyheder -->";
         $output .= "<div class=\"row\">";
@@ -187,6 +187,8 @@ function sortBysort($a, $b){
 //                $output .= "</div>";
 //              $output .= "</div>";
 
+    
+    
             $output .= "</div>";
           $output .= "</div>";
         $output .= "</section>";
@@ -209,7 +211,7 @@ function sortBysort($a, $b){
 <?php 
   
   // BREAKING
-  print views_embed_view('kriseinformation', 'pagevisning');
+  //print views_embed_view('kriseinformation', 'pagevisning');
 
   // OUTPUT
   print $output;

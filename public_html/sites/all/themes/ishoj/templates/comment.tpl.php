@@ -63,14 +63,17 @@
 
 <div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <div class="foto">
-    <?php print $picture ?>
-    <?php  
-    if(!$picture) {
-      print "<div class=\"user-picture\">";
-        print "<img src=\"/sites/all/themes/ishoj/dist/img/sprites-no/nopic.png\">";
-      print "</div>";
+    <?php
+    if($logged_in) {
+      print $picture;
+      if(!$picture) {
+        print "<div class=\"user-picture\">";
+          print "<img src=\"/sites/all/themes/ishoj/dist/img/sprites-no/nopic.png\">";
+        print "</div>";
+      }
     }
     ?>
+    
     <p><a class="taleboble-graa" title="Kommentar nr. <?php print $id ?>"><span><?php print $id ?></span></a></p>
     
   </div>
@@ -79,7 +82,11 @@
   <?php //endif; ?>
   <div class="tekst">
     <div class="submitted">
-      <?php print $author; ?>
+      <?php 
+        if($logged_in) {
+          print $author; 
+        }
+      ?>
       <span class="dato"> <?php print $created; ?></span>
       <?php //print $submitted; ?>
     </div>

@@ -43,6 +43,61 @@
   <?php if ($exposed): ?>
     <div class="view-filters">
       <?php print $exposed; ?>
+      <?php
+                    // TILMELDING TIL NYHEDSBREV              
+//                  $output = "<div id=\"mc_embed_signup\">";
+//                    $output .= "<form action=\"http://ishoj.us7.list-manage.com/subscribe/post?u=ad8416d0065ab2738f7c91bbf&amp;id=f902f99af4\" class=\"validate\" id=\"mc-embedded-subscribe-form\" method=\"post\" name=\"mc-embedded-subscribe-form\" novalidate=\"\" target=\"_blank\">";
+//                      $output .= "<h2>Tilmelding til Ishøj Indefra</h2><p class=\"sub\">Ishøj Kommunes nyhedsbrev</p>";
+//                      $output .= "<div class=\"mc-field-group\"><label for=\"mce-EMAIL\">E-mail</label>"; 
+//                        $output .= "<input class=\"required email\" id=\"mce-EMAIL\" name=\"EMAIL\" type=\"email\" value=\"\" />";
+//                      $output .= "</div>";
+//                      $output .= "<div class=\"mc-field-group\"><label for=\"mce-FNAME\">Fornavn</label>"; 
+//                        $output .= "<input class=\"required\" id=\"mce-FNAME\" name=\"FNAME\" type=\"text\" value=\"\" />";
+//                      $output .= "</div>";
+//                      $output .= "<div class=\"mc-field-group\"><label for=\"mce-LNAME\">Efternavn</label>";             
+//                        $output .= "<input class=\"required\" id=\"mce-LNAME\" name=\"LNAME\" type=\"text\" value=\"\" />";
+//                      $output .= "</div>";
+//                      $output .= "<div class=\"clear\" id=\"mce-responses\">";
+//                        $output .= "<div class=\"response\" id=\"mce-error-response\" style=\"display:none\"></div>";
+//                        $output .= "<div class=\"response\" id=\"mce-success-response\" style=\"display:none\"></div>";
+//                      $output .= "</div>";
+//                      $output .= "<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->";
+//                      $output .= "<div style=\"position: absolute; left: -5000px;\">";
+//                        $output .= "<input name=\"b_ad8416d0065ab2738f7c91bbf_f902f99af4\" type=\"text\" value=\"\" />";
+//                      $output .= "</div>";
+//                      $output .= "<div class=\"clear\"><input class=\"button\" id=\"mc-embedded-subscribe\" name=\"subscribe\" type=\"submit\" value=\"Tilmeld\" /></div>";
+//                    $output .= "</form>";
+//                  $output .= "</div>";
+                  // TILMELDING TIL NYHEDSBREV              
+                  $output .= "<div id=\"mc_embed_signup\">";
+                    $output .= "<form action=\"http://ishoj.us7.list-manage.com/subscribe/post?u=ad8416d0065ab2738f7c91bbf&amp;id=f902f99af4\" class=\"validate\" id=\"mc-embedded-subscribe-form\" method=\"post\" name=\"mc-embedded-subscribe-form\" novalidate=\"\" target=\"_blank\">";
+                      $output .= "<h1 class=\"text-center no-space-top\">1416</h1>
+<h2 class=\"_sub no-space-top space-bottom\">af dine kolleger er allerede tilmeldt
+vores interne nyhedsbrev</h2>
+<p class=\"sub space-top\">Tilmeld dig Ishøj indefra nu</p>";
+                      $output .= "<div class=\"mc-field-group\"><label for=\"mce-EMAIL\">E-mail</label>"; 
+                        $output .= "<input class=\"required email\" id=\"mce-EMAIL\" name=\"EMAIL\" type=\"email\" value=\"\" />";
+                      $output .= "</div>";
+                      $output .= "<div class=\"mc-field-group\"><label for=\"mce-FNAME\">Fornavn</label>"; 
+                        $output .= "<input class=\"required\" id=\"mce-FNAME\" name=\"FNAME\" type=\"text\" value=\"\" />";
+                      $output .= "</div>";
+                      $output .= "<div class=\"mc-field-group\"><label for=\"mce-LNAME\">Efternavn</label>";             
+                        $output .= "<input class=\"required\" id=\"mce-LNAME\" name=\"LNAME\" type=\"text\" value=\"\" />";
+                      $output .= "</div>";
+                      $output .= "<div class=\"clear\" id=\"mce-responses\">";
+                        $output .= "<div class=\"response\" id=\"mce-error-response\" style=\"display:none\"></div>";
+                        $output .= "<div class=\"response\" id=\"mce-success-response\" style=\"display:none\"></div>";
+                      $output .= "</div>";
+                      $output .= "<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->";
+                      $output .= "<div style=\"position: absolute; left: -5000px;\">";
+                        $output .= "<input name=\"b_ad8416d0065ab2738f7c91bbf_f902f99af4\" type=\"text\" value=\"\" />";
+                      $output .= "</div>";
+                      $output .= "<div class=\"clear\"><input class=\"button\" id=\"mc-embedded-subscribe\" name=\"subscribe\" type=\"submit\" value=\"Tilmeld\" /></div>";
+                    $output .= "</form>";
+                  $output .= "</div>";
+      
+      print $output;
+    ?>  
     </div>
   <?php endif; ?>
 

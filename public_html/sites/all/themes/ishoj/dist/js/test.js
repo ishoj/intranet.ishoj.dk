@@ -2,6 +2,7 @@
 // GLOBALE VARIABLER
 var countEmployees = 0;
 var countContent = 0;
+var userloggedin = false; 
 
 (function($) { 
   
@@ -92,7 +93,13 @@ var countContent = 0;
         $(".soegebar").removeClass("animate");
         $(".arrow").addClass("action");
         setTimeout(function(){
-          $( ".soegebar form > div > input" ).val("");
+//          $( ".soegebar form > div > input" ).val("");
+          $( ".soegebar form input" ).val("");
+          searchString = "";
+          // FJERN SØGERESULTATER
+          $(".soegebar-faner *").remove();
+          $(".soegebar-resultater *").remove();
+          $(".soegeresultat-blinker").removeClass("show");
         },300);
         searchBarStatus = false;
       }
@@ -166,6 +173,11 @@ var countContent = 0;
         $(".arrow").removeClass("action");
         setTimeout(function(){
           $( ".soegebar form input" ).val("");
+          searchString = "";
+          // FJERN SØGERESULTATER
+          $(".soegebar-faner *").remove();
+          $(".soegebar-resultater *").remove();
+          $(".soegeresultat-blinker").removeClass("show");
         },300);      
         searchBarStatus = false;
       }
@@ -225,24 +237,32 @@ $("#sogeformen").submit(function(e){
     function getSearchResultsval(val) {
       if(val.length < 2) { // Min. to tegn, før der foretages en søgning 
       return false;
-    }            
+    }    
+        
+        
   var indholdantal = 0;  
   var searchstartholder = '<div class="container"><div class="row search-results show">';
   var indholdstart = '<h2 class="indhold">Indhold <span title="0 søgeresultater">0</span></h2><ul class="search-content">';
   var indholdslut = '</ul>';
 var secstart = '<div class="container"><div class="row"><div class="grid-half medarbejdere">Medarbejdere <span title="7 søgeresultater">7</span></div><div class="grid-half indhold">Indhold <span title="1200 søgeresultater">1200</span></div></div></div>';     
-      
+userloggedinbuf = 0;   
+if (userloggedin) {
+userloggedinbuf = 1;
+} else {
+userloggedinbuf = 0;
+};        
+        
      var strindhold = '';
-    var jqxhr = $.getJSON( "/search/search.php?query=" + encodeURIComponent(val), function() {
+    var jqxhr = $.getJSON( "/search/search.php?query=" + encodeURIComponent(val) + "&l=" + userloggedinbuf, function() {
        
       })
         .done(function(dataindhold) {
-      var resultLimitindhold = 12;  
+      
   
       indholdantal = dataindhold.hits.total; 
       countContent = dataindhold.hits.total;
     
-         
+   $(".soegeresultat-blinker").addClass("show");      
     
          $.each(dataindhold.hits.hits, function( ital, itemdata ) {
 	
@@ -252,7 +272,7 @@ var secstart = '<div class="container"><div class="row"><div class="grid-half me
           });    
       
 // MEDARBEJDERE RENDER
-         var medarbejderstartantal = '';
+    var medarbejderstartantal = '';
      var medarbejderslutantal = '';
      var medarbejderfundet  = '';
       var medantal = 0; 
@@ -267,8 +287,10 @@ var secstart = '<div class="container"><div class="row"><div class="grid-half me
          
       medarbejderstartantal =   '<h2 class="medarbejdere action">Medarbejdere <span title="' + medantal + ' søgeresultater">' + medantal + '</span></h2><ul class="search-employees show">';
       medarbejderslutantal   = '</ul></div>';       
+       
+         
             
-	  var resultLimit = 12;
+	  var resultLimit = 120;
       var kaldenavnet = '';
       var afdeling = '';
       var stilling  = '';
@@ -324,10 +346,13 @@ foto = '<div class="foto"><a class="foto" href="' + item._source.url  + '" titel
 	    }
         });
 
-         
-             
-           $(".soegebar-faner").html(secstart);
-             $(".soegebar-resultater").html(searchstartholder + indholdstart + strindhold + indholdslut + medarbejderstartantal + medarbejderfundet + medarbejderslutantal);  
+    if (userloggedin) {
+        // --
+    } else {
+     medarbejderfundet = '<li><a href="/user"><span class="navn">Kræver login</span></a><div class="details">at se medarbejdere</div></li>';
+     }   
+         $(".soegebar-faner").html(secstart);
+         $(".soegebar-resultater").html(searchstartholder + indholdstart + strindhold + indholdslut + medarbejderstartantal + medarbejderfundet + medarbejderslutantal);  
       $(".medarbejdere span").html(medantal);
         $(".indhold span").html(indholdantal);
           // Hvis der er flere end 12 søgeresultater
@@ -386,8 +411,7 @@ foto = '<div class="foto"><a class="foto" href="' + item._source.url  + '" titel
         })
         .always(function() {
         });
-            
-     
+               
     }
     
   
@@ -429,13 +453,8 @@ foto = '<div class="foto"><a class="foto" href="' + item._source.url  + '" titel
 
     }
   
-  
-  
-  
-  
   /***********************************/
-  
-  
+
       /**** SØGEVARIABLER ****/
     var hasEmployees = 0,
         hasContent   = 0,

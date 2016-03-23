@@ -88,6 +88,7 @@
 <?php //drupal_set_message(print_r(taxonomy_get_vocabularies())); ?>
 
 <?php
+include_once drupal_get_path('theme', 'ishoj') . '/includes/uglen_functions.php';
 $output = "";
 ?>
 
@@ -384,8 +385,9 @@ $output = "";
 
 
 
-          // BREAKING
-          $output .= views_embed_view('kriseinformation','nodevisning', $node->nid);
+        // BREAKING
+        // $output .= views_embed_view('kriseinformation','nodevisning', $node->nid);
+        //$output .= breaking();
 
 
         print $output;

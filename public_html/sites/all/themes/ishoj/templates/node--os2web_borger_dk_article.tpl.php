@@ -78,6 +78,7 @@
  * @see template_process()
  */
 dsm($node);
+include_once drupal_get_path('theme', 'ishoj') . '/includes/uglen_functions.php';
 ?>
 <!--<div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>-->
   <?php //print render($title_prefix); ?>
@@ -708,7 +709,8 @@ usort($nodes, 'sortByTitle');
 
 
         // BREAKING
-        $output .= views_embed_view('kriseinformation','nodevisning', $node->nid);
+        // $output .= views_embed_view('kriseinformation','nodevisning', $node->nid);
+        //$output .= breaking();
 
 
         print $output;

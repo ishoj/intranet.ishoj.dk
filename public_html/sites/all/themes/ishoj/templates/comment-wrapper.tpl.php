@@ -35,6 +35,7 @@
  *
  * @ingroup themeable
  */
+if($logged_in) {
 ?>
 <div id="comments" class="<?php print $classes; ?>"<?php print $attributes; ?>>
   <?php if ($content['comments'] && $node->type != 'forum'): ?>
@@ -50,3 +51,12 @@
     <?php print render($content['comment_form']); ?>
   <?php endif; ?>
 </div>
+<?php
+}
+else {
+  print "<p>Login ind for at se/kommentere indholdet på denne side</p>";
+}
+?>
+                
+                
+      

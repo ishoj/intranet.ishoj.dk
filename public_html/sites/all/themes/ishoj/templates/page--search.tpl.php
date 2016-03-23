@@ -245,7 +245,16 @@ else {
           <div class="row">
             <div class="grid-full">
               <?php print $messages; ?>
-              <?php if ($tabs): ?><div class="tabs"><?php print render($tabs); ?></div><?php endif; ?>
+              <?php 
+              if($is_admin) {
+                if ($tabs): ?>
+                  <div class="tabs">
+                    <?php print render($tabs); ?>
+                  </div>
+                <?php 
+                endif; 
+              }
+              ?>
               <?php print render($page['help']); ?>
               <?php if ($action_links): ?><ul class="action-links"><?php print render($action_links); ?></ul><?php endif; ?>
             </div>
@@ -359,32 +368,16 @@ else {
         <div class="container">
           <div class="row">
             <div class="grid-third">
-              <h3>Andre kommunale hjemmesider</h3>
-              <form>
-                <label for="hjemmesider">Andre hjemmesider</label>
-                  <select name="hjemmesider" id="hjemmesider" class="sprite-menu">
-                  <optgroup label="Andre hjemmeside">
-                   <option value="0" selected="">Vælg en hjemmeside</option>                  
-                  <?php print views_embed_view('andre_kommunale_hjemmesider','default', $node->nid); ?>
-                  </optgroup>
-                      <?php print render($page['footer_hjemmesider']); ?>
-                
-                    </select>
-              </form>
-            </div>
-            <div class="grid-third">
               <?php //print render($page['footer_kontakt']); ?>
               
-              <h3>Ishøj Kommune</h3>
-              <p>Ishøj Store Torv 20<br />
-              2635 Ishøj<br />
-              Tlf. 43 57 75 75</p>
-            <p><a href="mailto:ishojkommune@ishoj.dk" title="Skriv e-mail til Ishøj Kommune">ishojkommune@ishoj.dk</a></p>
+              <h3>Vi vil gerne høre, hvad du synes</h3>
+              <p class="artikel"><a class="btn btn-large_ sigdinmening" href="/sig-din-mening-om-uglen" title="Sig din mening om Uglen"><span class="sprites-sprite sprite-arrow-right"></span>Sig din mening om Uglen</a>
 
             </div>
+            <div class="grid-third"></div>
             <div class="grid-third sociale-medier">
-              <?php print render($page['footer_sociale']); ?>
-              <h3>Følg os på sociale medier</h3>
+              <?php print render($page['footer_sociale']); ?>           
+              <h3>Ishøj Kommune på sociale medier</h3>
               <p>
                 <a class="sprite sprite-facebook footer" href="http://www.facebook.com/ishojkommune" title="Følg Ishøj Kommune på Facebook"><span><span class="screen-reader">Følg Ishøj Kommune på Facebook</span></span></a>
                 <a class="sprite sprite-linkedin footer" href="https://www.linkedin.com/company/ishoj-kommune" title="Følg Ishøj Kommune på LinkedIn"><span><span class="screen-reader">Følg Ishøj Kommune på LinkedIn</span></span></a>
@@ -392,6 +385,23 @@ else {
                 <a class="sprite sprite-youtube footer" href="http://www.youtube.com/tvishoj" title="Følg Ishøj Kommune på Youtube"><span><span class="screen-reader">Følg Ishøj Kommune på Youtube</span></span></a>
               </p>
             </div>
+<!--
+            <div class="grid-third">
+              <h3>Kommunale hjemmesider</h3>
+              <form>
+                <label for="hjemmesider">Andre hjemmesider</label>
+                  <select name="hjemmesider" id="hjemmesider" class="sprite-menu">
+                  <optgroup label="Andre hjemmeside">
+                   <option value="0" selected="">Vælg en hjemmeside</option>                  
+                  <?php //print views_embed_view('andre_kommunale_hjemmesider','default', $node->nid); ?>
+                  </optgroup>
+                      <?php //print render($page['footer_hjemmesider']); ?>
+                
+                    </select>
+              </form>
+            </div>
+-->
+
           </div>             
         </div>   
       </footer>
@@ -400,7 +410,7 @@ else {
       <!-- BREAKING START -->
       <?php //if ($is_admin and $logged_in): ?> 
         <?php if ($page['krisekommunikation']): ?>
-          <div class="breaking"><?php print render($page['krisekommunikation']); ?></div>
+          <div class="breaking"><?php //print render($page['krisekommunikation']); ?></div>
       	<?php endif; ?>
       <? //endif ?>         
       <!-- BREAKING SLUT -->
