@@ -4,3 +4,12 @@ sites/*/settings*.php
 # Ignore paths that contain user-generated content.
 sites/*/files
 sites/*/private
+
+node_modules
+test/results
+test/coverage
+
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
