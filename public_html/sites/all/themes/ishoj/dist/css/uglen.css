@@ -10299,3 +10299,35 @@ tr .draggable {
 .soegebar-faner .row .kommentarer .comment-form.indhold {
   margin-bottom: .5em;
 }
+
+/* line 6, src/sass/partials/_sms-tilmelding.scss */
+.sms-driftsstatus input {
+  margin-bottom: 0;
+  border: 1px solid #b9d1e4;
+  background-color: #ffffff;
+}
+/* line 10, src/sass/partials/_sms-tilmelding.scss */
+.sms-driftsstatus input:focus {
+  background-color: #e9f0f6;
+}
+/* line 16, src/sass/partials/_sms-tilmelding.scss */
+.sms-driftsstatus .form-submit {
+  float: left;
+  margin-right: 1em;
+  display: block;
+  width: inherit;
+  padding: .3125em 1em;
+  background-color: #30649e;
+  color: #ffffff;
+  font-size: 1.25em;
+  font-family: "Roboto Condensed", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 300;
+  line-height: 140%;
+  letter-spacing: 0.03125em;
+  cursor: pointer;
+}
+/* line 30, src/sass/partials/_sms-tilmelding.scss */
+.sms-driftsstatus .form-submit:hover {
+  background-color: #253139;
+  text-decoration: none;
+}

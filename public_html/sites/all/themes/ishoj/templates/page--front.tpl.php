@@ -406,86 +406,87 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
 //            if($is_admin) {
               if($logged_in) {
                 if(($user->uid == $showuser->uid) or $is_admin) {
+                  if(!$is_admin) {
+                    $mangler = 0;
 
-                  $mangler = 0;
+                    $mangler_output_top = "<div class=\"user-missing-data\">";
+                    $mangler_output_top .= "<ul>";
 
-                  $mangler_output_top = "<div class=\"user-missing-data\">";
-                  $mangler_output_top .= "<ul>";
+                    $mangler_output = "";
+                    $mangler_output_bottom = "";
 
-                  $mangler_output = "";
-                  $mangler_output_bottom = "";
+                    $mangler_output_top = "<div class=\"row row-topnyhed\"><div class=\"grid-full\">";
+                      $mangler_output_top .= "<div class=\"user-missing-data ny\">";
 
-                  $mangler_output_top = "<div class=\"row row-topnyhed\"><div class=\"grid-full\">";
-                    $mangler_output_top .= "<div class=\"user-missing-data ny\">";
+                        $mangler_output_top .= "<div class=\"left\">";
 
-                      $mangler_output_top .= "<div class=\"left\">";
+                          $mangler_output_top .= "<ul>";
 
-                        $mangler_output_top .= "<ul>";
+                            // Billede
+                            if(!$showuser->picture) {
+                              $mangler_output .= "<li>Billede</li>";
+                              $mangler++;
+                            }
+                            // Leder
+                            if(!$showuser->field_overordnet) {
+                              $mangler_output .= "<li>Leder</li>";
+                              $mangler++;
+                            }
+                            // Afløser
+                            if(!$showuser->field_afloeser) {
+                              $mangler_output .= "<li>Afløser</li>";
+                              $mangler++;
+                            }
+                            // Stilling
+                            if(!$showuser->field_titel_stilling) {
+                              $mangler_output .= "<li>Stilling</li>";
+                              $mangler++;
+                            }
+                            // Center/afdeling
+                            if(!$showuser->field_afdeling) {
+                              $mangler_output .= "<li>Center/afdeling</li>";
+                              $mangler++;
+                            }
+                            // Ansvarsområder
+                            if(!$showuser->field_ansvarsomraader) {
+                              $mangler_output .= "<li>Ansvarsområder</li>";
+                              $mangler++;
+                            }
+                            // Direkte telefon
+                            if(!$showuser->field_direkte_telefon) {
+                              $mangler_output .= "<li>Direkte telefon</li>";
+                              $mangler++;
+                            }
 
-                          // Billede
-                          if(!$showuser->picture) {
-                            $mangler_output .= "<li>Billede</li>";
-                            $mangler++;
+                          $mangler_output_bottom .= "</ul>";
+
+                          // Ret bruger knap
+                          if($logged_in) {
+                            if(($user->uid == $showuser->uid) or $is_admin) {
+                              $mangler_output_bottom .= "<div style=\"float:left; width:100%; margin-bottom:1em;\"><div class=\"edit-node\"><a href=\"/user/" . $showuser->uid . "/edit?pk_campaign=Forside-RetBruger\" title=\"Ret bruger\"><span>Ret profil</span></a></div></div>";
+                            }
                           }
-                          // Leder
-                          if(!$showuser->field_overordnet) {
-                            $mangler_output .= "<li>Leder</li>";
-                            $mangler++;
-                          }
-                          // Afløser
-                          if(!$showuser->field_afloeser) {
-                            $mangler_output .= "<li>Afløser</li>";
-                            $mangler++;
-                          }
-                          // Stilling
-                          if(!$showuser->field_titel_stilling) {
-                            $mangler_output .= "<li>Stilling</li>";
-                            $mangler++;
-                          }
-                          // Center/afdeling
-                          if(!$showuser->field_afdeling) {
-                            $mangler_output .= "<li>Center/afdeling</li>";
-                            $mangler++;
-                          }
-                          // Ansvarsområder
-                          if(!$showuser->field_ansvarsomraader) {
-                            $mangler_output .= "<li>Ansvarsområder</li>";
-                            $mangler++;
-                          }
-                          // Direkte telefon
-                          if(!$showuser->field_direkte_telefon) {
-                            $mangler_output .= "<li>Direkte telefon</li>";
-                            $mangler++;
-                          }
 
-                        $mangler_output_bottom .= "</ul>";
-
-                        // Ret bruger knap
-                        if($logged_in) {
-                          if(($user->uid == $showuser->uid) or $is_admin) {
-                            $mangler_output_bottom .= "<div style=\"float:left; width:100%; margin-bottom:1em;\"><div class=\"edit-node\"><a href=\"/user/" . $showuser->uid . "/edit?pk_campaign=Forside-RetBruger\" title=\"Ret bruger\"><span>Ret profil</span></a></div></div>";
-                          }
-                        }
-
-                      // Citat
+                        // Citat
+                        $mangler_output_bottom .= "</div>";
+                        $mangler_output_bottom .= "<div class=\"right\">";
+                          $mangler_output_bottom .= "<div class=\"foto\"><img src=\"/sites/all/themes/ishoj/dist/img/ahj_brugeroplysninger.png\"></div>";
+                          $mangler_output_bottom .= "<div class=\"text\"><h2>\"Det er vigtigt, at vi alle sørger for at opdatere vores profiler på Uglen\"</h2><h2>- Anders Hvid Jensen</h2><h3>Kommunaldirektør</h3></div>";
+                        $mangler_output_bottom .= "</div>";
                       $mangler_output_bottom .= "</div>";
-                      $mangler_output_bottom .= "<div class=\"right\">";
-                        $mangler_output_bottom .= "<div class=\"foto\"><img src=\"/sites/all/themes/ishoj/dist/img/ahj_brugeroplysninger.png\"></div>";
-                        $mangler_output_bottom .= "<div class=\"text\"><h2>\"Det er vigtigt, at vi alle sørger for at opdatere vores profiler på Uglen\"</h2><h2>- Anders Hvid Jensen</h2><h3>Kommunaldirektør</h3></div>";
-                      $mangler_output_bottom .= "</div>";
-                    $mangler_output_bottom .= "</div>";
 
-                  $mangler_output_bottom .= "</div></div>";
+                    $mangler_output_bottom .= "</div></div>";
 
-                  // Hvis der min. er et felt, der mangler at blive udfyldt
-                  if($mangler > 0) {
-                    list($first_word) = explode(' ', trim($showuser->field_fornavn['und'][0]['safe_value']));
+                    // Hvis der min. er et felt, der mangler at blive udfyldt
+                    if($mangler > 0) {
+                      list($first_word) = explode(' ', trim($showuser->field_fornavn['und'][0]['safe_value']));
 
-                    if($mangler == 1) {
-                      $output .= $mangler_output_top . "<h3>Hej " . $first_word . "</h3><p>Du mangler at udfylde følgende felt for at færdiggøre din profil:</p>" . $mangler_output .  $mangler_output_bottom;
-                    }
-                    else {
-                      $output .= $mangler_output_top . "<h3>Hej " . $first_word . "</h3><p>Du mangler at udfylde følgende felter for at færdiggøre din profil:</p>" . $mangler_output . $mangler_output_bottom;
+                      if($mangler == 1) {
+                        $output .= $mangler_output_top . "<h3>Hej " . $first_word . "</h3><p>Du mangler at udfylde følgende felt for at færdiggøre din profil:</p>" . $mangler_output .  $mangler_output_bottom;
+                      }
+                      else {
+                        $output .= $mangler_output_top . "<h3>Hej " . $first_word . "</h3><p>Du mangler at udfylde følgende felter for at færdiggøre din profil:</p>" . $mangler_output . $mangler_output_bottom;
+                      }
                     }
                   }
                 }
@@ -509,24 +510,44 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                               $output .= "<span class=\"sprites-sprite sprite-plus mikroartikel\"></span>Tilmelding til SMS-driftsstatus";
                             $output .= "</h3>";
                             $output .= "<div class=\"mArticle2 mArticle\" style=\"overflow: hidden; display: none;\">";
-                              $output .= "<h3>Tilmeld dig de områder, som du ønsker at modtage en SMS-driftstatus for</h3>";
-                              $output .= "<form>";
-                                $output .= "<input type=\"hidden\" id=\"fornavn\" name=\"fornavn\" value=\"" . $firstname . "\">";
-                                $output .= "<input type=\"hidden\" id=\"efternavn\" name=\"efternavn\" value=\"" . $lastname . "\">";
+                              $output .= "<h3>Tilmeld dig de områder, som du ønsker at modtage driftsstatusser for på din mobiltelefon</h3>";
+                              $output .= "<p>Hvis du i stedet for ønsker at afmelde, klik da på knappen, Afmeld. </p>";
+
+                              // Synlig formular
+                              $output .= "<form class=\"sms-formular\">";
                                 $output .= "<label>Indtast dit mobilnummer</label>";
                                 $output .= "<input type=\"text\" id=\"telefon\" name=\"telefon\" value=\"\" required placeholder=\"Mobilnummer\" style=\"width:112px;\">";
-                                $output .= "<label>Hvilke områder vil du modtage driftsmeddelelser om?</label>";
-                                $output .= "<input type=\"checkbox\" id=\"care\" name=\"care\" value=\"care\" /> Care<br />";
-                                $output .= "<input type=\"checkbox\" id=\"citrix\" name=\"citrix\" value=\"citrix\" /> Citrix<br />";
-                                $output .= "<input type=\"checkbox\" id=\"outlook\" name=\"outlook\" value=\"outlook\" /> Outlook<br />";
-                                $output .= "<input type=\"checkbox\" id=\"sbsys\" name=\"sbsys\" value=\"sbsys\" /> SBSYS<br />";
+                                $output .= "<label>Hvilke områder vil du modtage (eller ikke længere modtage) driftsstatusser om?</label>";
+                                $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_care\" name=\"care\" value=\"care\" /> Care<br />";
+                                $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_citrix\" name=\"citrix\" value=\"citrix\" /> Citrix<br />";
+                                $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_outlook\" name=\"outlook\" value=\"outlook\" /> Outlook<br />";
+                                $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_sbsys\" name=\"sbsys\" value=\"sbsys\" /> SBSYS<br />";
                                 $output .= "<p>&nbsp;</p>";
-                                $output .= "<input type=\"submit\" id=\"submit\" name=\"submit\" value=\"Tilmeld\">";
                               $output .= "</form>";
+
+                              $output .= "<a class=\"form-submit submit-action\" data-value=\"Tilmeld\"> Tilmeld </a>";
+                              $output .= "<a class=\"form-submit submit-action\" data-value=\"Afmeld\"> Afmeld </a>";
+
                             $output .= "</div>";
                           $output .= "</div>";
                         $output .= "</div>";
 
+                        // Skjult formular
+                        $output .= "<form id=\"sendeform\" class=\"hide-me\">";
+                        // $output .= "<form name=\"subunsubform\" action=\"https://www.gruppe-sms.dk/gate/?handle=subscription&language=da&target=self\" method=\"POST\" target=\"_self\">";
+                          $output .= "<input type=\"text\" name=\"Mobilnummer\" id=\"Mobilnummer\">";
+                          $output .= "<input type=\"text\" id=\"Fornavn\" name=\"Fornavn\" value=\"" . $firstname . "\">";
+                          $output .= "<input type=\"text\" id=\"Efternavn\" name=\"Efternavn\" value=\"" . $lastname . "\">";
+                        	$output .= "<input class=\"submitter\" type=\"hidden\" name=\"\" value=\"\">";
+                        	$output .= "<input type=\"hidden\" name=\"required\" value=\"Mobilnummer,Efternavn,Fornavn\">";
+
+                        	$output .= "<input type=\"hidden\" id=\"submit-key\" name=\"keys[]\">";
+
+                        	// $output .= "<input type=\"hidden\" id=\"key-care\" name=\"keys[]\" value=\"ctI1460622408ct570f544877950\">"; // Care
+                          // $output .= "<input type=\"hidden\" id=\"key-citrix\" name=\"keys[]\" value=\"ctY1460622344ct570f5408d1c8e\">"; // Citrix
+                          // $output .= "<input type=\"hidden\" id=\"key-outlook\" name=\"keys[]\" value=\"ctA1460622381ct570f542dd2eb5\">"; // Outlook
+                          // $output .= "<input type=\"hidden\" id=\"key-sbsys\" name=\"keys[]\" value=\"ctK1460617948ct570f42dc13215\">"; // SBSYS
+                        $output .= "</form>";
                       $output .= "</div>";
                     }
 

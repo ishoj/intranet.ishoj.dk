@@ -4,48 +4,157 @@
 /****************************/
 
 
-// Debouncing ensures that exactly one signal is sent for an event that may be happening several times 
+// Debouncing ensures that exactly one signal is sent for an event that may be happening several times
 // http://paulirish.com/2009/throttled-smartresize-jquery-event-handler/
 (function ($, sr) {
- 
+
   // debouncing function from John Hann
   // http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
   var debounce = function (func, threshold, execAsap) {
       var timeout;
- 
+
       return function debounced() {
           var obj = this, args = arguments;
           function delayed () {
               if (!execAsap)
                   func.apply(obj, args);
-              timeout = null; 
+              timeout = null;
           };
- 
+
           if (timeout)
               clearTimeout(timeout);
           else if (execAsap)
               func.apply(obj, args);
- 
-          timeout = setTimeout(delayed, threshold || 100); 
+
+          timeout = setTimeout(delayed, threshold || 100);
       };
   }
-	// smartresize 
+	// smartresize
 	jQuery.fn[sr] = function(fn){  return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr); };
- 
+
 })(jQuery,'smartresize');
 
 
 
 (function($) {
-  
+
   /***************************************/
   /****  D O C U M E N T   R E A D Y  ****/
   /***************************************/
-  
+
   $(document).ready(function() {
 
-    
-    
+
+
+    // SMS-DRIFTSSTATUS'
+    if ($(".sms-driftsstatus")[0]) {
+
+      $('#telefon').blur(function(e){
+         $('#Mobilnummer').val($(this).val());
+      });
+
+      var keyArray = [];
+
+        // $('.setPlayers').each(function(index) {
+        //     console.log(index + ':' + $(this).text());
+        //     keyArray.push($(this).text());
+        //     alert($(this).text());
+        // });
+        //
+        // $.each(array, function(index) {
+        //     console.log(index + ':' + this);
+        //     console.log(index + ':' + this);
+        // });
+
+
+
+      // $('#submit-tilmeld, #submit-afmeld').on('click', function(){
+      $('.submit-action').on('click', function(){
+
+        // Sætter felterne i den skjulte formular fra den synlige formular
+        console.log('\nFornavn: ' + $('#Fornavn').val() + '\n');
+        console.log('Efternavn: ' + $('#Efternavn').val() + '\n');
+        console.log('Mobilnummer: ' + $('#Mobilnummer').val() + '\n');
+        console.log('Submit-value: ' + $(this).data('value') + '\n');
+        var submitValue = $(this).data('value');
+
+        // Måske både sub og unsub (med og uden data i posten)
+        if (submitValue == "Tilmeld") {
+          $('.submitter').attr('name', 'sub');
+        }
+        else {
+          $('.submitter').attr('name', 'unsub');
+        }
+        $('.submitter').attr('value', submitValue);
+
+
+        $('.checkbox_type').each(function(index) {
+          if ($(this).prop('checked')) {
+            keyArray.push($(this).val());
+          }
+        });
+
+        // console.log('Antal valgt: ' + keyArray.length);
+
+        console.log('\n');
+
+        // Validering
+        if (keyArray.length == 0) {
+          console.log('Du mangler at vælge et eller flere områder');
+        }
+        if (!/^[0-9]+$/.test($('#telefon').val())) {
+          console.log('Du mangler at indtaste et gyldigt mobilnummer. \Du kan kun indtate tal.');
+        }
+
+
+        var dataString = "";
+
+        if (keyArray.length > 0) {
+          $.each(keyArray, function(index) {
+              console.log(index + ':' + this);
+
+              switch (this) {
+                 case "care":
+                  $('#submit-key').attr('value', 'ctI1460622408ct570f544877950');
+                  break;
+
+                 case "citrix":
+                  $('#submit-key').attr('value', 'ctY1460622344ct570f5408d1c8e');
+                  break;
+
+                 case "outlook":
+                  $('#submit-key').attr('value', 'ctA1460622381ct570f542dd2eb5');
+                  break;
+
+                 case "sbsys":
+                  $('#submit-key').attr('value', 'ctK1460617948ct570f42dc13215');
+                  break;
+
+                 default:
+                    //  alert('Default case');
+              }
+
+              // serialized data sent to AJAX
+              dataString = $("#sendeform").serialize();
+              console.log('\n\n' + dataString);
+
+
+          });
+        }
+
+
+        keyArray.length = 0; // fjerner alle items
+
+
+
+      })
+
+
+
+
+
+    } // END SMS-DRIFTSSTATUS
+
 
 
 //var waypoints = $("#waypoints-trigger-medarbejder").waypoint({
@@ -54,8 +163,8 @@
 //  }
 ////  offset: 'bottom-in-view'
 //});
-    
-    
+
+
     /*********************/
     /*** SET STRUCTURE ***/
     /*********************/
@@ -72,20 +181,20 @@
       }
       else {
         // DEL PÅ SOCIALE MEDIER
-        if($(".delsiden")[0]) {            
+        if($(".delsiden")[0]) {
           $(".delsiden").appendTo(".social-mobile");
         }
       }
 
-//      if(windowWidth < 960) { 
+//      if(windowWidth < 960) {
 //        // SØGNING
 //        if(!i) {
 //          findLatestShownUgleResult("mobile");
 //          console.log("Funktionen findLatestShownUgleResult(mobile) kaldt responsivt");
 //        }
 //      }
-//        
-      if(windowWidth >= 960) { 
+//
+      if(windowWidth >= 960) {
 //        if(menuStatus) {
 //          // MENUKNAP
 //          $(".header-menu").removeClass("hide-me");
@@ -101,12 +210,12 @@
         if($(".delsiden")[0] && !$(".sprite-printer")[0]) {
           $(".delsiden").prepend("<a class=\"sprite sprite-printer\" href=\"#\" title=\"Print siden\"><span><span class=\"screen-reader\">Print siden</span></span></a>");
         }
-        
+
         // SØGNING
 //        if(!i) {
 //          findLatestShownUgleResult("desktop");
 ////          console.log("Funktionen findLatestShownUgleResult(desktop) kaldt responsivt");
-//          
+//
 //
 //        }
       }
@@ -119,9 +228,9 @@
       }
     }
 
-    
-    
-    
+
+
+
     /*************/
     /*** INITS ***/
     /*************/
@@ -132,21 +241,21 @@
     /********************/
     $(window).smartresize(function() {
       setStructure(0);
-      
-    }); 
 
-    
+    });
+
+
     /****************/
     /*** BREAKING ***/
     /****************/
     if($(".breaking")[0]) {
-      setTimeout(function (){ 
+      setTimeout(function (){
         $(".breaking").addClass("show");
-      }, 200);   
+      }, 200);
     }
     $(".breaking-close").click(function(event){
       event.preventDefault();
-      $(".breaking").removeClass("show");      
+      $(".breaking").removeClass("show");
     });
 
 
@@ -157,15 +266,15 @@
 //
 //    // Når der klikkes på mobilmenu-knappen
 //    $(".header-menu").click(function() {
-//      if(!menuStatus) { 
+//      if(!menuStatus) {
 //        // Hvis søgebaren er aktiv, vent med at vise mobilmenuen, indtil søgebaren er skjult
 //        if(searchBarStatus) {
-//          setTimeout(function() {      
+//          setTimeout(function() {
 //            $(".header-menu").addClass("hide-me");
 //            $(".header-kryds").removeClass("hide-me");
 //            $("[data-role='mobilenav']").addClass("animate");
 //            $(".arrow").addClass("left");
-//            menuStatus = true;            
+//            menuStatus = true;
 //          }, 300);
 //        }
 //        else {
@@ -175,8 +284,8 @@
 //          $(".arrow").addClass("left");
 //          menuStatus = true;
 //        }
-//        
-//        // SØGEBAR 
+//
+//        // SØGEBAR
 //        $(".soegebar").removeClass("animate");
 //        $(".arrow").addClass("action");
 ////        removeSearchResults(2);  // Midlertidig deaktivering. Funktionen ligger i test.js
@@ -185,7 +294,7 @@
 //        },300);
 //        searchBarStatus = false;
 //      }
-//    });	
+//    });
 //    // Når der klikkes på skjul-mobilmenu-knappen
 //    $(".header-kryds").click(function() {
 //      if(menuStatus) {
@@ -203,13 +312,13 @@
 //        },300);
 //      }
 //    });
-//      
+//
 //
 //    /************************/
 //    /*** KLIK PÅ SØGEKNAP ***/
-//    /************************/    
+//    /************************/
 //    var searchBarStatus = false;
-//    
+//
 //    if($("body").hasClass("front")) { // Tilføj drupals page-klasser for de tre forsider (.front er en af dem)
 ////        $(".soegebar input[type=submit]").removeAttr("disabled");
 //        setTimeout(function(){
@@ -217,14 +326,14 @@
 //        },300);
 //        searchBarStatus = true;
 //    }
-//    
+//
 //    $(".header-search").click(function() {
 //      // NÅR DEN SKAL VISES
 //      if(!searchBarStatus) {
 //        // Hvis mobilmenuen er aktiv, vent med at vise søgebaren, indtil mobilmenuen er skjult
 //        if(menuStatus) {
-//          setTimeout(function() {      
-//            $(".soegebar").addClass("animate"); 
+//          setTimeout(function() {
+//            $(".soegebar").addClass("animate");
 //            $(".arrow").addClass("action");
 ////            $(".soegebar input[type=submit]").removeAttr("disabled");
 //            setTimeout(function(){
@@ -242,7 +351,7 @@
 //          },300);
 //          searchBarStatus = true;
 //        }
-//        
+//
 //        // MENUKNAP
 //        $(".header-menu").removeClass("hide-me");
 //        $(".header-kryds").addClass("hide-me");
@@ -262,32 +371,32 @@
 //        setTimeout(function(){
 ////          $( ".soegebar form > div > input" ).val("");
 //          $( ".soegebar form input" ).val("");
-//        },300);      
+//        },300);
 //        searchBarStatus = false;
 //      }
-//    });    
-    
+//    });
+
     //////////////////////////////////////
     // VIS SØGERESULTATER INDSÆTTES HER //
     //////////////////////////////////////
-      
+
     // Se http://stackoverflow.com/questions/15620303/trouble-animating-div-height-using-css-animation
     // og http://css3.bradshawenterprises.com/animating_height/
 //    function searchBoxHeight() {
 //      console.log( "soegeresultat højde: " + $(".soegeresultat").height() );
 //    }
-    
-    
+
+
     /**********************/
     /****  SØGEFILTER  ****/
     /**********************/
 //    var searchFilterString = "";
 //    var newFilterOnTheWay = 0;
-//    
+//
 //    var searchFilterArr = new Array('medarbejder=1', 'indholdssider=1', 'bilag=1', 'afdeling=1', 'ansvarsområder=1', 'stilling=1');
 //    var searchFilterArrBool = new Array(0, 0, 0, 0, 0, 0);
-//    
-//    
+//
+//
 //    // Klik på knappen 'Tilføj søgefilter'
 //    $(".add-search-filter").click(function(){
 //      if(!newFilterOnTheWay) {
@@ -296,116 +405,116 @@
 //        $(".addFilterForm").removeClass("hide-me");
 //      }
 //    });
-//    
+//
 //    // Tilføj søgefilter til søgestreng
 //    $(function() {
 //      // bind change event to select
 //      $("#addFilter").bind("change", function() {
 //        if($(this).val() != "0") {
 //          selIndex = $(this).val();
-//          
-//          switch (selIndex) { 
-//              
-//            case 'medarbejder': 
+//
+//          switch (selIndex) {
+//
+//            case 'medarbejder':
 ////              console.log(selIndex);
 //              searchFilterArrBool[0] = 1;
 //              break;
-//              
-//            case 'indholdssider': 
+//
+//            case 'indholdssider':
 ////              console.log(selIndex);
 //              searchFilterArrBool[1] = 1;
 //              break;
-//              
-//            case 'bilag': 
+//
+//            case 'bilag':
 ////              console.log(selIndex);
 //              searchFilterArrBool[2] = 1;
-//              break;      
-//              
-//            case 'afdeling': 
+//              break;
+//
+//            case 'afdeling':
 ////              console.log(selIndex);
 //              searchFilterArrBool[3] = 1;
-//              break;      
-//              
-//            case 'ansvarsområder': 
+//              break;
+//
+//            case 'ansvarsområder':
 ////              console.log(selIndex);
 //              searchFilterArrBool[4] = 1;
-//              break;      
-//              
-//            case 'stilling': 
+//              break;
+//
+//            case 'stilling':
 ////              console.log(selIndex);
 //              searchFilterArrBool[5] = 1;
 //              break;
 //          }
-//          
-//          
+//
+//
 //          // Tilføjer "slet filter"
 //          var newFilter = '<span class="remove-search-filter" data-index="' + selIndex + '"><i class="search-filter-minus" title="Slet søgefilter: ' + $(this).find(":selected").text() + '" ></i><span>' + $(this).find(":selected").text() + '</span></span>';
 //          $(".filter-lines").append(newFilter);
-//          
+//
 //          // Skjuler den valgte option
 //          $(this).find(":selected").addClass("hide-me");
-//          
+//
 //          // Viser "Tilføj filter" og skjuler select-boksen
 //          $(".add-search-filter").removeClass("hide-me");
 //          $(".addFilterForm").addClass("hide-me");
-//          
+//
 //          // "Selecter" første option, så den er klar til næste omgang "tilføj søgefiter"
 //          $("#addFilter option:first-child").attr("selected", true);
-//          
+//
 //          updateSearchString();
 //          newFilterOnTheWay = 0;
-//          
+//
 //        }
 //        return false;
-//      }); 
+//      });
 //    });
 //
-//    
+//
 //    // Klik på knappen 'Slet søgefilter'
 //    $(document).on('click', ".remove-search-filter", function() {
 //      var selIndex = $(this).attr("data-index");
 ////      console.log(selIndex);
 //      $(this).remove();
 //      $('.addFilterForm select option[value="' + selIndex + '"]').removeClass("hide-me");
-//      
-//          
-//      switch (selIndex) { 
 //
-//        case 'medarbejder': 
+//
+//      switch (selIndex) {
+//
+//        case 'medarbejder':
 //          searchFilterArrBool[0] = 0;
 //          break;
 //
-//        case 'indholdssider': 
+//        case 'indholdssider':
 //          searchFilterArrBool[1] = 0;
 //          break;
 //
-//        case 'bilag': 
+//        case 'bilag':
 //          searchFilterArrBool[2] = 0;
-//          break;      
+//          break;
 //
-//        case 'afdeling': 
+//        case 'afdeling':
 //          searchFilterArrBool[3] = 0;
-//          break;      
+//          break;
 //
-//        case 'ansvarsområder': 
+//        case 'ansvarsområder':
 //          searchFilterArrBool[4] = 0;
-//          break;      
+//          break;
 //
-//        case 'stilling': 
+//        case 'stilling':
 //          searchFilterArrBool[5] = 0;
 //          break;
 //      }
-//      
+//
 //      updateSearchString();
-//    
+//
 //    });
-//    
-//    
+//
+//
 //    function updateSearchString() {
-//      
+//
 //      searchFilterString = "";
 //      var mereEndEn = 0;
-//      
+//
 //      for(i = 0; i < searchFilterArrBool.length; i++) {
 //        if(searchFilterArrBool[i] == 1) {
 //          if(mereEndEn > 0) {
@@ -417,44 +526,44 @@
 //          mereEndEn++;
 //        }
 //      }
-//      
+//
 //      console.log( searchFilterString );
-//    
+//
 //    }
-    
+
 
 //    /**** SØGEVARIABLER ****/
 //    var hasEmployees = 0,
 //        hasContent   = 0,
 //        latestShown  = "";
-//    
-//    
+//
+//
 ////    function showUgleResults() {
 ////      // Hvis resultat i begge søgninger
 ////      if(hasEmployees && hasContent) {
-////        
+////
 ////        latestShown = "medarbejdere";
 ////      }
 ////      // Hvis resultat kun i medarbejder-søgning
 ////      if(hasEmployees && !hasContent) {
-////        
+////
 ////        latestShown = "medarbejdere";
 ////      }
 ////      // Hvis resultat kun i indholds-søgning
 ////      if(!hasEmployees && hasContent) {
-////        
+////
 ////        latestShown = "indhold";
 ////      }
 ////    }
-//    
-//    
+//
+//
 //    // Responsiv funktion der tjekker om hvilken søgning, der sidst er vist. Bruges når der skiftes fra mobil visning til desktop visning
 //    function findLatestShownUgleResult(s) {
-//      
+//
 //      switch (s) {
-//          
+//
 //        case "mobile":
-//          
+//
 //          if(latestShown == "medarbejdere") {
 //            $(".search-results h2.medarbejdere").addClass("action");
 //          }
@@ -462,39 +571,39 @@
 //            $(".search-results h2.indhold").addClass("action");
 //          }
 //          break;
-//          
+//
 //        case "desktop":
-//          
+//
 //          // Medarbejdere
-//          if(latestShown == "medarbejdere") { 
+//          if(latestShown == "medarbejdere") {
 //            // Desktop
 //            $(".soegebar-faner").removeClass("indhold").addClass("medarbejdere");
 //            $(".search-content").removeClass("show");
 //            $(".search-employees").addClass("show");
-//            $(".search-results h2.indhold").removeClass("action");            
+//            $(".search-results h2.indhold").removeClass("action");
 //          }
 //          // Indhold
-//          if(latestShown == "indhold") { 
+//          if(latestShown == "indhold") {
 //            // Desktop
 //            $(".soegebar-faner").removeClass("medarbejdere").addClass("indhold");
 //            $(".search-employees").removeClass("show");
 //            $(".search-content").addClass("show");
-//            $(".search-results h2.medarbejdere").removeClass("action");            
+//            $(".search-results h2.medarbejdere").removeClass("action");
 //          }
 //          break;
 ////        default:
 ////          default code block
 //      }
-//      
+//
 //    }
-//    
-//    
-//    
-//    
+//
+//
+//
+//
 //    // Klik på søgeresultat-header (medarbejdere eller indhold)
 //        $(".soegebar-resultater").on('click', ".search-results h2", function () {
 //      $(this).toggleClass("action");
-//      
+//
 //      // Medarbejdere
 //      if($(this).hasClass("medarbejdere")) {
 //        if($(this).hasClass("action")) {
@@ -502,7 +611,7 @@
 //            $(".search-employees").addClass("show");
 //            latestShown = "medarbejdere";
 //            // Desktop
-//            $(".soegebar-faner").removeClass("indhold").addClass("medarbejdere");        
+//            $(".soegebar-faner").removeClass("indhold").addClass("medarbejdere");
 //          }
 //        }
 //        else {
@@ -510,7 +619,7 @@
 //          latestShown = "medarbejdere";
 //        }
 //      }
-//      
+//
 //      // Indhold
 //      if($(this).hasClass("indhold")) {
 //        if($(this).hasClass("action")) {
@@ -518,7 +627,7 @@
 //            $(".search-content").addClass("show");
 //            latestShown = "indhold";
 //            // Desktop
-//            $(".soegebar-faner").removeClass("medarbejdere").addClass("indhold");   
+//            $(".soegebar-faner").removeClass("medarbejdere").addClass("indhold");
 //          }
 //        }
 //        else {
@@ -526,12 +635,12 @@
 //          latestShown = "indhold";
 //        }
 //      }
-//      
-//    });    
+//
+//    });
 //
 //    // Klik/mouseover på soegebar-faner (medarbejdere eller indhold)
 //    $(".soegebar-faner").on('click mouseover', ".row div", function () {
-//      
+//
 //      // Medarbejdere
 //      if($(this).hasClass("medarbejdere")) {
 //        console.log("uglen.js: " + countEmployees);
@@ -543,11 +652,11 @@
 //          // Mobil
 //          $(".search-results h2.medarbejdere").addClass("action");
 //          $(".search-results h2.indhold").removeClass("action");
-//          
+//
 //          latestShown = "medarbejdere";
 //        }
 //      }
-//      
+//
 //      // Indhold
 //      if($(this).hasClass("indhold")) {
 //        if(!$(".soegebar-faner").hasClass("indhold")) {
@@ -558,13 +667,13 @@
 //          // Mobil
 //          $(".search-results h2.medarbejdere").removeClass("action");
 //          $(".search-results h2.indhold").addClass("action");
-//          
+//
 //          latestShown = "indhold";
 //        }
 //      }
-//      
-//    });    
-//    
+//
+//    });
+//
 //    // Scroll til toppen, når der fokus på søgefeltet, eller når der tastes i søgefeltet
 //    // Bruger scrollTo-plugin'et
 //    var soegefeltFokus = 0;
@@ -589,19 +698,19 @@
 //          soegefeltIsTop = 1;
 //      },
 //    });
-//    
-//    
-//   
-    
-    
-    
+//
+//
+//
+
+
+
     /*************************************/
     /**** MIKROARTIKLER FRA BORGER.DK ****/
     /*************************************/
-    if($(".microArticleContainer")[0]) { 
+    if($(".microArticleContainer")[0]) {
       $(".microArticle div.mArticle").hide();
       $(".microArticle > h3").prepend("<span class=\"sprites-sprite sprite-plus mikroartikel\"></span>");
-      
+
       $(".microArticle h3.mArticle").click(function(){
           $(this).parent().find("div.mArticle").slideToggle('fast');
           if($(this).parent().hasClass("active")){
@@ -614,10 +723,10 @@
               $(this).addClass("active");
               $(this).find("span").addClass("sprite-minus");
           }
-      });		
+      });
     }
-    
-      
+
+
     /********************/
     /**** GOOGLE MAP ****/
     /********************/
@@ -631,8 +740,8 @@
     $(this).text("Skjul kort");
         }
     });
-    
-    
+
+
     /********************/
     /**** DEL SIDEN ****/
     /********************/
@@ -655,30 +764,30 @@
       e.stopPropagation();
       popupCenter($(this).attr("href"), $(this).attr("title"), 580, 470);
       e.preventDefault();
-    });  
+    });
 //    $(".dimmer-delsiden a:not(.dimmer-delsiden)").click(function(e){
 //      e.stopPropagation();
 //      popupCenter($(this).attr("href"), $(this).attr("title"), 580, 470);
 //      e.preventDefault();
-//    });  
+//    });
     // DEL-KNAPPEN
     $(".sprite-share").click(function(e){
       $(".dimmer-delsiden").removeClass("hidden");
       $(".dimmer-delsiden ul").addClass("show");
       e.preventDefault();
-    });  
+    });
     // LINK URL-KNAPPEN
     $(".sprite-link").click(function(e){
       e.stopPropagation();
       $(".link-url").addClass("show");
       e.preventDefault();
-    });  
+    });
     // URL TEKST
     $(".link-url textarea").click(function(e){
       e.stopPropagation();
       e.preventDefault();
       $(this).focus().select().toggleClass("show-bg");
-    });  
+    });
     // LUK-KNAP
     $(".dimmer-delsiden .breaking-close").click(function(e){
       e.stopPropagation();
@@ -688,9 +797,9 @@
       $(".link-url textarea").removeClass("show-bg");
       $(".link-url").removeClass("show");
       $(".link-url span").removeClass("show-bg");
-    });  
-    
-    
+    });
+
+
     // DIMMER-DELSIDEN
     $(".dimmer-delsiden").click(function(e){
       $(this).addClass("hidden").children("> ul").removeClass(".show");
@@ -698,16 +807,16 @@
       $(".link-url textarea").removeClass("show-bg");
       $(".link-url").removeClass("show");
       $(".link-url span").removeClass("show-bg");
-    });  
-      
+    });
+
     /*********************/
     /**** PRINT SIDEN ****/
     /*********************/
-    $(document).on('click', '.sprite-printer', function(e) { 
+    $(document).on('click', '.sprite-printer', function(e) {
       window.print();
       e.preventDefault();
     });
-      
+
 
     /*************************************/
     /**** ANDRE KOMMUNALE HJEMMESIDER ****/
@@ -734,28 +843,28 @@
     /*******************************/
     function findSlidesPerView(maxCol) {
       var ww = $(window).width();
-      if (ww>=960) { 
-        if(maxCol == 4) 
+      if (ww>=960) {
+        if(maxCol == 4)
           return 4;
-        if(maxCol == 3) 
+        if(maxCol == 3)
           return 3;
       }
       if (ww>=640 && ww<960) {
         return 2;
       }
-      if (ww<640) { 
+      if (ww<640) {
         return 1;
       }
-    } 
+    }
     function findSpaceBetween() {
       var ww = $(window).width();
-      if (ww>=960) { 
+      if (ww>=960) {
           return 42;
       }
       if (ww>=640 && ww<960) {
         return 24;
       }
-      if (ww<640) { 
+      if (ww<640) {
         return 12;
       }
     }
@@ -771,7 +880,7 @@
           nextButton: '.swiper-button-next',
           prevButton: '.swiper-button-prev'
         });
-        $(window).resize(function() { 
+        $(window).resize(function() {
           socialContentSwiper.params.slidesPerView = findSlidesPerView(4);
         });
       }
@@ -785,12 +894,12 @@
           nextButton: '.news-swiper-button-next',
           prevButton: '.news-swiper-button-prev'
         });
-        $(window).resize(function() { 
+        $(window).resize(function() {
           newsSwiper.params.slidesPerView = findSlidesPerView(3);
           newsSwiper.params.spaceBetween  = findSpaceBetween();
         });
       }
-      // TV-Ishøj Youtube 
+      // TV-Ishøj Youtube
       if ($(".swiper-container-news_tvi")[0]) {
         var news_tviSwiper = new Swiper ('.swiper-container-news_tvi', {
           direction: 'horizontal',
@@ -800,7 +909,7 @@
           nextButton: '.news_tvi-swiper-button-next',
           prevButton: '.news_tvi-swiper-button-prev'
         });
-        $(window).resize(function() { 
+        $(window).resize(function() {
           news_tviSwiper.params.slidesPerView = findSlidesPerView(3);
           news_tviSwiper.params.spaceBetween  = findSpaceBetween();
         });
@@ -815,36 +924,36 @@
           nextButton: '.activities-swiper-button-next',
           prevButton: '.activities-swiper-button-prev'
         });
-        $(window).resize(function() { 
+        $(window).resize(function() {
           activitiesSwiper.params.slidesPerView = findSlidesPerView(3);
           activitiesSwiper.params.spaceBetween  = findSpaceBetween();
         });
       }
 
     }
-    
+
     initSwiper();
-  
-    
+
+
     // Tilføj h2 til Aktivitetsidens søgeboks
 //    if($(".views-exposed-widgets")[0]) {
 //      $(".views-exposed-widgets").prepend("<h2>Søg aktiviteter</h2>");
 //    }
-    
+
     // Tilføj h2 til Aktivitetsidens søgeboks
     if($(".nyhedsside")[0]) {
       $(".views-exposed-widgets").prepend("<h2>Søg nyheder</h2>");
     }
-    
-    // Tilføj måneds-friser til aktivitetslisten på Aktivitetessiden 
+
+    // Tilføj måneds-friser til aktivitetslisten på Aktivitetessiden
     if($(".page-taxonomy-term-3013")[0]) {
       var bgMonths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       var bgMonthsNames = ["jan", "feb", "mar", "apr", "maj", "jun", "jul", "aug", "sep", "okt", "nov", "dec"];
       var bgMonthsNamesFull = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
-       
+
       $(".swiper-slide").each(function(){
         var datoText = $(this).find(".date").html();
-        
+
         for(i = 0; i < bgMonths.length; i++) {
           if(datoText.indexOf(bgMonthsNames[i]) > -1) {
             if(bgMonths[i] == 1) {
@@ -854,12 +963,12 @@
               bgMonths[i] = 1;
               console.log("Indsæt frise\n");
 //              $( '<div class="swiper-slide fix-width"><div id="frise' + i + '" class="maanedsfrise ' + bgMonthsNames[i] + '" data-stellar-background-ratio="0.85"><div><div><div><h2>' + bgMonthsNamesFull[i] + '</h2></div></div></div></div></div>' ).insertBefore( $(this) );
-              break; 
+              break;
             }
           }
         }
         console.log($(this).find(".date").html() + "\n");
-         
+
       });
 //      $.stellar({
 //        horizontalScrolling: false,
@@ -868,7 +977,7 @@
 //      });
     }
 
-    
+
     /************************/
     /**** TILFØJ INDHOLD ****/
     /************************/
@@ -878,31 +987,31 @@
       });
     }
 
-    
-    
-    
+
+
+
     /**********************/
     /**** DRUPAL FIXES ****/
-    /**********************/    
-  
+    /**********************/
+
     /* Fjerner styles-attributten på billeder, der er indsat i brødteksten. Herved kan billeder bliver skaleret responsivt via css */
     $(".artikel img").each(function(){
       if($(this).attr("style")) {
-        $(this).removeAttr("style");	
+        $(this).removeAttr("style");
       }
     });
-    
 
-    
-    
-    
+
+
+
+
   });
 
-  
+
   /*********************************/
   /****  W I N D O W   L O A D  ****/
   /*********************************/
-  
+
   $(window).load(function() {
 
     /********************/
@@ -925,12 +1034,5 @@
 
   });
 
-  
+
 })(jQuery);
-
-
-
-
-
-
-
