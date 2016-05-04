@@ -501,7 +501,7 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                  $output .= "<div class=\"grid-two-thirds almindelige\">";
 
                     // TILMELDING TIL SMS-DRIFTSSTATUS START
-                    if($is_admin) {
+                    if($is_admin or ($showuser->name == "kln")) {
                       $output .= "<div class=\"sms-driftsstatus\">";
 
                         $output .= "<div class=\"microArticleContainer\" style=\"margin:0 0 2.5em !important;\">";
@@ -510,30 +510,33 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                               $output .= "<span class=\"sprites-sprite sprite-plus mikroartikel\"></span>Tilmelding til SMS-driftsstatus";
                             $output .= "</h3>";
                             $output .= "<div class=\"mArticle2 mArticle\" style=\"overflow: hidden; display: none;\">";
-                              $output .= "<h3>Tilmeld dig de områder, som du ønsker at modtage driftsstatusser for på din mobiltelefon</h3>";
-                              $output .= "<p>Hvis du i stedet for ønsker at afmelde, klik da på knappen, Afmeld. </p>";
+                              $output .= "<h3>Nu kan du som noget nyt modtage driftsstatusser på din mobiltelefon</h3>";
 
                               // Synlig formular
                               $output .= "<form class=\"sms-formular\">";
                                 $output .= "<label>Indtast dit mobilnummer</label>";
                                 $output .= "<input type=\"text\" id=\"telefon\" name=\"telefon\" value=\"\" required placeholder=\"Mobilnummer\" style=\"width:112px;\">";
-                                $output .= "<label>Hvilke områder vil du modtage (eller ikke længere modtage) driftsstatusser om?</label>";
+                                $output .= "<label>Hvilke områder vil du modtage driftsstatusser om?</label>";
                                 $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_care\" name=\"care\" value=\"care\" /> Care<br />";
                                 $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_citrix\" name=\"citrix\" value=\"citrix\" /> Citrix<br />";
                                 $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_outlook\" name=\"outlook\" value=\"outlook\" /> Outlook<br />";
                                 $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_sbsys\" name=\"sbsys\" value=\"sbsys\" /> SBSYS<br />";
                                 $output .= "<p>&nbsp;</p>";
+                                $output .= "<p>Hvis du i stedet for ønsker at afmelde, klik da på knappen, Afmeld. </p>";
                               $output .= "</form>";
+
 
                               $output .= "<a class=\"form-submit submit-action\" data-value=\"Tilmeld\"> Tilmeld </a>";
                               $output .= "<a class=\"form-submit submit-action\" data-value=\"Afmeld\"> Afmeld </a>";
+                              $output .= "<p><br />&nbsp;</p>";
 
                             $output .= "</div>";
                           $output .= "</div>";
                         $output .= "</div>";
 
                         // Skjult formular
-                        $output .= "<form id=\"sendeform\" class=\"hide-me\">";
+                        // $output .= "<form id=\"sendeform\" class=\"hide-me\">";
+                        $output .= "<form id=\"sendeform\" class=\"hide-me\" action=\"/sites/all/themes/ishoj/dist/js/sms_driftsstatus.php\" method=\"POST\">";
                         // $output .= "<form name=\"subunsubform\" action=\"https://www.gruppe-sms.dk/gate/?handle=subscription&language=da&target=self\" method=\"POST\" target=\"_self\">";
                           $output .= "<input type=\"text\" name=\"Mobilnummer\" id=\"Mobilnummer\">";
                           $output .= "<input type=\"text\" id=\"Fornavn\" name=\"Fornavn\" value=\"" . $firstname . "\">";
@@ -542,7 +545,8 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                         	$output .= "<input type=\"hidden\" name=\"required\" value=\"Mobilnummer,Efternavn,Fornavn\">";
 
                         	$output .= "<input type=\"hidden\" id=\"submit-key\" name=\"keys[]\">";
-
+                          // $output .= "<input type=\"hidden\" name=\"keys[]\" value=\"ctY1460622344ct570f5408d1c8e\">";
+                          // $output .= "<input type=\"hidden\" name=\"keys[]\" value=\"ctA1460622381ct570f542dd2eb5\">";
                         	// $output .= "<input type=\"hidden\" id=\"key-care\" name=\"keys[]\" value=\"ctI1460622408ct570f544877950\">"; // Care
                           // $output .= "<input type=\"hidden\" id=\"key-citrix\" name=\"keys[]\" value=\"ctY1460622344ct570f5408d1c8e\">"; // Citrix
                           // $output .= "<input type=\"hidden\" id=\"key-outlook\" name=\"keys[]\" value=\"ctA1460622381ct570f542dd2eb5\">"; // Outlook

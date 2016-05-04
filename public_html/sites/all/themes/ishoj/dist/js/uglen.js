@@ -3072,48 +3072,66 @@ else if (typeof define === 'function' && define.amd) {
         console.log('\n');
 
         // Validering
+        // if (!/^[0-9]+$/.test($('#telefon').val())) { // kun tal
+        if (!$('#telefon').val()) {
+          console.log('Du mangler at indtaste et mobilnummer');
+        }
         if (keyArray.length == 0) {
           console.log('Du mangler at vælge et eller flere områder');
         }
-        if (!/^[0-9]+$/.test($('#telefon').val())) {
-          console.log('Du mangler at indtaste et gyldigt mobilnummer. \Du kan kun indtate tal.');
-        }
-
 
         var dataString = "";
 
         if (keyArray.length > 0) {
           $.each(keyArray, function(index) {
-              console.log(index + ':' + this);
 
-              switch (this) {
-                 case "care":
-                  $('#submit-key').attr('value', 'ctI1460622408ct570f544877950');
-                  break;
+            console.log(index + ': ' + this);
 
-                 case "citrix":
-                  $('#submit-key').attr('value', 'ctY1460622344ct570f5408d1c8e');
-                  break;
 
-                 case "outlook":
-                  $('#submit-key').attr('value', 'ctA1460622381ct570f542dd2eb5');
-                  break;
+            // FIXES: Send værdien i røven af hinanden, fx ctI1460622408ct570f544877950,ctY1460622344ct570f5408d1c8e
 
-                 case "sbsys":
-                  $('#submit-key').attr('value', 'ctK1460617948ct570f42dc13215');
-                  break;
+            // if(this == 'care') {
+            //   $('#submit-key').attr('value', 'ctI1460622408ct570f544877950');
+            // }
+            // if(this == 'citrix') {
+            //   $('#submit-key').attr('value', 'ctY1460622344ct570f5408d1c8e');
+            // }
+            // if(this == 'outlook') {
+            //   $('#submit-key').attr('value', 'ctA1460622381ct570f542dd2eb5');
+            // }
+            // if(this == 'sbsys') {
+            //   $('#submit-key').attr('value', 'ctK1460617948ct570f42dc13215');
+            // }
 
-                 default:
-                    //  alert('Default case');
-              }
+            // serialized data sent to AJAX
+            dataString = $("#sendeform").serialize();
+            console.log('\n\n' + dataString);
 
-              // serialized data sent to AJAX
-              dataString = $("#sendeform").serialize();
-              console.log('\n\n' + dataString);
+
+
+
+
+            // $.ajax( {
+            //   type: 'POST',
+            //   url: 'https://www.gruppe-sms.dk/gate/?handle=subscription&language=da',
+            //   // url: 'http://cors.io/?u=http://www.ishoj.dk',
+            //   data: dataString,
+            //   success: function(data) {
+            //     console.log(data + '\n\n');
+            //
+            //     // $('#message').html(data);
+            //   }
+            // });
 
 
           });
         }
+
+
+        $('#sendeform').submit();
+        // $.post('/sites/all/themes/ishoj/dist/js/sms_driftsstatus.php', { hest: 'value1', fest: 'value2' }, function(result) {
+        //     console.log('\n\ndata sendt');
+        // });
 
 
         keyArray.length = 0; // fjerner alle items
