@@ -8,7 +8,24 @@ body {
 }
 
 
-
+.sms-driftsstatus {
+  .sms-error {
+    color: $google;
+  }
+  .microArticleContainer > .microArticle > h3 {
+    // background-color: $color-yellow-light;
+    font-weight: 400;
+    // &:hover {
+    //   background-color: $color-yellow-normal;
+    // }
+  }
+  // .microArticleContainer > .microArticle > h3.active {
+  //   background-color: $color-yellow-normal;
+  //   &:hover {
+  //     background-color: $color-yellow-normal;
+  //   }
+  // }
+}
 
 .bruger-bar {
   padding: calc-em(8px) 0;

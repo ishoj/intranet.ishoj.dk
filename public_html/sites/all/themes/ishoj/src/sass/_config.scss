@@ -39,14 +39,15 @@ $color-green-normal:  #53a253;
 $color-green-dark:    #428242;
 
 // Gul
+$color-yellow-light:  #f5de8c;
 $color-yellow-normal: #FCD550;
 
 // Kategori baggrund
 //$color-category: #243039;
 
 // links
-//$color-link: $color-blue-normal; 
-$color-link: $color-blue-dark; 
+//$color-link: $color-blue-normal;
+$color-link: $color-blue-dark;
 //$color-link-dark: $color-blue-dark;
 $color-link-dark: $color-blue-normal;
 
@@ -85,8 +86,8 @@ $bp-medium-1: 43.75em;// 700px  - Tweakpoint
 $bp-medium-2: 48em;   // 768px  - Tweakpoint
 $bp-medium-3: 52em;   // 832px  - Tweakpoint
 $bp-large:    60em;   // 960px
-$bp-large-2:  64em;   // 1024px - Tweakpoint 
-$bp-large-3:  72em;   // 1152px - Tweakpoint 
+$bp-large-2:  64em;   // 1024px - Tweakpoint
+$bp-large-3:  72em;   // 1152px - Tweakpoint
 $bp-xlarge:   80em;   // 1280px
 $bp-xlarge-2: 90em;   // 1440px - Tweakpoint
 
@@ -105,21 +106,13 @@ $box-corner: calc-em(2px);
 
 //  TING OG SAGER OM DEN NYE HJEMMESIDE
 //
-//  - Mobiloptimeret, mobile-first responsiv hjemmeside 
+//  - Mobiloptimeret, mobile-first responsiv hjemmeside
 //  - Har gjort "klar" til den kommende version af NemID, der kan afvikles fra mobile enheder (javascript-version)
 //  - Grafik er vektor-baseret, hvis det understøttes (hermed kan det skaleres uden tab af kvalitet)
 //  - Hjemmesiden tilgodeser borgernes (brugernes) brugsmønstre - dvs. flest bruger søgefeltet, derfor fylder den så meget
 //  - Alt er selvbetjening, derfor samles det i samme navigation
 //  - Fremhæver (igen) det kulturelle område med en aktivitetssektion (det er borgerne meget interesseret i)
-//  - Navigation på undersider er igen flyttet fra bunden af siden til den ene side på websiderne (på desktops)  
-//  - Billeder på navigationen er fjernet, da det er for vanskeligt at vedligeholde/holde ajour/finde egnede fotos + det tager meget af båndbredden 
+//  - Navigation på undersider er igen flyttet fra bunden af siden til den ene side på websiderne (på desktops)
+//  - Billeder på navigationen er fjernet, da det er for vanskeligt at vedligeholde/holde ajour/finde egnede fotos + det tager meget af båndbredden
 //  - Selvbetjeningsløsninger fremhæves endnu mere på websiderne (det handlingsbaserede) (Kan det mon kaldes nudging?)
-//  - 
-
-
-
-
-
-
-
-
+//  -

@@ -46,39 +46,30 @@
 
 
 
-    // SMS-DRIFTSSTATUS'
+    // SMS-DRIFTSSTATUS
     if ($(".sms-driftsstatus")[0]) {
 
-      $('#telefon').blur(function(e){
-         $('#Mobilnummer').val($(this).val());
-      });
+      // var keyArray = [];
+      var submitValue = "";
+      var smsValidateMobile = false;
+      var smsValidateCheckbox = false;
+      var dataString = "";
+      var smsCheckboxIsChecked = false;
 
-      var keyArray = [];
-
-        // $('.setPlayers').each(function(index) {
-        //     console.log(index + ':' + $(this).text());
-        //     keyArray.push($(this).text());
-        //     alert($(this).text());
-        // });
-        //
-        // $.each(array, function(index) {
-        //     console.log(index + ':' + this);
-        //     console.log(index + ':' + this);
-        // });
-
-
-
-      // $('#submit-tilmeld, #submit-afmeld').on('click', function(){
       $('.submit-action').on('click', function(){
 
-        // Sætter felterne i den skjulte formular fra den synlige formular
-        console.log('\nFornavn: ' + $('#Fornavn').val() + '\n');
-        console.log('Efternavn: ' + $('#Efternavn').val() + '\n');
-        console.log('Mobilnummer: ' + $('#Mobilnummer').val() + '\n');
-        console.log('Submit-value: ' + $(this).data('value') + '\n');
-        var submitValue = $(this).data('value');
+        if (!$('.sms-error-mobile').hasClass('hide-me')) {
+          $('.sms-error-mobile').addClass('hide-me');
+        }
+        if (!$('.sms-error-checkbox').hasClass('hide-me')) {
+          $('.sms-error-checkbox').addClass('hide-me');
+        }
 
-        // Måske både sub og unsub (med og uden data i posten)
+        // console.log('\nFornavn: ' + $('#Fornavn').val() + '\n');
+        // console.log('Efternavn: ' + $('#Efternavn').val() + '\n');
+        // console.log('Mobilnummer: ' + $('#Mobilnummer').val() + '\n');
+        // console.log('Submit-value: ' + $(this).data('value') + '\n');
+        submitValue = $(this).data('value');
         if (submitValue == "Tilmeld") {
           $('.submitter').attr('name', 'sub');
         }
@@ -88,87 +79,94 @@
         $('.submitter').attr('value', submitValue);
 
 
-        $('.checkbox_type').each(function(index) {
-          if ($(this).prop('checked')) {
-            keyArray.push($(this).val());
+        // console.log('Antal valgt: ' + keyArray.length);
+        // console.log('\n');
+
+        // mobilnummer
+        if (/^[0-9]+$/.test($('#Mobilnummer').val()) && $('#Mobilnummer').val().length == 8) { // kun tal på 8 cifre
+          smsValidateMobile = true;
+        }
+        else {
+          // console.log('Du mangler at indtaste et mobilnummer på 8 cifre.');
+          $('.sms-error-mobile').removeClass('hide-me').text('Du mangler at indtaste et mobilnummer på 8 cifre');
+          smsValidateMobile = false;
+        }
+        // checkbox
+        $('.checkbox_type').each(function (index, currentObject) {
+          if ($(currentObject).prop('checked')) {
+            smsCheckboxIsChecked = true;
+          }
+          if(smsCheckboxIsChecked) {
+            return false;
           }
         });
 
-        // console.log('Antal valgt: ' + keyArray.length);
-
-        console.log('\n');
-
-        // Validering
-        // if (!/^[0-9]+$/.test($('#telefon').val())) { // kun tal
-        if (!$('#telefon').val()) {
-          console.log('Du mangler at indtaste et mobilnummer');
+        if (smsCheckboxIsChecked) {
+          smsValidateCheckbox = true;
         }
-        if (keyArray.length == 0) {
-          console.log('Du mangler at vælge et eller flere områder');
+        else {
+          smsValidateCheckbox = false;
+          // console.log('Du mangler at vælge et eller flere områder');
+          $('.sms-error-checkbox').removeClass('hide-me').text('Du mangler at vælge et eller flere områder');
         }
 
-        var dataString = "";
+        if (smsValidateMobile && smsValidateCheckbox) {
 
-        if (keyArray.length > 0) {
-          $.each(keyArray, function(index) {
+          dataString = $(".sms-formular").serialize();
+          // console.log('\n\n' + dataString);
 
-            console.log(index + ': ' + this);
+          $.ajax( {
+            type: 'POST',
+            url: '/sites/all/themes/ishoj/includes/sms_driftsstatus.php',
+            data: dataString,
+            success: function(data) {
+              // console.log(data + '\n\n');
+              dataString = "";
 
+              $('.formularen').toggleClass('hide-me');
+              $('.meddelelserne').toggleClass('hide-me');
+              // $('.meddelelserne div').text(data);
 
-            // FIXES: Send værdien i røven af hinanden, fx ctI1460622408ct570f544877950,ctY1460622344ct570f5408d1c8e
-
-            // if(this == 'care') {
-            //   $('#submit-key').attr('value', 'ctI1460622408ct570f544877950');
-            // }
-            // if(this == 'citrix') {
-            //   $('#submit-key').attr('value', 'ctY1460622344ct570f5408d1c8e');
-            // }
-            // if(this == 'outlook') {
-            //   $('#submit-key').attr('value', 'ctA1460622381ct570f542dd2eb5');
-            // }
-            // if(this == 'sbsys') {
-            //   $('#submit-key').attr('value', 'ctK1460617948ct570f42dc13215');
-            // }
-
-            // serialized data sent to AJAX
-            dataString = $("#sendeform").serialize();
-            console.log('\n\n' + dataString);
-
-
-
-
-
-            // $.ajax( {
-            //   type: 'POST',
-            //   url: 'https://www.gruppe-sms.dk/gate/?handle=subscription&language=da',
-            //   // url: 'http://cors.io/?u=http://www.ishoj.dk',
-            //   data: dataString,
-            //   success: function(data) {
-            //     console.log(data + '\n\n');
-            //
-            //     // $('#message').html(data);
-            //   }
-            // });
-
-
+              if (/Du er nu tilmeldt/i.test(data)) {
+                $('.meddelelserne div').html('<h3>Du er nu tilmeldt</h3>');
+              }
+              if (!/Du er nu tilmeldt/i.test(data) && /Du er allerede tilmeldt gruppen/i.test(data)) {
+                $('.meddelelserne div').html('<h3>Du er allerede tilmeldt</h3>');
+              }
+              if (/Du er nu afmeldt/i.test(data)) {
+                $('.meddelelserne div').html('<h3>Du er nu afmeldt</h3>');
+              }
+              if (!/Du er nu afmeldt/i.test(data) && /Ikke tilmeldt, så ikke afmeldt/i.test(data)) {
+                $('.meddelelserne div').html('<h3>Du er ikke tilmeldt</h3>');
+              }
+              // Du er nu tilmeldt
+              // Du er nu afmeldt
+              // Ikke tilmeldt, så ikke afmeldt
+              // Du er allerede tilmeldt gruppen
+            }
           });
         }
 
-
-        $('#sendeform').submit();
-        // $.post('/sites/all/themes/ishoj/dist/js/sms_driftsstatus.php', { hest: 'value1', fest: 'value2' }, function(result) {
-        //     console.log('\n\ndata sendt');
-        // });
-
-
-        keyArray.length = 0; // fjerner alle items
-
+        // keyArray.length = 0; // fjerner alle items
 
 
       })
 
-
-
+      function smsInit() {
+        $('.sms-error-mobile').addClass('hide-me');
+        $('.sms-error-checkbox').addClass('hide-me');
+        submitValue = "";
+        smsValidateMobile = false;
+        smsValidateCheckbox = false;
+        dataString = "";
+        $('.meddelelserne div').text('');
+        $('#Mobilnummer').val('');
+        $('.checkbox_type').each(function (index, currentObject) {
+          // index starts with 0
+          $(currentObject).prop('checked', false);
+        });
+        smsCheckboxIsChecked = false;
+      }
 
 
     } // END SMS-DRIFTSSTATUS
@@ -740,7 +738,19 @@
               $(this).parent().addClass("active");
               $(this).addClass("active");
               $(this).find("span").addClass("sprite-minus");
+
+              // SMS-DRIFTSSTATUS
+              if ($(".sms-driftsstatus")[0]) {
+                if ($('.formularen').hasClass('hide-me')) {
+                  $('.formularen').toggleClass('hide-me');
+                  $('.meddelelserne').toggleClass('hide-me');
+                }
+                smsInit();
+              }
+
           }
+
+
       });
     }
 
