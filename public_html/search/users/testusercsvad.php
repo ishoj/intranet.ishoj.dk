@@ -22,23 +22,23 @@ print "TOM" . "<br/>";
     print "user: " . $username . "<br/>";
 
 
-} else { 
+} else {
 // TITEL
-   
+
 
 if ($usertochange->field_user_in_ad['und'][0]['value']  == 0) {
  print "user: " . $username . "<br/>";
- print "bruger no ad: " . $usertochange->name . "<br/>";   
- print "email: " . $email . "<br/>";   
-  
-  
+ print "bruger no ad: " . $usertochange->name . "<br/>";
+ print "email: " . $email . "<br/>";
+
+
 //   if ($usertochange->name == "jvm") {
 $existing = user_load($usertochange->uid);
-$edit = (array) $existing;         
+$edit = (array) $existing;
 $edit['field_user_in_ad']['und'][0]['value'] = '1';
 $edit['mail'] = $email;
 unset($edit['pass']);
-unset($edit['picture']);            
+unset($edit['picture']);
 unset($edit['field_faerdigheder']);
 unset($edit['field_ansvarsomraader']);
 unset($edit['field_os2web_base_field_kle_ref']);
@@ -47,28 +47,28 @@ unset($edit['data']);
 unset($edit['field_fotolink']);
 unset($edit['signature']);
 unset($edit['signature_format']);
-unset($edit['name']); 
-unset($edit['theme']);                 
-unset($edit['roles']); 
-unset($edit['language']); 
+unset($edit['name']);
+unset($edit['theme']);
+unset($edit['roles']);
+unset($edit['language']);
 unset($edit['rdf_mapping']);
-unset($edit['field_os2intra_import_groups']);                
-print_r($edit);  
+unset($edit['field_os2intra_import_groups']);
+print_r($edit);
 
 $os = array("jvm", "tho", "thk", "Linux");
 if (in_array($username, $os)) {
 print "IKKE UPDATE";
 } else {
-//user_save($existing, $edit);
+// user_save($existing, $edit);
 print $username . " UPDATED";
-} 
-    
- 
-      }     
-// }        
-        
-   
-  
+}
+
+
+      }
+// }
+
+
+
 
 }
 //
