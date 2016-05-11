@@ -527,6 +527,7 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                                   $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_citrix\" name=\"keys[]\" value=\"ctY1460622344ct570f5408d1c8e\" /> Citrix<br />";
                                   $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_outlook\" name=\"keys[]\" value=\"ctA1460622381ct570f542dd2eb5\" /> Outlook<br />";
                                   $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_sbsys\" name=\"keys[]\" value=\"ctK1460617948ct570f42dc13215\" /> SBSYS<br />";
+                                  $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_telefoni\" name=\"keys[]\" value=\"ctW1462950899ct5732dbf37e8db\" /> Telefoni<br />";
 
                                   $output .= "<p>&nbsp;</p>";
 
