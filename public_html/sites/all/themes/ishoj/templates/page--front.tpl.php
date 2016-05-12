@@ -501,7 +501,7 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                  $output .= "<div class=\"grid-two-thirds almindelige\">";
 
                     // TILMELDING TIL SMS-DRIFTSSTATUS START
-                    if($is_admin or ($showuser->name == "kln")) {
+                    // if($is_admin or ($showuser->name == "kln")) {
                       $output .= "<div class=\"sms-driftsstatus\">";
 
                         $output .= "<div class=\"microArticleContainer\" style=\"margin:0 0 2.5em !important;\">";
@@ -552,7 +552,7 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                           $output .= "</div>";
                         $output .= "</div>";
                       $output .= "</div>";
-                    }
+                    // }
 
                     $output .= views_embed_view('nyhedsliste','almindelige_nyheder_ny2', $node->nid);
 

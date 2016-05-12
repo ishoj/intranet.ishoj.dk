@@ -754,7 +754,8 @@ vores interne nyhedsbrev</h2>
         //$output .= breaking();
 
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if($node->nid == 15232) {
           $output_infoskaerm .= "";
@@ -779,6 +780,64 @@ vores interne nyhedsbrev</h2>
         if($logged_in) {
           $output = erstatIndhold($output, $user->uid);
         }
+
+
+
+        // TILMELDING TIL SMS-DRIFTSSTATUS START
+        $smstilmelding = "";
+        $smstilmelding .= "<div class=\"sms-driftsstatus\">";
+
+          $smstilmelding .= "<div class=\"microArticleContainer\" style=\"margin:0 0 2.5em !important;\">";
+            $smstilmelding .= "<div class=\"microArticle\">";
+              $smstilmelding .= "<h3 class=\"mArticle\" id=\"mArticle2\">";
+                $smstilmelding .= "<span class=\"sprites-sprite sprite-plus mikroartikel\"></span>Tilmelding til SMS-driftsinformation";
+              $smstilmelding .= "</h3>";
+              $smstilmelding .= "<div class=\"mArticle2 mArticle\" style=\"overflow: hidden; display: none;\">";
+                $smstilmelding .= "<div class=\"formularen\">";
+                  $smstilmelding .= "<h3>Nu kan du som noget nyt modtage driftsinformation på din mobiltelefon</h3>";
+                  $smstilmelding .= "<form class=\"sms-formular\">";
+
+                    $smstilmelding .= "<input type=\"hidden\" id=\"Fornavn\" name=\"Fornavn\" value=\"" . $firstname . "\">";
+                    $smstilmelding .= "<input type=\"hidden\" id=\"Efternavn\" name=\"Efternavn\" value=\"" . $lastname . "\">";
+
+                    $smstilmelding .= "<label>Indtast dit mobilnummer</label>";
+                    $smstilmelding .= "<p class=\"sms-error sms-error-mobile hide-me\"></p>";
+                    $smstilmelding .= "<input type=\"text\" id=\"Mobilnummer\" name=\"Mobilnummer\" value=\"\" required placeholder=\"Mobilnummer\" style=\"width:112px;\">";
+
+                    $smstilmelding .= "<label>Hvilke områder vil du modtage driftsinformation om?</label>";
+                    $smstilmelding .= "<p class=\"sms-error sms-error-checkbox hide-me\"></p>";
+                    $smstilmelding .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_care\" name=\"keys[]\" value=\"ctI1460622408ct570f544877950\" /> Care<br />";
+                    $smstilmelding .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_citrix\" name=\"keys[]\" value=\"ctY1460622344ct570f5408d1c8e\" /> Citrix<br />";
+                    $smstilmelding .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_outlook\" name=\"keys[]\" value=\"ctA1460622381ct570f542dd2eb5\" /> Outlook<br />";
+                    $smstilmelding .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_sbsys\" name=\"keys[]\" value=\"ctK1460617948ct570f42dc13215\" /> SBSYS<br />";
+                    $smstilmelding .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_telefoni\" name=\"keys[]\" value=\"ctW1462950899ct5732dbf37e8db\" /> Telefoni<br />";
+
+                    $smstilmelding .= "<p>&nbsp;</p>";
+
+                    $smstilmelding .= "<p>Hvis du i stedet for ønsker at afmelde, klik da på knappen, Afmeld. </p>";
+
+                    $smstilmelding .= "<input class=\"submitter\" type=\"hidden\" name=\"\" value=\"\">";
+                    $smstilmelding .= "<input type=\"hidden\" name=\"required\" value=\"Mobilnummer,Efternavn,Fornavn\">";
+
+                    $smstilmelding .= "<br />";
+
+                    $smstilmelding .= "<a class=\"form-submit submit-action\" data-value=\"Tilmeld\"> Tilmeld </a>";
+                    $smstilmelding .= "<a class=\"form-submit submit-action\" data-value=\"Afmeld\"> Afmeld </a>";
+
+                  $smstilmelding .= "</form>";
+                $smstilmelding .= "</div>";
+                $smstilmelding .= "<div class=\"meddelelserne hide-me\">";
+                  $smstilmelding .= "<div></div>";
+                $smstilmelding .= "</div>";
+                $smstilmelding .= "<p>&nbsp;</p>";
+
+              $smstilmelding .= "</div>";
+            $smstilmelding .= "</div>";
+          $smstilmelding .= "</div>";
+        $smstilmelding .= "</div>";
+
+        $output = str_replace("[sms-tilmeldingsboks]", $smstilmelding, $output);
+
         print $output;
         //print render($content['links']);
 
