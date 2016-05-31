@@ -30,11 +30,20 @@ print '<a href="/user/password">Jeg har glemt mit kodeord!</a>';
 ?>
                 </div>
               </div>
+              <div class="grid-half">
+              <?php
+
+              if (module_exists('drupal_nemid_login_sg') && $login_methods = drupal_nemid_login_get_login_methods()) {
+                $block = block_load('drupal_nemid_login', 'nemid_login');
+                $output = _block_get_renderable_array(_block_render_blocks(array($block)));
+                print drupal_render($output);
+              } ?>
+              </div>
             </div>
           </div>
         </section>
         <!-- ARTIKEL SLUT -->
-        
+
       </div>
       <!-- CONTENT SLUT -->
       

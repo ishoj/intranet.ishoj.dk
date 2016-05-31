@@ -15,12 +15,8 @@ if ($showuser->field_kaldenavn['und'][0]['safe_value'] != '') {
 else {
   $name = $showuser->field_fornavn['und'][0]['safe_value'] . ' ' . $showuser->field_efternavn['und'][0]['safe_value'];  
 }
-  
 
-  
-dsm($showuser);  
 $output = "";
-
 
 $output .= "<!-- PAGE START -->";
 $output .= "<div data-role=\"page\">"; 
@@ -133,7 +129,11 @@ $output .= "<div data-role=\"page\">";
 
           $output .= "</div>";
           $output .= "<div class=\"grid-third\">";
-//            $output .= "<p>TESTER</p>";
+            if (module_exists('drupal_nemid_login_sg') && $login_methods = drupal_nemid_login_get_login_methods()) {
+              $block = block_load('drupal_nemid_login', 'nemid_login');
+              $output = _block_get_renderable_array(_block_render_blocks(array($block)));
+              print drupal_render($output);
+            }
           $output .= "</div>";
         $output .= "</div>";
 
