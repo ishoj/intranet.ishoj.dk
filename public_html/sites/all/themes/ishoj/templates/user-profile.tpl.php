@@ -132,7 +132,7 @@ $output .= "<div data-role=\"page\">";
           if (module_exists('drupal_nemid_login_sg') && $login_methods = drupal_nemid_login_get_login_methods()) {
             $block = block_load('drupal_nemid_login', 'nemid_login');
             $block_output = _block_get_renderable_array(_block_render_blocks(array($block)));
-            print drupal_render($block_output);
+            $output .= $block_output;
           }
           $output .= "</div>";
         $output .= "</div>";
