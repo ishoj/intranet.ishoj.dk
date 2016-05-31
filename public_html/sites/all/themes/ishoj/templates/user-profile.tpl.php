@@ -129,11 +129,7 @@ $output .= "<div data-role=\"page\">";
 
           $output .= "</div>";
           $output .= "<div class=\"grid-third\">";
-            if (module_exists('drupal_nemid_login_sg') && $login_methods = drupal_nemid_login_get_login_methods()) {
-              $block = block_load('drupal_nemid_login', 'nemid_login');
-              $output = _block_get_renderable_array(_block_render_blocks(array($block)));
-              print drupal_render($output);
-            }
+
           $output .= "</div>";
         $output .= "</div>";
 
@@ -437,7 +433,11 @@ $output .= "<div data-role=\"page\">";
 //            $output .=  "</div>";    
 //          $output .= "</div>";
   
-
+        if (module_exists('drupal_nemid_login_sg') && $login_methods = drupal_nemid_login_get_login_methods()) {
+           $block = block_load('drupal_nemid_login', 'nemid_login');
+           $output = _block_get_renderable_array(_block_render_blocks(array($block)));
+           print drupal_render($output);
+        }
 
         $output .= "</div>";
       $output .= "</div>";
