@@ -73,9 +73,9 @@ class SocialContentPinterest extends SocialContent {
       '#type' => 'textfield',
       '#title' => 'API URL',
       '#description' => t('Use @user and @board tokens. Example: !url', array(
-        '!url' => 'http://pinterest.com/@user/@board/rss',
+        '!url' => 'https://pinterest.com/@user/@board.rss',
       )),
-      '#default_value' => isset($settings['api_url']) ? $settings['api_url'] : NULL,
+      '#default_value' => isset($settings['api_url']) ? $settings['api_url'] : 'https://pinterest.com/@user/@board.rss',
       '#required' => TRUE,
     );
 
@@ -152,7 +152,7 @@ class SocialContentPinterest extends SocialContent {
     $row->created = strtotime($row->pubDate);
     $filter = filter_format_exists('pinterest') ? 'pinterest' : 'filtered_html';
     $row->body = array('value' => $row->description, 'format' => $filter);
-    $id = str_replace('http://www.pinterest.com/pin/', '', $row->guid);
+    $id = str_replace('https://www.pinterest.com/pin/', '', $row->guid);
     $id = str_replace('/', '', $id);
     $row->id = $id;
 
@@ -168,7 +168,7 @@ class SocialContentPinterest extends SocialContent {
     if ($img = $tags->item(0)) {
       $src = $img->getAttribute('src');
       $picture = $this->saveExternalFile($src, $mappings['picture']);
-      $row->picture = !empty($picture) ? $picture : NULL;
+      $row->picture = $picture ? $picture : NULL;
     }
 
     return TRUE;

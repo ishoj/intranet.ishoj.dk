@@ -71,27 +71,3 @@ function social_content_pinterest_install() {
     }
   }
 }
-
-/**
- * Implements hook_node_info().
- */
-function social_content_pinterest_node_info() {
-  $items = array(
-    'pinterest' => array(
-      'name' => t('Pinterest'),
-      'base' => 'node_content',
-      'description' => '',
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'help' => '',
-    ),
-  );
-  return $items;
-}
-
-/**
- * Implements hook_node_info().
- */
-function social_content_pinterest_form($node, $form_state) {
-  return array();
-}

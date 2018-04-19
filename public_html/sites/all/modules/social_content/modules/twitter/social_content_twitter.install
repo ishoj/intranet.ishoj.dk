@@ -5,9 +5,9 @@
  */
 
 /**
- * Implements hook_enable().
+ * Create the tweet text format.
  */
-function social_content_twitter_enable() {
+function social_content_twitter_create_text_format() {
   module_load_include('inc', 'social_content_twitter', 'social_content_twitter.filters');
   $tweet_format = array(
     'format' => 'tweet',
@@ -25,6 +25,10 @@ function social_content_twitter_enable() {
  * Implements hook_install().
  */
 function social_content_twitter_install() {
+  if (variable_get('social_content_create_text_formats', TRUE)) {
+    social_content_twitter_create_text_format();
+  }
+
   $create_bundle = variable_get('social_content_create_bundles', TRUE);
   if (!$create_bundle) {
     return;

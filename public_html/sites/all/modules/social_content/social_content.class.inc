@@ -299,6 +299,23 @@ abstract class SocialContent {
       '#weight' => 999,
     );
 
+    $form['author'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Authored by'),
+      '#maxlength' => 60,
+      '#autocomplete_path' => 'user/autocomplete',
+      '#element_validate' => array('social_content_element_validate_user_name'),
+      '#description' => t('Leave blank for %anonymous.', array('%anonymous' => variable_get('anonymous', t('Anonymous')))),
+    );
+    if (isset($settings['author'])) {
+      $author = user_load($settings['author']);
+      $form['author']['#default_value'] = $author->name;
+    }
+    else {
+      $admin_user = user_load(1);
+      $form['author']['#default_value'] = $admin_user->name;
+    }
+
     $form['limit'] = array(
       '#type' => 'textfield',
       '#title' => t('Import limit'),
@@ -379,6 +396,7 @@ abstract class SocialContent {
   protected function instanceSettingsFields() {
     return array(
       'limit' => 50,
+      'author' => 1,
       'auto_publish' => TRUE,
       'auto_delete' => NULL,
       'enabled' => FALSE,
@@ -418,6 +436,16 @@ abstract class SocialContent {
       unset($settings['fields']['extra']);
     }
     $settings['id'] = is_numeric($settings['id']) ? $settings['id'] : NULL;
+
+    // Convert author field from username to uid.
+    if (empty($settings['author'])) {
+      $settings['author'] = 0;
+    }
+    else {
+      $author = user_load_by_name($settings['author']);
+      $settings['author'] = $author->uid;
+    }
+
     $row = (object) $settings;
     $row->settings = serialize($settings);
     $update = !empty($row->id) ? 'id' : array();
@@ -506,18 +534,29 @@ abstract class SocialContent {
    *
    * Will get all social content and create nodes from them.
    *
+   * @param array $settings_override
+   *   (Optional) Pass through settings in a key => value array to override
+   *   instance and global settings.
+   *
    * @return array
    *   Stats about the import process.
    */
-  public function import() {
+  public function import($settings_override = array()) {
     $import_stats = array(
       'skipped' => 0,
       'imported' => 0,
       'processed' => 0,
     );
     $field_mappings = $this->getFieldMappings();
+
+    // Override instance settings first, as these can be used elsewhere.
+    $this->settings['instance'] = array_merge($this->settings['instance'], $settings_override);
     $settings = array_merge($this->settings['global'], $this->settings['instance']);
-    $last_id = self::getLastImportedExternalID($settings['id']);
+
+    $last_id = NULL;
+    if (!isset($settings['skip_last_id']) || $settings['skip_last_id'] == FALSE) {
+      $last_id = self::getLastImportedExternalID($settings['id']);
+    }
 
     // Determine which language the imoprted content should be in.
     global $language;
@@ -541,13 +580,25 @@ abstract class SocialContent {
         // Basic attributes of a node.
         $values = array(
           'type' => $settings['content_type'],
-          'uid' => 1,
           'status' => $settings['auto_publish'],
           'promote' => 0,
           'language' => $langcode,
           'created' => isset($row->created) ? $row->created : time(),
           'path' => array('alias' => $path),
         );
+
+        // If an author has not yet been set, default to uid 1 (this is for
+        // legacy reasons, everything used to always be imported as uid 1).
+        if (!isset($settings['author'])) {
+          $values['uid'] = 1;
+        }
+        // If it's set but is empty, then it's the anonymous user.
+        elseif (empty($settings['author'])) {
+          $values['uid'] = 0;
+        }
+        else {
+          $values['uid'] = $settings['author'];
+        }
 
         // Using entity_metadata_wrapper as it's easier to set fields.
         $entity = entity_create('node', $values);
@@ -632,6 +683,26 @@ abstract class SocialContent {
         }
         elseif ($property_info[$field_name]['type'] == 'field_item_link') {
           $value = array('url' => $value);
+        }
+        elseif (in_array($property_info[$field_name]['type'], array('list<taxonomy_term>', 'taxonomy_term'))) {
+          $terms = array();
+          $vid = taxonomy_vocabulary_machine_name_load($property_info[$field_name]['bundle'])->vid;
+          if ($value && !is_array($value)) {
+            $value = array($value);
+          }
+          foreach ($value as $name) {
+            $name = self::validateText($name);
+            $term = taxonomy_get_term_by_name($name, $property_info[$field_name]['bundle']);
+            if (!$term) {
+              $term = new stdClass();
+              $term->name = $name;
+              $term->vid = $vid;
+              taxonomy_term_save($term);
+              $term = taxonomy_get_term_by_name($name, $property_info[$field_name]['bundle']);
+            }
+            $terms[] = array_pop($term)->tid;
+          }
+          $value = $terms;
         }
         if ($value) {
           $wrapper->{$field_name}->set($value);
@@ -793,7 +864,7 @@ abstract class SocialContent {
    * @return mixed
    *   An array representing the saved image or FALSE if there was an error.
    */
-  static protected function saveExternalFile($url, $field_name, $validators = array()) {
+  protected function saveExternalFile($url, $field_name, $validators = array()) {
     $result = self::httpRequest($url);
     if ($result->code != 200) {
       return FALSE;
@@ -803,21 +874,30 @@ abstract class SocialContent {
     // Facebook has generic /graph/picture urls that redirect.
     // So look for a redirect url first in the response.
     if (isset($result->redirect_url)) {
-      $path_info = pathinfo($result->redirect_url);
+      $url_info = drupal_parse_url($result->redirect_url);
     }
     else {
-      $path_info = pathinfo($url);
+      $url_info = drupal_parse_url($url);
     }
+    $path_info = pathinfo($url_info['path']);
 
-    // TODO: Create a nice filename from the content type.
     $filename = $path_info['basename'];
-
     $field_info = field_info_field($field_name);
     if ($field_info['type'] == 'image') {
       $validators += array('file_validate_is_image' => array());
     }
     $field_uri_scheme = $field_info['settings']['uri_scheme'];
 
+    $instance_info = field_info_instance('node', $field_name, $this->settings['instance']['content_type']);
+    if ($instance_info && !empty($instance_info['settings']) && !empty($instance_info['settings']['file_directory'])) {
+      $directory = $instance_info['settings']['file_directory'];
+      $dir_path = $field_uri_scheme . '://' . $directory;
+      if (file_prepare_directory($dir_path, FILE_CREATE_DIRECTORY)) {
+        $filename = $directory . '/' . $filename;
+      }
+    }
+
+    $file = NULL;
     try {
       $file = file_save_data($result->data, $field_uri_scheme . '://' . $filename, FILE_EXISTS_RENAME);
     } catch (Exception $e) {
@@ -825,14 +905,14 @@ abstract class SocialContent {
       watchdog('social_content', 'Error saving file: %message', array(
         '%message' => $e->getMessage(),
       ));
+      return FALSE;
     }
-
 
     if (!$file) {
       return FALSE;
     }
 
-    if (!empty($validators) && file_validate($file, $validators)) {
+    if ($validators && file_validate($file, $validators)) {
       return FALSE;
     }
 

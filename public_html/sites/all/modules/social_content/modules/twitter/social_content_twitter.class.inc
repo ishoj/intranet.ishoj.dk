@@ -70,6 +70,15 @@ class SocialContentTwitter extends SocialContent {
     $row->account_link = 'http://twitter.com/' . $row->user->screen_name;
     $filter = filter_format_exists('tweet') ? 'tweet' : 'filtered_html';
     $row->text = array('value' => $row->text, 'format' => $filter);
+    if (isset($row->full_text)) {
+      // Theoretically should respect 'display_text_range', which indicates [start, end]
+      // of full_text to display. But that will throw off the mappings in 'entities',
+      // since they seem to refer to 'full_text' as a whole (as of 2017-04-14).
+      $row->text = $row->full_text;
+    }
+    if (isset($row->retweeted_status->full_text)) {
+      $row->retweeted_status->text = $row->retweeted_status->full_text;
+    }
     if (parent::prepareRow($row) === FALSE) {
       return FALSE;
     }
@@ -77,6 +86,37 @@ class SocialContentTwitter extends SocialContent {
     if (isset($mappings['user_picture'])) {
       $picture = $this->saveExternalFile($row->user->profile_image_url, $mappings['user_picture']);
       $row->user_picture = !empty($picture) ? $picture : NULL;
+    }
+
+    if (isset($mappings['media'])) {
+      if (isset($row->entities->media)) {
+        foreach ($row->entities->media as $item) {
+          if (isset($item->media_url)) {
+            $picture = $this->saveExternalFile($item->media_url, $mappings['media']);
+            $row->media = !empty($picture) ? $picture : NULL;
+            if ($picture) {
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    // Get media from retweet:
+    // Duplicate code in parent (social_content_twitter.class.inc) that gets first media
+    // item from $row->entities, but apply it to $row->retweeted_status->entities.
+    if (isset($mappings['media']) && isset($row->retweeted_status) && !isset($row->media)) {
+      if (isset($row->retweeted_status->entities->media)) {
+        foreach ($row->retweeted_status->entities->media as $item) {
+          if (isset($item->media_url)) {
+            $picture = $this->saveExternalFile($item->media_url, $mappings['media']);
+            $row->media = !empty($picture) ? $picture : NULL;
+            if ($picture) {
+              break;
+            }
+          }
+        }
+      }
     }
   }
 
@@ -97,6 +137,7 @@ class SocialContentTwitter extends SocialContent {
       'account' => 'field_tweet_user',
       'account_link' => 'field_tweet_user_link',
       'link' => 'field_tweet_link',
+      'media' => 'field_tweet_media',
       'user_picture' => 'field_tweet_user_picture',
       'name' => 'field_tweet_user_name',
     ) + parent::fields();
@@ -125,31 +166,31 @@ class SocialContentTwitter extends SocialContent {
       '#description' => t('Do not include trailing slash. Example: !url', array(
         '!url' => 'https://api.twitter.com/1.1',
       )),
-      '#default_value' => isset($settings['api_url']) ? $settings['api_url'] : NULL,
+      '#default_value' => isset($settings['api_url']) ? $settings['api_url'] : 'https://api.twitter.com/1.1',
       '#required' => TRUE,
     );
 
     $form['oauth_consumer_key'] = array(
       '#type' => 'textfield',
-      '#title' => t('Consumer key'),
+      '#title' => t('Consumer Key (API Key)'),
       '#default_value' => isset($settings['oauth_consumer_key']) ? $settings['oauth_consumer_key'] : NULL,
       '#required' => TRUE,
     );
     $form['oauth_consumer_secret'] = array(
       '#type' => 'textfield',
-      '#title' => t('Consumer secret'),
+      '#title' => t('Consumer Secret (API Secret)'),
       '#default_value' => isset($settings['oauth_consumer_secret']) ? $settings['oauth_consumer_secret'] : NULL,
       '#required' => TRUE,
     );
     $form['oauth_token'] = array(
       '#type'  => 'textfield',
-      '#title' => t('OAuth token'),
+      '#title' => t('Access Token'),
       '#default_value' => isset($settings['oauth_token']) ? $settings['oauth_token'] : NULL,
       '#required' => TRUE,
     );
     $form['oauth_secret'] = array(
       '#type' => 'textfield',
-      '#title' => t('OAuth secret'),
+      '#title' => t('Access Token Secret'),
       '#default_value' => isset($settings['oauth_secret']) ? $settings['oauth_secret'] : NULL,
       '#required' => TRUE,
     );
@@ -260,6 +301,7 @@ class SocialContentTwitter extends SocialContent {
       'screen_name' => $settings['account'],
       'exclude_replies' => TRUE,
       'count' => $settings['limit'],
+      'tweet_mode' => 'extended',
     );
     if ($last_id) {
       $params['since_id'] = $last_id;

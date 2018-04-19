@@ -53,6 +53,7 @@ class SocialContentLinkedin extends SocialContent {
       'account_name' => 'field_linkedin_account_name',
       'account_link' => 'field_linkedin_account_link',
       'link' => 'field_linkedin_link',
+      'update_link' => 'field_linkedin_update_link',
       'picture' => 'field_linkedin_picture',
     ) + parent::fields();
   }
@@ -64,42 +65,50 @@ class SocialContentLinkedin extends SocialContent {
    */
   public function globalSettingsForm() {
     $settings = $this->settings['global'];
-    $token_generator_link = isset($settings['client_id']) ? l(t('Get Access Token'), $this->getAccessTokenUrl()) : '';
-    if (isset($_GET['code']) && empty($_POST)) {
-      $settings['access_token'] = $this->getAccessToken($settings, $_GET['code']);
-      if ($settings['access_token']) {
-        drupal_set_message(t('Access token has been generated, please save the form.'));
+    $token_generator_link = '';
+    if (!empty($settings['client_id'])) {
+      $token_generator_link = t('!token_link. You will need to add %site_url as an Authorized Redirect URL in your Linkedin app settings.', array(
+        '!token_link' => l(t('Click here to generate an Access Token'), $this->getAccessTokenUrl()),
+        '%site_url' => url(current_path(), array(
+          'absolute' => TRUE,
+        )),
+      ));
+    }
+
+    // Make the token request if it comes from Linkedin.
+    if (isset($_GET['code']) && empty($_POST['form_token'])) {
+      $access_token = $this->getAccessToken($settings, $_GET['code']);
+      if ($access_token) {
+        drupal_set_message(t('Use %access_token as the Access Token.', array(
+          '%access_token' => $access_token,
+        )));
+        drupal_goto(url(current_path(), array(
+          'absolute' => TRUE,
+        )));
       }
     }
 
     $form = parent::globalSettingsForm();
-
     $form['description'] = array(
-      '#markup' => '<p>' . t('See !link', array(
-          '!link' => l('linkedin.com/secure/developer', 'https://www.linkedin.com/secure/developer'),
-        )) . '</p>',
+      '#markup' => '<p>' . t('See !doc_url.', array(
+        '!doc_url' => l('linkedin.com/secure/developer', 'https://www.linkedin.com/secure/developer'),
+      )) . '</p>',
     );
 
     $form['access_token'] = array(
       '#type' => 'textfield',
       '#title' => t('Access Token'),
       '#default_value' => isset($settings['access_token']) ? $settings['access_token'] : NULL,
-      '#description' => $token_generator_link ? $token_generator_link : t('Save this form to get the Access Token.'),
-      '#maxlength' => 300,
-    );
-    $form['redirect_uri'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Redirect path'),
-      '#default_value' => isset($settings['redirect_uri']) ? $settings['redirect_uri'] : current_path(),
-      '#description' => t('Used when generating access token. Leave alone if not sure.'),
+      '#description' => $token_generator_link ? $token_generator_link : t('To generate an Access Token, save this form first.'),
+      '#maxlength' => 2000,
     );
     $form['api_url'] = array(
       '#type' => 'textfield',
       '#title' => t('API URL'),
-      '#description' => t('Do not include trailing slash. Example: !url', array(
+      '#description' => t('Do not include trailing slash. Default is !url', array(
         '!url' => 'https://api.linkedin.com',
       )),
-      '#default_value' => isset($settings['api_url']) ? $settings['api_url'] : NULL,
+      '#default_value' => isset($settings['api_url']) ? $settings['api_url'] : 'https://api.linkedin.com',
       '#required' => TRUE,
     );
     $form['api_version'] = array(
@@ -109,10 +118,19 @@ class SocialContentLinkedin extends SocialContent {
       '#default_value' => isset($settings['api_version']) ? $settings['api_version'] : 'v1',
       '#required' => TRUE,
     );
+    $form['update_url'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Update URL'),
+      '#description' => t('The base URL to a status update. Default is !url', array(
+        '!url' => 'https://www.linkedin.com/feed/update/urn:li:activity:',
+      )),
+      '#default_value' => isset($settings['update_url']) ? $settings['update_url'] : 'https://www.linkedin.com/feed/update/urn:li:activity:',
+      '#required' => TRUE,
+    );
     $form['oauth_url'] = array(
       '#type' => 'textfield',
       '#title' => t('OAuth 2 URL'),
-      '#description' => t('Do not include trailing slash. Example: !url', array(
+      '#description' => t('Do not include trailing slash. Default is !url', array(
         '!url' => 'https://www.linkedin.com/uas/oauth2',
       )),
       '#default_value' => isset($settings['oauth_url']) ? $settings['oauth_url'] : 'https://www.linkedin.com/uas/oauth2',
@@ -147,7 +165,7 @@ class SocialContentLinkedin extends SocialContent {
     $form['company_id'] = array(
       '#type' => 'textfield',
       '#title' => t('Linkedin Company ID'),
-      '#description' => t("The Linkedin company id to pull the statuses from e.g. '165106'. Use !link", array(
+      '#description' => t("The Linkedin company id to pull the statuses from e.g. '165106'. You can use !link.", array(
         '!link' => "<a target='_blank' href='https://developer.linkedin.com/apply-getting-started#company-lookup'>Linkedin Company ID lookup</a>",
       )),
       '#default_value' => isset($settings['company_id']) ? $settings['company_id'] : NULL,
@@ -172,11 +190,12 @@ class SocialContentLinkedin extends SocialContent {
     $global_settings = $this->settings['global'];
 
     if (empty($global_settings['access_token'])) {
+      watchdog('social_content_linkedin', 'Error fetching feed, data: %data', array('%data' => "empty access token"), WATCHDOG_WARNING);
       drupal_set_message(t('Error: Access Token is empty.'), 'error');
     }
     else if (!empty($settings['company_id'])) {
 
-      // @todo: Job postings and products, which have a different format.
+      // TODO: Job postings and products have a different format.
       $params = array(
         'format' => 'json',
         'oauth2_access_token' => $global_settings['access_token'],
@@ -197,6 +216,10 @@ class SocialContentLinkedin extends SocialContent {
         if (isset($posts->values)) {
           return $posts->values;
         }
+      }
+      else {
+        watchdog('social_content_linkedin', 'Error fetching feed, data: %data', array('%data' => $result->data), WATCHDOG_WARNING);
+        drupal_set_message(t('Error: @error', array('@error' => $result->data)), 'error');
       }
     }
 
@@ -228,6 +251,9 @@ class SocialContentLinkedin extends SocialContent {
 
       $row->link = $row->updateContent->companyStatusUpdate->share->content->submittedUrl;
 
+      $global_settings = $this->settings['global'];
+      $row->update_link = $global_settings['update_url'] . explode('-', $row->updateKey)[2];
+
       $image_url = $row->updateContent->companyStatusUpdate->share->content->submittedImageUrl;
       if ($image_url) {
         $picture = $this->saveExternalFile($image_url, $mappings['picture']);
@@ -257,8 +283,7 @@ class SocialContentLinkedin extends SocialContent {
     $query = array(
       'format' => 'json',
       'client_id' => $global_settings['client_id'],
-      'redirect_uri' => url($global_settings['redirect_uri'], array(
-        'query' => array(drupal_get_destination()),
+      'redirect_uri' => url(current_path(), array(
         'absolute' => TRUE,
       )),
       'response_type' => 'code',
@@ -285,8 +310,7 @@ class SocialContentLinkedin extends SocialContent {
       'format' => 'json',
       'client_id' => $settings['client_id'],
       'client_secret' => $settings['client_secret'],
-      'redirect_uri' => url($settings['redirect_uri'], array(
-        'query' => array(drupal_get_destination()),
+      'redirect_uri' => url(current_path(), array(
         'absolute' => TRUE,
       )),
       'grant_type' => 'authorization_code',

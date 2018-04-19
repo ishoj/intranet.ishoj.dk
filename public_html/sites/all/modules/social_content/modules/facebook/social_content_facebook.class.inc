@@ -75,16 +75,18 @@ class SocialContentFacebook extends SocialContent {
     $form['graph_url'] = array(
       '#type' => 'textfield',
       '#title' => t('Facebook Graph URL'),
-      '#description' => t('Do not include trailing slash. Example: !url', array(
-        '!url' => 'https://graph.facebook.com',
+      '#description' => t('Do not include a trailing slash. If not sure, use %url', array(
+        '%url' => 'https://graph.facebook.com',
       )),
-      '#default_value' => isset($settings['graph_url']) ? $settings['graph_url'] : NULL,
+      '#default_value' => isset($settings['graph_url']) ? $settings['graph_url'] : 'https://graph.facebook.com',
       '#required' => TRUE,
     );
     $form['access_token'] = array(
       '#type' => 'textfield',
       '#title' => t('Access Token'),
-      '#description' => t('This is required to interact with Facebook. Use https://graph.facebook.com/oauth/access_token?client_id=APP_ID&client_secret=APP_SECRET&&grant_type=client_credentials to generate one.'),
+      '#description' => t('This is required to interact with Facebook. Use %url to generate one.', array(
+        '%url' => 'https://graph.facebook.com/oauth/access_token?client_id=APP_ID&client_secret=APP_SECRET&&grant_type=client_credentials',
+      )),
       '#default_value' => isset($settings['access_token']) ? $settings['access_token'] : NULL,
       '#maxlength' => 300,
       '#required' => TRUE,
@@ -142,7 +144,7 @@ class SocialContentFacebook extends SocialContent {
     // Look for the Facebook Page id.
     if (!empty($settings['page_name'])) {
       $url = $global_settings['graph_url'] . '/' . $settings['page_name'];
-      $result = $this->httpRequest(url($url, array('query' => array(), 'external' => TRUE)));
+      $result = $this->httpRequest(url($url, array('query' => array('access_token' => $global_settings['access_token']), 'external' => TRUE)));
       if ($result->code == 200) {
         $data = json_decode($result->data);
         if (!empty($data->id)) {
@@ -167,7 +169,10 @@ class SocialContentFacebook extends SocialContent {
     $settings = $this->settings['instance'];
     $global_settings = $this->settings['global'];
 
-    $params['access_token'] = $global_settings['access_token'];
+    $params = array(
+      'access_token' => $global_settings['access_token'],
+      'fields' => 'message,id,created_time,from,full_picture',
+    );
     if (!empty($settings['limit'])) {
       $params['limit'] = $settings['limit'];
     }
@@ -192,12 +197,13 @@ class SocialContentFacebook extends SocialContent {
       return FALSE;
     }
 
-    // Dicard updates without content.
+    // Discard updates without content.
     if (!isset($row->message)) {
       return FALSE;
     }
 
     $global_settings = $this->settings['global'];
+    $settings = $this->settings['instance'];
 
     $id_parts = explode('_', $row->id);
     $row->id = $id_parts[1];
@@ -208,13 +214,23 @@ class SocialContentFacebook extends SocialContent {
     if (parent::prepareRow($row) === FALSE) {
       return FALSE;
     }
-    if (!empty($row->picture)) {
+    if (!empty($row->full_picture)) {
+      $validators = array();
+      if (!empty($settings['min_resolution'])) {
+        $validators = array(
+          'file_validate_image_resolution' => array(0, $settings['min_resolution']),
+        );
+      }
       $image_url = $this->getImageUrl($row, $global_settings);
       if ($image_url) {
         $mappings = $this->getFieldMappings();
-        $picture = $this->saveExternalFile($image_url, $mappings['picture']);
+        $picture = $this->saveExternalFile($image_url, $mappings['picture'], $validators);
       }
     }
+
+    // For legacy reasons we store this in $row->picture.
+    // Facebook changed where they stored this field.
+    // See https://www.drupal.org/node/2559873
     $row->picture = !empty($picture) ? $picture : NULL;
 
     return TRUE;
@@ -232,14 +248,14 @@ class SocialContentFacebook extends SocialContent {
    *   The URL, or FALSE on error.
    */
   protected function getImageUrl($row, $settings) {
-    if (isset($row->picture)) {
-      $picture_url = $row->picture;
+    if (isset($row->full_picture)) {
+      $picture_url = $row->full_picture;
     }
     if (isset($row->object_id)) {
       $picture_url = $settings['graph_url'] . '/' . $row->object_id . '/picture';
     }
     else {
-      $picture_url_parts = drupal_parse_url($row->picture);
+      $picture_url_parts = drupal_parse_url($row->full_picture);
       if (isset($picture_url_parts['query']['url'])) {
         $picture_url = $picture_url_parts['query']['url'];
       }

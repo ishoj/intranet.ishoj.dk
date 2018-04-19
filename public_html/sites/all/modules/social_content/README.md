@@ -5,6 +5,8 @@ A Drupal module to pull in social content.
 
 Project page: https://www.drupal.org/project/social_content
 
+Social Content Twitter module requires https://www.drupal.org/project/oauth
+
 
 TODO
 ----

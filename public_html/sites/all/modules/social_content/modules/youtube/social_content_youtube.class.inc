@@ -85,8 +85,8 @@ class SocialContentYoutube extends SocialContent {
     $form['api_url'] = array(
       '#type' => 'textfield',
       '#title' => t('API URL'),
-      '#description' => t('Do not include trailing slash. Example: !url', array(
-        '!url' => 'https://www.googleapis.com/youtube/v3',
+      '#description' => t('Do not include a trailing slash. If not sure, use %url', array(
+        '%url' => 'https://www.googleapis.com/youtube/v3',
       )),
       '#default_value' => isset($settings['api_url']) ? $settings['api_url'] : 'https://www.googleapis.com/youtube/v3',
       '#required' => TRUE,
@@ -116,9 +116,8 @@ class SocialContentYoutube extends SocialContent {
     $form['youtube_id'] = array(
       '#type' => 'textfield',
       '#title' => t('Youtube Channel ID'),
-      '#description' => t('This field is generated automatically.'),
+      '#description' => t('This field is generated automatically if you enter the Youtube User Name.<br>You can also capture it, see <a href="@url" target="_blank">@url</a> to find the channel ID.', array('@url' => 'https://stackoverflow.com/a/16326307/872050')),
       '#default_value' => isset($settings['youtube_id']) ? $settings['youtube_id'] : NULL,
-      '#disabled' => TRUE,
     );
 
     return $form;
@@ -152,6 +151,10 @@ class SocialContentYoutube extends SocialContent {
             $settings['youtube_id'] = $item->id;
           }
         }
+      }
+      else {
+        watchdog('social_content_youtube', 'Error fetching feed, data: %data', array('%data' => $result->data), WATCHDOG_WARNING);
+        return FALSE;
       }
     }
     return parent::saveInstanceSettings($settings);
@@ -201,6 +204,10 @@ class SocialContentYoutube extends SocialContent {
           $item->id = $id_number;
         }
         return $data->items;
+      }
+      else {
+        watchdog('social_content_youtube', 'Error fetching feed, data: %data', array('%data' => $result->data), WATCHDOG_WARNING);
+        return FALSE;
       }
     }
 

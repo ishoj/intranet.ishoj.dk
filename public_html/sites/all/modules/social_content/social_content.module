@@ -222,12 +222,15 @@ function social_content_cronapi($op, $job = NULL) {
  *
  * @param array $instance
  *   The full loaded instance
+ * @param array $settings_override
+ *   (Optional) Pass through settings in a key => value array to override
+ *   instance and global settings.
  *
  * @return mixed
  *   Whatever is returned by the import process
  */
-function social_content_run_import($instance) {
-  return $instance->import();
+function social_content_run_import($instance, $settings_override = array()) {
+  return $instance->import($settings_override);
 }
 
 /**
@@ -287,5 +290,16 @@ function social_content_modules_uninstalled($modules) {
         $instance->deleteInstance();
       }
     }
+  }
+}
+
+/**
+ * Form element validation handler to check for valid usernames.
+ *
+ * This is used on the author field, on the global/instance settings form.
+ */
+function social_content_element_validate_user_name($element, &$form_state) {
+  if (!empty($element['#value']) && !($account = user_load_by_name($element['#value']))) {
+    form_error($element, t('The username %name does not exist.', array('%name' => $element['#value'])));
   }
 }

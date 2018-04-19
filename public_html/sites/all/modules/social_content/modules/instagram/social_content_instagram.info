@@ -8,9 +8,9 @@ dependencies[] = image
 dependencies[] = text
 files[]= social_content_instagram.class.inc
 
-; Information added by Drupal.org packaging script on 2014-12-23
-version = "7.x-2.0-beta2"
+; Information added by Drupal.org packaging script on 2017-12-15
+version = "7.x-2.0-beta10"
 core = "7.x"
 project = "social_content"
-datestamp = "1419335291"
+datestamp = "1513378388"
 

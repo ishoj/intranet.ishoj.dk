@@ -117,7 +117,7 @@ function social_content_form($form, &$form_state, $type, $class, $action = NULL)
 function social_content_form_submit($form, $form_state) {
 
   $values = $form_state['values'];
-  if ($values['op'] == 'Save') {
+  if ($values['op'] == t('Save')) {
     $class = $form['#storage']['class'];
     $class->saveForm($form_state['values']);
     drupal_set_message(t('Your changes have been saved.'));
