@@ -229,7 +229,10 @@ $bterm = taxonomy_term_load($buftid);
                   $output = $output . "<h2>" . $node->field_os2web_base_field_summary['und'][0]['safe_value'] . "</h2>";
                 }
                 $output = $output . "<!-- UNDEROVERSKRIFT SLUT -->";
-
+                 // Beskrivelse
+                if($node->body) {
+                   $output = $output . $node->body['und'][0]['value'];
+                }
                 // SELVBETJENINGSLØSNING
                 if($node->field_field_url_3) {
                   $output = $output . "<!-- SELBETJENINGSLØSNING START -->";
