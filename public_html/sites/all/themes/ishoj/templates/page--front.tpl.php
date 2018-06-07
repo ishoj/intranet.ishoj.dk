@@ -433,10 +433,10 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                               $mangler++;
                             }
                             // Afløser
-                            if(!$showuser->field_afloeser) {
-                              $mangler_output .= "<li>Afløser</li>";
-                              $mangler++;
-                            }
+                            // if(!$showuser->field_afloeser) {
+                            //   $mangler_output .= "<li>Afløser</li>";
+                            //   $mangler++;
+                            // }
                             // Stilling
                             if(!$showuser->field_titel_stilling) {
                               $mangler_output .= "<li>Stilling</li>";
@@ -470,8 +470,8 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                         // Citat
                         $mangler_output_bottom .= "</div>";
                         $mangler_output_bottom .= "<div class=\"right\">";
-                          $mangler_output_bottom .= "<div class=\"foto\"><img src=\"/sites/all/themes/ishoj/dist/img/ahj_brugeroplysninger.png\"></div>";
-                          $mangler_output_bottom .= "<div class=\"text\"><h2>\"Det er vigtigt, at vi alle sørger for at opdatere vores profiler på Uglen\"</h2><h2>- Anders Hvid Jensen</h2><h3>Kommunaldirektør</h3></div>";
+                          // $mangler_output_bottom .= "<div class=\"foto\"><img src=\"/sites/all/themes/ishoj/dist/img/ahj_brugeroplysninger.png\"></div>";
+                          // $mangler_output_bottom .= "<div class=\"text\"><h2>\"Det er vigtigt, at vi alle sørger for at opdatere vores profiler på Uglen\"</h2><h2>- Anders Hvid Jensen</h2><h3>Kommunaldirektør</h3></div>";
                         $mangler_output_bottom .= "</div>";
                       $mangler_output_bottom .= "</div>";
 
@@ -557,7 +557,7 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                     $output .= views_embed_view('nyhedsliste','almindelige_nyheder_ny2', $node->nid);
 
                     // MIDLERTIDIG BOKS I.F.M. VINDUESUDSKIFTNINGEN
-                    $output .= '<p class="vinduesudskiftning"><a title="Information om vinduesudskiftningen på rådhuset" href="/kategori/vinduesudskiftning-paa-raadhuset">Information om vinduesudskiftningen på rådhuset</a></p>';
+                    $output .= '<p class="vinduesudskiftning"><a title="Information om rådhusrenoveringen" href="/kategori/vinduesudskiftning-paa-raadhuset">Information om rådhusrenoveringen</a></p>';
 
                  $output .= "</div>";
                  $output .= "<div class=\"grid-third\">";

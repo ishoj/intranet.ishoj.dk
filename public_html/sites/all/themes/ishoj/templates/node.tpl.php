@@ -80,13 +80,16 @@
  * @ingroup themeable
  */
 
-// dsm($node);
+if ($is_admin) {
+ dsm($node);
+
+}
 
 if($node->nid == 15715) {
-if (!user_is_logged_in()) {
-//print "http://uglen.ishoj.dk/user";
+  if (!user_is_logged_in()) {
+  //print "http://uglen.ishoj.dk/user";
     drupal_goto('user');
-}
+  }
 }
 
 include_once drupal_get_path('theme', 'ishoj') . '/includes/uglen_functions.php';
@@ -247,7 +250,6 @@ $bterm = taxonomy_term_load($buftid);
                 $output = $output . "<!-- TEKSTINDHOLD START -->";
                 hide($content['comments']);
                 hide($content['links']);
-
                 $output = $output . findusersbytags(render($content));
                 $output = $output . "<!-- TEKSTINDHOLD SLUT -->";
 
@@ -711,7 +713,7 @@ $bterm = taxonomy_term_load($buftid);
                   // TILMELDING TIL NYHEDSBREV
                   $output .= "<div id=\"mc_embed_signup\">";
                     $output .= "<form action=\"http://ishoj.us7.list-manage.com/subscribe/post?u=ad8416d0065ab2738f7c91bbf&amp;id=f902f99af4\" class=\"validate\" id=\"mc-embedded-subscribe-form\" method=\"post\" name=\"mc-embedded-subscribe-form\" novalidate=\"\" target=\"_blank\">";
-                      $output .= "<h1 class=\"text-center no-space-top\">1416</h1>
+                      $output .= "<h1 class=\"text-center no-space-top\">1156</h1>
 <h2 class=\"_sub no-space-top space-bottom\">af dine kolleger er allerede tilmeldt
 vores interne nyhedsbrev</h2>
 <p class=\"sub space-top\">Tilmeld dig Ishøj indefra nu</p>";

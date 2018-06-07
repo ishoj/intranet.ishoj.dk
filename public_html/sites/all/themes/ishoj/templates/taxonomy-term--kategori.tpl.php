@@ -201,7 +201,7 @@ function sortBysort($a, $b){
             $output .= "<div class=\"row\">";
               $output .= "<div class=\"grid-full\">";
               if($term->tid == "6760") { // Vinduesudskiftnings-kategori
-                $output .= "<h1 class=\"text-center\">Nyt om vinduesudskiftningen</h1>";
+                $output .= "<h1 class=\"text-center\">Nyt om rådhusrenoveringen</h1>";
               }
               else { // alle andre
                 $output .= "<h1 class=\"text-center\">Nyt fra " . $term_name . "</h1>";

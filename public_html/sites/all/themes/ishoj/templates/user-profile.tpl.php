@@ -8,25 +8,25 @@ if (arg(0) == 'user') {
 $uid = arg(1);
 $showuser = user_load($uid);
 //$showuser->field_kaldenavn['und'][0]['safe_value'];
-  
-if ($showuser->field_kaldenavn['und'][0]['safe_value'] != '') {
-  $name = $showuser->field_kaldenavn['und'][0]['safe_value'];   
-} 
-else {
-  $name = $showuser->field_fornavn['und'][0]['safe_value'] . ' ' . $showuser->field_efternavn['und'][0]['safe_value'];  
-}
-  
 
-  
-dsm($showuser);  
+if ($showuser->field_kaldenavn['und'][0]['safe_value'] != '') {
+  $name = $showuser->field_kaldenavn['und'][0]['safe_value'];
+}
+else {
+  $name = $showuser->field_fornavn['und'][0]['safe_value'] . ' ' . $showuser->field_efternavn['und'][0]['safe_value'];
+}
+
+
+
+dsm($showuser);
 $output = "";
 
 
 $output .= "<!-- PAGE START -->";
-$output .= "<div data-role=\"page\">"; 
+$output .= "<div data-role=\"page\">";
 
   $output .= "<!-- CONTENT START -->";
-  $output .= "<div data-role=\"content\">"; 
+  $output .= "<div data-role=\"content\">";
 
     $output .= "<!-- ARTIKEL START -->";
     $output .= "<section class=\"artikel\">";
@@ -41,14 +41,14 @@ $output .= "<div data-role=\"page\">";
                 if($logged_in) {
                 if(($user->uid == $showuser->uid) or $is_admin) {
 
-  
+
             $mangler = 0;
-            
+
             $mangler_output_top = "<div class=\"user-missing-data\">";
             $mangler_output_top .= "<ul>";
             $mangler_output_bottom = "";
             $mangler_output = "";
-  
+
             // Billede
             if(!$showuser->picture) {
               $mangler_output .= "<li>Billede</li>";
@@ -60,10 +60,10 @@ $output .= "<div data-role=\"page\">";
               $mangler++;
             }
             // Afløser
-            if(!$showuser->field_afloeser) {
-              $mangler_output .= "<li>Afløser</li>";
-              $mangler++;
-            }
+            // if(!$showuser->field_afloeser) {
+            //   $mangler_output .= "<li>Afløser</li>";
+            //   $mangler++;
+            // }
             // Stilling
             if(!$showuser->field_titel_stilling) {
               $mangler_output .= "<li>Stilling</li>";
@@ -94,7 +94,7 @@ $output .= "<div data-role=\"page\">";
 //              $mangler_output .= "<li>Privat mobil</li>";
 //              $mangler++;
 //            }
-  
+
             $mangler_output_bottom .= "</ul>";
 
             // RET BRUGER KNAP
@@ -103,12 +103,12 @@ $output .= "<div data-role=\"page\">";
                 $mangler_output_bottom .= "<div style=\"float:left; width:100%; margin-bottom:1em;\"><div class=\"edit-node\"><a href=\"/user/" . $showuser->uid . "/edit\" title=\"Ret bruger\"><span>Ret profil</span></a></div></div>";
               }
             }
-  
+
             $mangler_output_bottom .= "</div>";
-            
+
             // Hvis der min. er et felt, der mangler at blive udfyldt
             if($mangler > 0) {
-              
+
               if($mangler == 1) {
                 $output .= $mangler_output_top . "<h3>Hej " . $showuser->field_fornavn['und'][0]['safe_value'] . "</h3><p>Du mangler at udfylde følgende felt for at færdiggøre din profil:</p>" . $mangler_output .  $mangler_output_bottom;
               }
@@ -116,7 +116,7 @@ $output .= "<div data-role=\"page\">";
                 $output .= $mangler_output_top . "<h3>Hej " . $showuser->field_fornavn['und'][0]['safe_value'] . "</h3><p>Du mangler at udfylde følgende felter for at færdiggøre din profil:</p>" . $mangler_output .  $mangler_output_bottom;              }
             }
             else {
-              
+
               // RET BRUGER KNAP
               //global $user;
               if($logged_in) {
@@ -124,12 +124,12 @@ $output .= "<div data-role=\"page\">";
                   $output .= "<div style=\"float:left; width:100%; margin-bottom:1em;\"><div class=\"edit-node\"><a href=\"/user/" . $showuser->uid . "/edit\" title=\"Ret bruger\"><span>Ret bruger</span></a></div></div>";
                 }
               }
-            
+
             }
                   }
               }
-          
-  
+
+
 
           $output .= "</div>";
           $output .= "<div class=\"grid-third\">";
@@ -146,14 +146,14 @@ $output .= "<div data-role=\"page\">";
 //                $output .= theme('user_picture', array('account' =>$showuser));
               if($showuser->picture) {
                 $output .= "<img alt=\"" . $name . "\" src=\"" . image_style_url('profilfoto_stor', $showuser->picture->uri) . "\" />";
-                   
+
                $output .= "<img class=\"hide-me\" alt=\"" . $name . "\" src=\"" . image_style_url('profilfoto_lille', $showuser->picture->uri) . "\" />";
                 }
-              
+
               else {
-                  $output .= "<img alt=\"" . $name . "\" src=\"/sites/all/themes/ishoj/dist/img/sprites-no/nopic_big.png\" />";              
+                  $output .= "<img alt=\"" . $name . "\" src=\"/sites/all/themes/ishoj/dist/img/sprites-no/nopic_big.png\" />";
               }
-  
+
               // BRUGER DATA
               $output .= "<div class=\"user-data\">";
 
@@ -170,20 +170,20 @@ $output .= "<div data-role=\"page\">";
 
                 // LOKATION
                 if($showuser->field_aktivitetssted) {
-                  
+
                   // STED
                   $output .= "<p><strong>LOKATION:</strong> " . taxonomy_term_load($showuser->field_aktivitetssted['und'][0]['tid'])->name;
-                  
+
                   // ETAGE
                   if($showuser->field_etage) {
-                    $output .= ", etage " . $showuser->field_etage['und'][0]['value'];  
+                    $output .= ", etage " . $showuser->field_etage['und'][0]['value'];
                   }
-                  
+
                   // LOKALE NR.
                   if($showuser->field_lokale_nr_) {
-                    $output .= ", lokale " . $showuser->field_lokale_nr_['und'][0]['value'];  
+                    $output .= ", lokale " . $showuser->field_lokale_nr_['und'][0]['value'];
                   }
-                  
+
                   $output .= "</p>";
                 }
 
@@ -229,8 +229,8 @@ $output .= "<div data-role=\"page\">";
               }
               $output .= "</ul>";
             }
-    
-    
+
+
     // UDDANNELSE
             if($showuser->field_user_uddannelse) {
               $output .= "<p><strong>UDDANNELSE:</strong></p>";
@@ -240,7 +240,7 @@ $output .= "<div data-role=\"page\">";
               }
               $output .= "</ul>";
             }
-    
+
      // SPROGKUNDSKABER
             if($showuser->field_user_sprogkundskaber) {
               $output .= "<p><strong>SPROGKUNDSKABER:</strong></p>";
@@ -254,30 +254,30 @@ $output .= "<div data-role=\"page\">";
             // INDLÆG OPRETTET AF BRUGER
 //              $output .= views_embed_view('noder_fra_user','vis_users_noder', $showuser->uid);
             $view = views_get_view('noder_fra_user');
-            $view->set_display('vis_users_noder');    
-            $view->set_arguments(array($showuser->uid));  
+            $view->set_display('vis_users_noder');
+            $view->set_arguments(array($showuser->uid));
             $results = $view->render();
-            if(sizeof($view->result) > 0) { 
+            if(sizeof($view->result) > 0) {
               $output .= "<p><strong>INDLÆG OPRETTET AF BRUGER:</strong></p>";
               $output .= $results;
             }
 
           $output .= "</div>";
           $output .= "<div class=\"grid-third\">";
-  
+
             // AFLØSER
             if($showuser->field_afloeser) {
 
 
               $output .= "<div class=\"forfatter-container user-side\">";
-              
+
               if(count($showuser->field_afloeser['und']) > 1) {
                 $output .= "<p class=\"hest\"><strong>AFLØSERE:</strong></p>";
               }
               else {
                 $output .= "<p class=\"hest\"><strong>AFLØSER:</strong></p>";
               }
-              
+
               $outputuser = "";
 
               foreach ($showuser->field_afloeser['und'] as $afloeserKey => $afloeserItem) {
@@ -287,11 +287,11 @@ $output .= "<div data-role=\"page\">";
                 $outputuser .= "<li>";
                 // KALDENNAVN - FOR- OG EFTERNAVN
                 if ($afloeserItem['user']->field_kaldenavn['und'][0]['safe_value'] != '') {
-                  $name = $afloeserItem['user']->field_kaldenavn['und'][0]['safe_value'];   
-                } 
+                  $name = $afloeserItem['user']->field_kaldenavn['und'][0]['safe_value'];
+                }
                 else {
-                  $name = $afloeserItem['user']->field_fornavn['und'][0]['safe_value'] . ' ' . $afloeserItem['user']->field_efternavn['und'][0]['safe_value'];  
-                }    
+                  $name = $afloeserItem['user']->field_fornavn['und'][0]['safe_value'] . ' ' . $afloeserItem['user']->field_efternavn['und'][0]['safe_value'];
+                }
 
                 if($afloeserItem['user']->field_fornavn and $afloeserItem['user']->field_efternavn) {
                   $outputuser .= "<a href=\"/users/" . $afloeserItem['user']->name . "\" titel=\"\"><span class=\"navn\">" . $name . "</span></a>";
@@ -332,7 +332,7 @@ $output .= "<div data-role=\"page\">";
                 $outputuser .= "</div>";
                 $outputuser .= "</li>";
                 $outputuser .= "</ul>";
-                $outputuser  .="</div>";                    
+                $outputuser  .="</div>";
               }
 
               $output .= $outputuser;
@@ -344,14 +344,14 @@ $output .= "<div data-role=\"page\">";
             if($showuser->field_overordnet) {
 
               $output .= "<div class=\"forfatter-container user-side\">";
-              
+
               if(count($showuser->field_overordnet['und']) > 1) {
                 $output .= "<p class=\"hest\"><strong>LEDERE:</strong></p>";
               }
               else {
                 $output .= "<p class=\"hest\"><strong>LEDER:</strong></p>";
               }
-              
+
               $outputuser = "";
 
               foreach ($showuser->field_overordnet['und'] as $overordnetKey => $overordnetItem) {
@@ -361,11 +361,11 @@ $output .= "<div data-role=\"page\">";
                 $outputuser .= "<li>";
                 // KALDENNAVN - FOR- OG EFTERNAVN
                 if ($overordnetItem['user']->field_kaldenavn['und'][0]['safe_value'] != '') {
-                  $name = $overordnetItem['user']->field_kaldenavn['und'][0]['safe_value'];   
-                } 
+                  $name = $overordnetItem['user']->field_kaldenavn['und'][0]['safe_value'];
+                }
                 else {
-                  $name = $overordnetItem['user']->field_fornavn['und'][0]['safe_value'] . ' ' . $overordnetItem['user']->field_efternavn['und'][0]['safe_value'];  
-                }    
+                  $name = $overordnetItem['user']->field_fornavn['und'][0]['safe_value'] . ' ' . $overordnetItem['user']->field_efternavn['und'][0]['safe_value'];
+                }
 
                 if($overordnetItem['user']->field_fornavn and $overordnetItem['user']->field_efternavn) {
                   $outputuser .= "<a href=\"/users/" . $overordnetItem['user']->name . "\" titel=\"\"><span class=\"navn\">" . $name . "</span></a>";
@@ -406,14 +406,14 @@ $output .= "<div data-role=\"page\">";
                 $outputuser .= "</div>";
                 $outputuser .= "</li>";
                 $outputuser .= "</ul>";
-                $outputuser  .="</div>";                    
+                $outputuser  .="</div>";
               }
 
               $output .= $outputuser;
-              $output .= "</div>";                  
+              $output .= "</div>";
 
 
-            } 
+            }
 
 
 
@@ -426,7 +426,7 @@ $output .= "<div data-role=\"page\">";
   //                  $output .=  "<li>Thomas Aagaard Kjeldsen<br />Tlf. 43 57 62 29<br /><a href=\"mailto:thk@ishoj.dk\" title=\"Send en e-mail til Thomas Aagaard Kjeldsen\">thk@ishoj.dk</a></li>";
   //                  $output .=  "<li>Henrik Alexandersen<br />Tlf. 43 57 62 34<br /><a href=\"mailto:39456@ishoj.dk\" title=\"Send en e-mail til Henrik Alexandersen\">39456@ishoj.dk</a></li>";
   //                  $output .=  "</ul>";
-  //    
+  //
   //                  $output .=  "<h3>Når du har spørgsmål til teknikken, fx funktionalitet, fejlmeddelelser mv.</h3>";
   //
   //                  $output .=  "<ul>";
@@ -434,9 +434,9 @@ $output .= "<div data-role=\"page\">";
   //                    $output .=  "<li>Jesper Vig Meyer<br />Tlf. 43 57 62 03<br /><a href=\mailto:jvm@ishoj.dk\" title=\"Send en e-mail til Jesper Vig Meyer\">jvm@ishoj.dk</a></li>";
   //                  $output .=  "</ul>";
 
-//            $output .=  "</div>";    
+//            $output .=  "</div>";
 //          $output .= "</div>";
-  
+
 
 
         $output .= "</div>";
@@ -451,7 +451,7 @@ $output .= "</div>";
 $output .= "<!-- PAGE SLUT -->";
 
 }
-print $output; 
-  
+print $output;
+
 ?>
  <?php // print render($user_profile); ?>

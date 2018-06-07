@@ -1,0 +1,698 @@
+@charset "UTF-8";
+/* line 5, ../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* line 22, ../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+html {
+  line-height: 1;
+}
+
+/* line 24, ../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 26, ../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 28, ../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 30, ../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 103, ../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 32, ../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 116, ../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+}
+
+/* Usage - Stick into the top of your SCSS sheet and @include where needed for cross browser transitions. 
+
+.class {
+     @include transition($transition-property, $transition-time, $method);
+}
+
+$transition-property = the property you want to transition
+$transition-time = seconds you want the transition to last
+$method = how you want it to transition - e.g. ease-in-out
+
+Usage example;
+
+-------------
+
+.item {
+    @include transition(padding, 1s, ease-in-out);
+}
+
+//ingen property-argument sendt med
+
+.item {
+    @include transition(null, 1s, ease-in-out);
+}
+
+-------------
+
+*/
+/* Calculate fluid ratio based on two dimensions (width/height) */
+/* This element will have fluid ratio from 4:1 at 800px to 2:1 at 300px. */
+@-webkit-keyframes AnimFadeInOpacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes AnimFadeInOpacityAndScale {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0.1);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+  }
+}
+@-webkit-keyframes AnimTyping {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+@-webkit-keyframes AnimFadeInAndScale90to100 {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+  }
+}
+@-webkit-keyframes AnimBoxShow {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0.1);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+  }
+}
+@-webkit-keyframes AnimBoxHide {
+  0% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform: scale(0.1);
+  }
+}
+@-webkit-keyframes AnimShow {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes AnimHide {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+@-webkit-keyframes AnimSignShow {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0.1);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+  }
+}
+@-webkit-keyframes AnimSignHide {
+  0% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform: scale(0.1);
+  }
+}
+@-webkit-keyframes AnimInBounce {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0.4);
+  }
+  40% {
+    opacity: 1;
+    -webkit-transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+  }
+}
+@-webkit-keyframes slideInFromBottom700px {
+  0% {
+    opacity: 0;
+    bottom: -700px;
+  }
+  100% {
+    opacity: 1;
+    bottom: 0;
+  }
+}
+@-webkit-keyframes slideOutToBottom700px {
+  0% {
+    opacity: 1;
+    bottom: 0;
+  }
+  100% {
+    opacity: 0;
+    bottom: -700px;
+  }
+}
+@-webkit-keyframes slideInFromBottom1080px {
+  0% {
+    opacity: 0;
+    bottom: -1080px;
+  }
+  100% {
+    opacity: 1;
+    bottom: 0;
+  }
+}
+@-webkit-keyframes slideOutToBottom1080px {
+  0% {
+    opacity: 1;
+    bottom: 0;
+  }
+  100% {
+    opacity: 0;
+    bottom: -1080px;
+  }
+}
+@-webkit-keyframes DummyHide {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes aktivitetDatoSlideInFromTop {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate(0px, -145px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translate(0px, 0px);
+  }
+}
+@-webkit-keyframes aktivitetDatoSlideOutToTop {
+  0% {
+    opacity: 1;
+    -webkit-transform: translate(0px, 0px);
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform: translate(0px, -330px);
+  }
+}
+/* VARIABLER */
+/* line 26, ../sass/infotv.scss */
+.hide {
+  display: none;
+}
+
+/* line 31, ../sass/infotv.scss */
+html {
+  width: 100%;
+  height: 100%;
+  cursor: none;
+  cursor: url(../../img/sprites-no/cursorblank.png), none;
+}
+
+/* line 38, ../sass/infotv.scss */
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-style: normal;
+  font-size: 100%;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 300;
+  color: #000;
+  overflow: hidden;
+  background: #f1f3f6;
+}
+/* line 52, ../sass/infotv.scss */
+body * {
+  cursor: none;
+  cursor: url(../../img/sprites-no/cursorblank.png), none;
+}
+
+/* line 58, ../sass/infotv.scss */
+strong {
+  font-weight: 400;
+}
+
+/* line 64, ../sass/infotv.scss */
+a {
+  color: #428bca;
+  text-decoration: none;
+}
+
+/* DRUPAL RESET */
+/* line 70, ../sass/infotv.scss */
+#skip-link {
+  display: none;
+}
+
+/* line 71, ../sass/infotv.scss */
+.region, .region-content, .block, .block-system {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+/********************************************/
+/********************************************/
+/********************************************/
+/**************************/
+/**** INFO-TV SKABELON ****/
+/**************************/
+/* line 89, ../sass/infotv.scss */
+.infotv-skabelon {
+  display: none;
+}
+
+/* line 96, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon {
+  position: relative;
+  width: 1920px !important;
+  height: 1080px !important;
+  display: block;
+}
+/* line 101, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon img {
+  width: 100%;
+  height: 100%;
+}
+/* line 105, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon .bgBox {
+  position: absolute;
+  left: 0;
+  bottom: -700px;
+  width: 100%;
+  height: 700px;
+  background: url(../../img/sprites-no/bg_white_80pct.png);
+  opacity: 1;
+}
+/* line 113, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon .bgBox.animationForward {
+  -webkit-animation: slideInFromBottom700px 0.6s ease;
+  -webkit-animation-fill-mode: forwards;
+  -webkit-animation-delay: 2.0s;
+}
+/* line 118, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon .bgBox.full {
+  bottom: -1080px;
+  height: 1080px;
+  -webkit-animation: slideInFromBottom1080px 0.9257s ease;
+  -webkit-animation-fill-mode: forwards;
+  -webkit-animation-delay: 2.0s;
+}
+/* line 126, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon .bgBoxInvisible {
+  position: absolute;
+  left: 0;
+  bottom: -700px;
+  width: 100%;
+  height: 700px;
+  background: none;
+  opacity: 1;
+}
+/* line 134, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon .bgBoxInvisible.animationForward {
+  -webkit-animation: slideInFromBottom700px 0.6s ease;
+  -webkit-animation-fill-mode: forwards;
+  -webkit-animation-delay: 2.0s;
+}
+/* line 139, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon .bgBoxInvisible.full {
+  bottom: -1080px;
+  height: 1080px;
+  -webkit-animation: slideInFromBottom1080px 0.9257s ease;
+  -webkit-animation-fill-mode: forwards;
+  -webkit-animation-delay: 2.0s;
+}
+/* line 146, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon .bgBoxInvisible > * {
+  width: 88%;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 6%;
+  margin-right: 6%;
+  padding: 0;
+}
+/* line 153, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon .bgBoxInvisible > * > h1, .currentSlide.infotv-skabelon .bgBoxInvisible > * h2, .currentSlide.infotv-skabelon .bgBoxInvisible > * p {
+  margin-right: 0;
+  margin-left: 0;
+}
+/* line 158, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon .bgBoxInvisible h1 {
+  margin-top: 70px;
+  margin-bottom: 50px;
+  padding: 0;
+  font-weight: 400;
+  font-size: 6.125em;
+  letter-spacing: 1px;
+  color: #1f1f20;
+}
+/* line 169, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon .bgBoxInvisible h2 {
+  margin-top: 0;
+  margin-bottom: 50px;
+  font-weight: 400;
+  font-size: 3.5em;
+  letter-spacing: 1px;
+  color: #1f1f20;
+}
+/* line 179, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon .bgBoxInvisible p, .currentSlide.infotv-skabelon .bgBoxInvisible li {
+  margin-top: 0;
+  margin-bottom: 50px;
+  font-weight: 300;
+  font-size: 3.5em;
+  letter-spacing: 1px;
+  line-height: 130%;
+  color: #1f1f20;
+}
+/* line 190, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon .bgBoxInvisible li {
+  list-style: disc;
+}
+/* line 193, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon .bgBoxInvisible .aabningstider-col-1, .currentSlide.infotv-skabelon .bgBoxInvisible .aabningstider-col-2 {
+  float: left;
+  width: 15%;
+  display: block;
+  margin: 40px 0 0 0;
+  padding: 0;
+}
+/* line 200, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon .bgBoxInvisible .aabningstider-col-2 {
+  width: 85%;
+}
+/* line 203, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon .bgBoxInvisible .aabningstider-col-2 p {
+  width: 100%;
+}
+/* line 212, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon.aktivitet h1 {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 5.5em;
+}
+/* line 219, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon.aktivitet .aktivitet-dato {
+  position: absolute;
+  top: 10%;
+  left: 6%;
+  opacity: 0;
+  -webkit-transform: translate(0px, -10%);
+  padding: 0 .75em;
+  background: #3286b6;
+  text-align: center;
+  line-height: 220%;
+  font-size: 5em;
+  font-weight: 400;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.0725em;
+  -webkit-border-radius: 0.0725em;
+  -moz-border-radius: 0.0725em;
+  -ms-border-radius: 0.0725em;
+  -o-border-radius: 0.0725em;
+  border-radius: 0.0725em;
+}
+/* line 243, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon.aktivitet .aktivitet-dato:after, .currentSlide.infotv-skabelon.aktivitet .aktivitet-dato:before {
+  top: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+/* line 254, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon.aktivitet .aktivitet-dato:after {
+  border-top-color: #3286b6;
+  border-width: 0.375em;
+  margin-left: -0.375em;
+}
+/* line 261, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon.aktivitet .aktivitet-dato.animationForward {
+  -webkit-animation: aktivitetDatoSlideInFromTop 0.6s ease;
+  -webkit-animation-fill-mode: forwards;
+  -webkit-animation-delay: 2.0s;
+}
+/* line 267, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon.aktivitet .aktivitet-fuld-dato {
+  margin-bottom: 1.125em;
+  font-size: 4.0em;
+}
+/* line 273, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon.aktivitet .aktivitet-sted, .currentSlide.infotv-skabelon.aktivitet .aktivitet-arrangor {
+  margin-bottom: .25em;
+}
+/* line 279, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon.aktivitet .aktivitet-arrangor {
+  margin-bottom: .75em;
+}
+/* line 283, ../sass/infotv.scss */
+.currentSlide.infotv-skabelon.aktivitet .aktivitet-url {
+  color: #3286b6;
+}
+/* line 293, ../sass/infotv.scss */
+.currentSlide.reverse.infotv-skabelon .bgBox.animationBack {
+  -webkit-animation: slideOutToBottom700px 0.6s ease;
+  -webkit-animation-fill-mode: forwards;
+}
+/* line 297, ../sass/infotv.scss */
+.currentSlide.reverse.infotv-skabelon .bgBox.full {
+  -webkit-animation: slideOutToBottom1080px 0.9257s ease;
+  -webkit-animation-fill-mode: forwards;
+}
+/* line 303, ../sass/infotv.scss */
+.currentSlide.reverse.infotv-skabelon .bgBoxInvisible.animationBack {
+  -webkit-animation: slideOutToBottom700px 0.6s ease;
+  -webkit-animation-fill-mode: forwards;
+}
+/* line 307, ../sass/infotv.scss */
+.currentSlide.reverse.infotv-skabelon .bgBoxInvisible.full {
+  -webkit-animation: slideOutToBottom1080px 0.9257s ease;
+  -webkit-animation-fill-mode: forwards;
+}
+/* line 314, ../sass/infotv.scss */
+.currentSlide.reverse.infotv-skabelon.aktivitet .aktivitet-dato {
+  -webkit-animation: aktivitetDatoSlideOutToTop 0.5s ease;
+  -webkit-animation-fill-mode: forwards;
+}
+
+/********************************************************/
+/****** OVERLAY - lægger sig ovenpå info-tv-rullen ******/
+/********************************************************/
+/* line 331, ../sass/infotv.scss */
+.overlay {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/****** SPINNER ******/
+/* line 341, ../sass/infotv.scss */
+.spinner {
+  width: 200px;
+  height: 200px;
+  background-color: #aaa;
+  margin: 440px auto;
+  -webkit-animation: rotateplane 1.2s infinite ease-in-out;
+  animation: rotateplane 1.2s infinite ease-in-out;
+}
+
+@-webkit-keyframes rotateplane {
+  0% {
+    -webkit-transform: perspective(800px);
+  }
+  50% {
+    -webkit-transform: perspective(800px) rotateY(180deg);
+  }
+  100% {
+    -webkit-transform: perspective(800px) rotateY(180deg) rotateX(180deg);
+  }
+}
+@keyframes rotateplane {
+  0% {
+    transform: perspective(800px) rotateX(0deg) rotateY(0deg);
+    -webkit-transform: perspective(800px) rotateX(0deg) rotateY(0deg);
+  }
+  50% {
+    transform: perspective(800px) rotateX(-180.1deg) rotateY(0deg);
+    -webkit-transform: perspective(800px) rotateX(-180.1deg) rotateY(0deg);
+  }
+  100% {
+    transform: perspective(800px) rotateX(-180deg) rotateY(-179.9deg);
+    -webkit-transform: perspective(800px) rotateX(-180deg) rotateY(-179.9deg);
+  }
+}
+/****** KRISEINFORMATION ******/
+/* line 373, ../sass/infotv.scss */
+.kriseinformation {
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background: #FCD550;
+}
+/* line 383, ../sass/infotv.scss */
+.kriseinformation h1 {
+  width: 82%;
+  margin: 80px 6% 50px;
+  padding: 0;
+  font-weight: 400;
+  font-size: 8em;
+  line-height: 120%;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #1f1f20;
+}
+/* line 396, ../sass/infotv.scss */
+.kriseinformation h2 {
+  width: 82%;
+  margin: 0 6% 60px;
+  font-weight: 400;
+  font-size: 4.0em;
+  letter-spacing: 1px;
+  line-height: 130%;
+  color: #1f1f20;
+}
+/* line 407, ../sass/infotv.scss */
+.kriseinformation p {
+  width: 82%;
+  margin: 0 6% 60px;
+  font-weight: 300;
+  font-size: 3.5em;
+  letter-spacing: 1px;
+  line-height: 130%;
+  color: #1f1f20;
+}
+/* line 417, ../sass/infotv.scss */
+.kriseinformation p span {
+  font-weight: 100;
+  font-size: .75em;
+}
+
+/****** UR ******/
+/* line 427, ../sass/infotv.scss */
+.ur {
+  position: absolute;
+  z-index: 10;
+  width: 200px;
+  height: 90px;
+  top: 35px;
+  right: 35px;
+  margin: 0;
+  padding: 0;
+  background: rgba(34, 34, 34, 0.75);
+  /*background: rgba(255, 255, 255, 0.75);*/
+  font-size: 4em;
+  font-family: 'Roboto Condensed', 'Droid Sans Mono', sans-serif;
+  font-weight: 400;
+  color: #f1f3f6;
+  text-align: center;
+  letter-spacing: 4px;
+  border-radius: 4px;
+  line-height: 86px;
+}
+
+/* line 450, ../sass/infotv.scss */
+.ur span {
+  color: #dcddde;
+}
+
+/* line 454, ../sass/infotv.scss */
+.error {
+  position: absolute;
+  z-index: 10;
+  width: 100px;
+  height: 100px;
+  bottom: 35px;
+  right: 35px;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  background-repeat: no-repeat;
+  background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOC4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMjgzLjUgMjgzLjUiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDI4My41IDI4My41IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxwYXRoIGQ9Ik0yMDguOSwyMTMuOWwyMS40LTIyLjRjLTEzLjEtMTguMi0yOC45LTI4LjQtNTAuNS0zNS45bC0yLjYsMzNDMTkxLjYsMTk1LjUsMTk5LjEsMjAxLjUsMjA4LjksMjEzLjl6Ii8+DQo8cGF0aCBkPSJNNzUuNiwyMTMuNGMxMC40LTEyLjcsMTcuMi0xOCwzMS41LTI0LjljLTEtMTAuNC0yLTIxLjUtMy0zMi45Yy0yMS40LDcuNi0zNywxNy42LTUwLDM1LjZMNzUuNiwyMTMuNHoiLz4NCjxwYXRoIGQ9Ik0yNjEuMSwxNTkuOGwyMS4zLTIyLjNjLTI0LjktMjguNC01OC41LTQ5LjEtOTYuNS01OC4xbC0yLjYsMzIuN0MyMTQuMiwxMjAuNSwyNDEuMywxMzUuNywyNjEuMSwxNTkuOHoiLz4NCjxwYXRoIGQ9Ik0yMywxNjBjMTkuNy0yMy45LDQ2LjUtMzkuMSw3Ny4yLTQ3LjZjLTEtMTEuMi0yLTIyLjMtMi45LTMyLjdjLTM3LjgsOS4xLTcxLjEsMjkuOS05NS44LDU4LjJMMjMsMTYweiIvPg0KPHBhdGggZD0iTTE1Ny4yLDE5OC40Yy00LjQsNC41LTI1LjEsNC40LTMwLjcsMHMtMTMtMTQ3LjctMTMuMy0xNTAuN2MtMC4yLTMtMC40LTUuMy0wLjQtNi45YzAtOS41LDIuNS0xNyw3LjUtMjIuMg0KCWM1LTUuMywxMi4xLTcuOSwyMS4zLTcuOWM5LjIsMCwxNi4zLDIuNywyMS40LDguMmM1LjEsNS41LDcuNiwxMy4xLDcuNiwyMy4xYzAsMi40LTAuMSw1LjEtMC40LDguMQ0KCUMxNzAsNTMuMSwxNjEuNiwxOTMuOSwxNTcuMiwxOTguNHogTTE0MS42LDIxNmM3LjksMCwxNC43LDIuOSwyMC4zLDguNmM1LjYsNS43LDguNCwxMi42LDguNCwyMC44YzAsNy45LTIuOCwxNC43LTguNCwyMC4yDQoJYy01LjYsNS41LTEyLjMsOC4zLTIwLjMsOC4zYy03LjgsMC0xNC41LTIuOC0yMC4xLTguNGMtNS42LTUuNi04LjQtMTIuMy04LjQtMjAuMWMwLTguMiwyLjgtMTUuMSw4LjQtMjAuOA0KCUMxMjcuMSwyMTguOCwxMzMuOCwyMTYsMTQxLjYsMjE2eiIvPg0KPC9zdmc+DQo=);
+}
+/* line 467, ../sass/infotv.scss */
+.error.action {
+  opacity: .5;
+}

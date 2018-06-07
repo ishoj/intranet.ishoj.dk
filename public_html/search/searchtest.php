@@ -19,7 +19,6 @@ function searchmedarb($data_stringfunc) {
 
 $query = $_GET['query'];
 $query = str_replace(array('¿', '¾', 'Œ', ' '), array('oe', 'ae', 'aa', '%20'), $query);
-// $query = str_replace(array('¿', '¾', 'Œ', ''), array('oe', 'ae', 'aa', '%20'), $query);
 $data = array(
   'query' => array(
     'function_score' => array(
