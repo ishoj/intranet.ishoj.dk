@@ -77,7 +77,7 @@
  * @see template_preprocess_node()
  * @see template_process()
  */
-dsm($node);
+//dsm($node);
 include_once drupal_get_path('theme', 'ishoj') . '/includes/uglen_functions.php';
 ?>
 <!--<div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>-->

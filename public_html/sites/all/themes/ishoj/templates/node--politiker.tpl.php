@@ -84,7 +84,7 @@
 
 
 
-<?php dsm($node); //drupal_set_message('<pre>' . print_r($node, TRUE) . '</pre>'); ?>
+<?php //dsm($node); //drupal_set_message('<pre>' . print_r($node, TRUE) . '</pre>'); ?>
 
 <?php
 include_once drupal_get_path('theme', 'ishoj') . '/includes/uglen_functions.php';

@@ -42,7 +42,7 @@
 ?>
 
 <?php 
-dsm($term);
+//dsm($term);
 
 $output = "";
 

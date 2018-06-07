@@ -79,7 +79,7 @@
  *
  * @ingroup themeable
  */
-dsm($node);
+//dsm($node);
 include_once drupal_get_path('theme', 'ishoj') . '/includes/uglen_functions.php';
 ?>
 

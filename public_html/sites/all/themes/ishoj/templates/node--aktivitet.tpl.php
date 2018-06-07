@@ -84,7 +84,7 @@
 
 
 
-<?php dsm($node); //drupal_set_message('<pre>' . print_r($node, TRUE) . '</pre>'); ?>
+<?php ///dsm($node); //drupal_set_message('<pre>' . print_r($node, TRUE) . '</pre>'); ?>
 <?php //drupal_set_message(print_r(taxonomy_get_vocabularies())); ?>
 
 <?php

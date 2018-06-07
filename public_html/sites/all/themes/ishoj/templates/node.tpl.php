@@ -80,10 +80,10 @@
  * @ingroup themeable
  */
 
-if ($is_admin) {
- dsm($node);
+//if ($is_admin) {
+// dsm($node);
 
-}
+//}
 
 if($node->nid == 15715) {
   if (!user_is_logged_in()) {

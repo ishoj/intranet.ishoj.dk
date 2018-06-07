@@ -42,7 +42,7 @@
 ?>
 
 <?php 
-dsm($term);
+//dsm($term);
 function sortByTitle($a, $b){
   return strcmp($a->title, $b->title);
 }
@@ -136,7 +136,7 @@ function sortByTitle($a, $b){
             }
 
     $taxo_child = taxonomy_get_children($tid, $vid = 0, $key = 'tid');
-        dsm($taxo_child);    
+        //dsm($taxo_child);    
         // UNDER KATEGORIER
          foreach($taxo_child as $termchild) {
            

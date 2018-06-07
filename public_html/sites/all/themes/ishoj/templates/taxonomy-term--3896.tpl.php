@@ -42,7 +42,7 @@
 ?>
 
 <?php 
-dsm($term);
+//dsm($term);
 function sortByTitle($a, $b){
   return strcmp($a->title, $b->title);
 }
