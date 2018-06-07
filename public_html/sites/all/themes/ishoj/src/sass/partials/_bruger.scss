@@ -1,0 +1,179 @@
+
+
+
+// USER CONTAINER
+.user-container {
+  float: left;
+  width: 100%;
+  margin-bottom: 2em;
+//  background: $color-light-gray-light;
+  @media (min-width: $bp-large) { // 960 px
+//    background: $color-light-blue-normal;
+    background: $color-light-gray-light;
+  }  
+  
+  // USER PICTURE
+  img {
+    float: left;
+    width: 50%;
+    height: auto;
+    max-width: calc-em(160px);
+    // 960 px
+    @media (min-width: $bp-large) {  
+      width: 60%;
+      max-width: calc-em(240px);
+    }
+    // 1024 px
+    @media (min-width: $bp-large-2) {  
+      max-width: calc-em(320px);
+      width: 100%;
+    }  
+  }
+  
+  // USER DATA
+  .user-data {
+    float: left;
+    width: 100%;
+//    padding: calc-em(24px);
+    padding: 1.5em 0 0 0;
+    @media (min-width: $bp-large) { // 960 px
+      width: auto;
+//      padding: 0 0 0 calc-em(24px);  
+      padding: calc-em(24px);  
+    }  
+
+  }
+
+}
+
+.user-missing-data {
+  float: left;
+  width: 100%;
+  margin: 0 0 2em 0;
+  padding: 1.5em;
+  background: $color-green-normal;
+  color: $color-white;
+  div > ul,
+  ul {
+    @extend .list-unstyled;
+    li {
+      width: 100% !important;
+      min-height: 0 !important;
+      margin-bottom: 1em !important;
+      padding-left: calc-em(32px) !important; 
+      background-image:url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj4KPGc+CjwvZz4KCTxwYXRoIGQ9Ik0xMy43MDEgNy4yMjZjMC42NjkgMC42NTMgNy4yMDMgNy41MTQgNy4yMDMgNy41MTQgMC4zNTggMC4zNDkgMC41MzYgMC44MDUgMC41MzYgMS4yNjFzLTAuMTc4IDAuOTEyLTAuNTM2IDEuMjYxYzAgMC02LjUzNCA2Ljg2MS03LjIwMyA3LjUxMi0wLjY2OSAwLjY1My0xLjg3IDAuNjk4LTIuNTg2IDAtMC43MTQtMC42OTYtMC43Ny0xLjY2NyAwLTIuNTJsNS45OTctNi4yNTMtNS45OTUtNi4yNTNjLTAuNzctMC44NTQtMC43MTQtMS44MjYgMC0yLjUyMiAwLjcxNC0wLjY5NiAxLjkxNy0wLjY1MyAyLjU4NCAweiIgZmlsbD0iI2ZmZmZmZiIgLz4KPC9zdmc+Cg==);
+      background-repeat: no-repeat;
+      background-size: calc-em(24px);
+//      background-position: calc-em(8px) calc-em(8px); 
+    }
+  }
+  &.ny {
+    padding: 0;
+    @extend .byvaaben-kors;    
+    background-position: right -9999px top -9999px;
+
+    @media (min-width: $bp-medium-2) { // 768 px
+      background-position: right -230px top -50px;
+    }  
+    
+    .left {
+      float: left;
+      width: 100%;
+      padding: 1.5em;
+      @media (min-width: $bp-medium-2) { // 768 px
+        width: 42%;
+      }  
+    }
+    .right {
+      @extend .byvaaben-kors;
+      float: right;
+      width: 100%;
+      padding: 1.5em;  
+      @media (min-width: $bp-medium-2) { // 768 px
+        width: 55%;
+        background-image: none;
+      }  
+      .foto {
+        float: right;
+        width: 100%;
+        img {
+          margin-bottom: 1em;
+          
+//          float: right;
+//          margin-right: calc-em(18px);
+//          margin-top: calc-em(18px);
+        }
+//        @media (min-width: $bp-medium-2) { // 768 px 
+//        }  
+        @media (min-width: $bp-large-3) { // 1152 px 
+          width: 45%;
+          img {
+            float: right;
+            margin-right: calc-em(18px);
+            margin-top: calc-em(18px);
+          }
+        }  
+      }
+      .text {
+        float: left;
+        width: 100%;
+        h2 {
+          padding-top: .5em;
+          margin-bottom: .25em;
+          &:first-of-type {
+            line-height: 135%;
+            padding-top: .5em; 
+            font-size: 2.25em;
+            font-style: italic;
+            font-weight: 400;
+            margin-bottom: .5em;
+          }
+        }
+        h3 {
+          margin-top: -1.25em;
+          font-weight: 300;
+          text-indent: .62em;
+        }
+//        @media (min-width: $bp-medium-2) { // 768 px
+//          width: 55%;
+//        }  
+        @media (min-width: $bp-large-3) { // 1152 px 
+          width: 55%;
+        }  
+      }
+    }
+  }
+}
+
+
+
+// ANSVARSOMRÅDER (TAGS)
+.ansvarsomraader {
+  @extend .list-unstyled;
+  float: left;
+  width: 100%;
+  margin-bottom: 1.5em;
+  li {
+    float: left;
+    padding: 0;
+    margin-right: calc-em(3px);
+    margin-bottom: calc-em(3px);
+    background: $color-light-blue-normal;
+    &:hover {
+      background: $color-light-blue-dark;
+    }
+    a {
+      padding: .75em;
+      line-height: 200%;
+      color: $color-gray-dark;
+      &:hover {  
+        color: $color-gray-dark;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+
+ 
+

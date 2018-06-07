@@ -72,21 +72,22 @@
  * @ingroup themeable
  */
 ?>
- 
- 
-<?php 
+
+
+<?php
 include_once drupal_get_path('theme', 'ishoj') . '/includes/uglen_functions.php';
 // Sætter metatags på forsiden
-print render($page['content']['metatags']); 
+print render($page['content']['metatags']);
 global $user;
 $name = '';
 $showuser = user_load($user->uid);
 $firstname = $showuser->field_fornavn['und'][0]['safe_value'];
+$lastname = $showuser->field_efternavn['und'][0]['safe_value'];
 if ($showuser->field_kaldenavn['und'][0]['safe_value'] != '') {
-  $name = $showuser->field_kaldenavn['und'][0]['safe_value'];   
-} 
+  $name = $showuser->field_kaldenavn['und'][0]['safe_value'];
+}
 else {
-  $name = $showuser->field_fornavn['und'][0]['safe_value'] . ' ' . $showuser->field_efternavn['und'][0]['safe_value'];  
+  $name = $showuser->field_fornavn['und'][0]['safe_value'] . ' ' . $showuser->field_efternavn['und'][0]['safe_value'];
 }
 
 
@@ -97,7 +98,7 @@ else {
       <div class="container">
         <div class="row">
           <div class="grid-full">
-<?php 
+<?php
             $brugerbar = "";
             if($logged_in) {
               $brugerbar .= "<a href=\"/user\" title=\"Din brugerprofil\">" . $name . "</a>";
@@ -110,23 +111,23 @@ else {
             print $brugerbar;
 
 ?>
-            
+
           </div>
         </div>
       </div>
     </section>
     <!-- BRUGER BAR SLUT -->
-    
-    
+
+
     <!-- HEADER START -->
     <header data-role="header">
-      
+
       <!-- NAVIGATION START -->
       <div class="container">
 
             <!-- ARROW START -->
             <div class="arrow action">
-            
+
               <!-- IKONER START -->
 <!--              <i class="icon icon-list btn-mobilmenu" title="Vis menu"></i>-->
               <i class="header-menu" title="Vis menu"></i>
@@ -134,22 +135,22 @@ else {
               <i class="header-kryds hide-me" title="Skjul menu"></i>
 <!--              <i class="icon icon-search btn-search"  title="Søg"></i>-->
               <i class="header-search" title="Søg"></i>
-              <?php 
+              <?php
                 if($logged_in) {
                   print "<i class=\"header-plus\" title=\"Tilføj nyt indhold\"></i>";
                 }
               ?>
               <!-- IKONER SLUT -->
-              
+
               <!-- MENU START -->
               <nav class="mainMenu">
                 <?php print render($page['menu']); ?>
               </nav>
               <!-- MENU SLUT -->
-              
+
               <!-- LOGO START -->
               <?php
-              if($logo or $site_name) { 
+              if($logo or $site_name) {
                 // site version
                 $logoContent = "<div class=\"logo-container\">";
                 $logoContent .= "<a class=\"logo-site\" href=\"" . $front_page . "\" title=\"Gå til forsiden\" rel=\"home\">";
@@ -161,16 +162,16 @@ else {
                   $logoContent .= "<span>" . $site_name . "</span>";
                 }
                 $logoContent .= "</a></div>";
-                
+
                 // print version
                 print $logoContent;
               }
               ?>
               <!-- LOGO SLUT -->
-            
+
             </div>
             <!-- ARROW SLUT -->
-            
+
       </div>
       <!-- NAVIGATION SLUT -->
 
@@ -179,10 +180,10 @@ else {
         <?php print render($page['menu_mobile']); ?>
       </nav>
       <!-- MOBILMENU SLUT -->
-                 
-      <?php 
+
+      <?php
       if($logged_in) {
-        print "<!-- TILFØJ INDHOLD START -->";    
+        print "<!-- TILFØJ INDHOLD START -->";
         print "<section class=\"tilfoej-indhold\">";
           print "<div class=\"container\">";
             print "<div class=\"row\">";
@@ -214,48 +215,48 @@ else {
             print "</div>";
           print "</div>";
         print "</section>";
-        print "<!-- TILFØJ INDHOLD SLUT -->";  
+        print "<!-- TILFØJ INDHOLD SLUT -->";
       }
       ?>
-                                               
+
       <!-- SØGEBAR START -->
       <section class="soegebar animate bg-<?php echo mt_rand(1,9); ?>">
         <div class="container">
           <div class="row formular">
             <div class="soegeresultat-blinker animated shake"></div>
             <div class="grid-full">
-               
-               
-               
-               
-                <?php 
-                if($logged_in) { 
+
+
+
+
+                <?php
+                if($logged_in) {
 //print "<h1>Hej " . $firstname .  " hvad søger du?</h1>";
 print "<h1>Hvad søger du?</h1>";
 } else {
-print "<h1>Hvad søger du?</h1>";   
+print "<h1>Hvad søger du?</h1>";
 }
-?>           
+?>
               <form id="sogeformen" action="/" method="post" accept-charset="UTF-8">
                 <label class="" for="soegefelt">Søg</label>
-                  <?php 
-if($logged_in) { 
+                  <?php
+if($logged_in) {
 print '<input id="soegefelt" placeholder="Indtast dine søgeord"/>';
 } else {
-print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';   
+print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
 }
-    
-                      
-                      
+
+
+
                   ?>
  </form>
 <!--
               <div class="search-filter">
                 <div class="filter-lines"></div>
                 <div class="add-filter-line">
-                 
+
                   <span class="add-search-filter"><i class="search-filter-plus" title="Tilføj søgefilter"></i><span>Tilføj søgefilter</span></span>
-                  
+
                   <form class="addFilterForm hide-me">
                     <select name="addFilter" id="addFilter" class="sprite-menu">
                       <option value="0" selected="">Vælg søgefilter</option>
@@ -267,7 +268,7 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                       <option value="stilling">Titel / stilling</option>
                     </select>
                   </form>
-        
+
                 </div>
               </div>
 -->
@@ -275,25 +276,25 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
           </div>
         </div>
       </section>
-      <!-- SØGEBAR SLUT -->      
+      <!-- SØGEBAR SLUT -->
 
-      <!-- SØGEFANER START -->      
+      <!-- SØGEFANER START -->
       <section class="soegebar-faner medarbejdere">
       </section>
-      <!-- SØGEFANER SLUT -->      
-      
+      <!-- SØGEFANER SLUT -->
+
       <!-- SØGERESULTATER START -->
       <section class="soegebar-resultater">
       </section>
       <!-- SØGERESULTATER SLUT -->
 
-                  
+
     </header>
-    <!-- HEADER SLUT --> 
-    
+    <!-- HEADER SLUT -->
+
     <!-- PAGE START -->
-    <div data-role="page"> 
-    
+    <div data-role="page">
+
       <?php if ($messages): ?>
       <!-- DRUPAL MESSAGES START -->
       <div class="drupal-messages">
@@ -301,14 +302,14 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
           <div class="row">
             <div class="grid-full">
               <?php print $messages; ?>
-              <?php 
+              <?php
               if($is_admin) {
                 if ($tabs): ?>
                   <div class="tabs">
                     <?php print render($tabs); ?>
                   </div>
-                <?php 
-                endif; 
+                <?php
+                endif;
               }
               ?>
               <?php print render($page['help']); ?>
@@ -319,11 +320,11 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
       </div>
       <!-- DRUPAL MESSAGES SLUT -->
       <?php endif; ?>
-    
-        
+
+
       <?php //if($page['editor'] and $logged_in): ?>
       <?php //if($logged_in): ?>
-        <!-- REDAKTØRMENU START -->        
+        <!-- REDAKTØRMENU START -->
 <!--
         <section class="redaktormenu">
           <div class="container">
@@ -341,12 +342,12 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
 -->
         <!-- REDAKTØRMENU SLUT -->
       <?php //endif; ?>
-      
-      
-      
+
+
+
       <!-- CONTENT START -->
-      <div data-role="content"> 
-       
+      <div data-role="content">
+
       <?php
 //        $output = "";
 //
@@ -370,13 +371,13 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
 //    case "3013":
 //     //  DONT SHOW
 //        break;
-//    case "3896": 
+//    case "3896":
 //     //  DONT SHOW
 //        break;
 //    default:
 //      $output = $output . "<li><a href=\"" . url('taxonomy/term/' . $term->tid) . "\" title=\"" . $term->name . "\"><span class=\"cat-icon\"></span><span class=\"cat-text\">" . $term->name . "</span></a></li>";
 //}
-//                       
+//
 //                      }
 //                      $output = $output . "</ul>";
 //                    }
@@ -387,104 +388,105 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
 //            $output = $output . "</div>";
 //          $output = $output . "</div>";
 //        $output = $output . "</section>";
-//        $output = $output . "<!-- CONTENT CATEGORY SLUT -->";     
+//        $output = $output . "<!-- CONTENT CATEGORY SLUT -->";
 //
 //        print $output;
         ?>
 
         <?php
-        
+
 //        if($is_admin) {
           $output = "";
           $output .= "<!-- NYHEDER START -->";
-          
+
           $output .= "<section class=\"news-almindelige\">";
             $output .= "<div class=\"container\">";
 
-////////////////////////////////////////////////////////////////////////////////              
+////////////////////////////////////////////////////////////////////////////////
 //            if($is_admin) {
               if($logged_in) {
                 if(($user->uid == $showuser->uid) or $is_admin) {
+                  if(!$is_admin) {
+                    $mangler = 0;
 
-                  $mangler = 0;
-                  
-                  $mangler_output_top = "<div class=\"user-missing-data\">";
-                  $mangler_output_top .= "<ul>";
-                  
-                  $mangler_output = "";
-                  $mangler_output_bottom = "";
-                  
-                  $mangler_output_top = "<div class=\"row row-topnyhed\"><div class=\"grid-full\">";
-                    $mangler_output_top .= "<div class=\"user-missing-data ny\">";
+                    $mangler_output_top = "<div class=\"user-missing-data\">";
+                    $mangler_output_top .= "<ul>";
 
-                      $mangler_output_top .= "<div class=\"left\">";
+                    $mangler_output = "";
+                    $mangler_output_bottom = "";
 
-                        $mangler_output_top .= "<ul>";
-                  
-                          // Billede
-                          if(!$showuser->picture) {
-                            $mangler_output .= "<li>Billede</li>";
-                            $mangler++;
-                          }
-                          // Leder
-                          if(!$showuser->field_overordnet) {
-                            $mangler_output .= "<li>Leder</li>";
-                            $mangler++;
-                          }
-                          // Afløser
-                          if(!$showuser->field_afloeser) {
-                            $mangler_output .= "<li>Afløser</li>";
-                            $mangler++;
-                          }
-                          // Stilling
-                          if(!$showuser->field_titel_stilling) {
-                            $mangler_output .= "<li>Stilling</li>";
-                            $mangler++;
-                          }
-                          // Center/afdeling
-                          if(!$showuser->field_afdeling) {
-                            $mangler_output .= "<li>Center/afdeling</li>";
-                            $mangler++;
-                          }
-                          // Ansvarsområder
-                          if(!$showuser->field_ansvarsomraader) {
-                            $mangler_output .= "<li>Ansvarsområder</li>";
-                            $mangler++;
-                          }
-                          // Direkte telefon
-                          if(!$showuser->field_direkte_telefon) {
-                            $mangler_output .= "<li>Direkte telefon</li>";
-                            $mangler++;
-                          }                  
-                  
-                        $mangler_output_bottom .= "</ul>";
-                  
-                        // Ret bruger knap
-                        if($logged_in) {
-                          if(($user->uid == $showuser->uid) or $is_admin) {
-                            $mangler_output_bottom .= "<div style=\"float:left; width:100%; margin-bottom:1em;\"><div class=\"edit-node\"><a href=\"/user/" . $showuser->uid . "/edit?pk_campaign=Forside-RetBruger\" title=\"Ret bruger\"><span>Ret profil</span></a></div></div>";
-                          }
-                        }
+                    $mangler_output_top = "<div class=\"row row-topnyhed\"><div class=\"grid-full\">";
+                      $mangler_output_top .= "<div class=\"user-missing-data ny\">";
 
-                      // Citat
+                        $mangler_output_top .= "<div class=\"left\">";
+
+                          $mangler_output_top .= "<ul>";
+
+                            // Billede
+                            if(!$showuser->picture) {
+                              $mangler_output .= "<li>Billede</li>";
+                              $mangler++;
+                            }
+                            // Leder
+                            if(!$showuser->field_overordnet) {
+                              $mangler_output .= "<li>Leder</li>";
+                              $mangler++;
+                            }
+                            // Afløser
+                            if(!$showuser->field_afloeser) {
+                              $mangler_output .= "<li>Afløser</li>";
+                              $mangler++;
+                            }
+                            // Stilling
+                            if(!$showuser->field_titel_stilling) {
+                              $mangler_output .= "<li>Stilling</li>";
+                              $mangler++;
+                            }
+                            // Center/afdeling
+                            if(!$showuser->field_afdeling) {
+                              $mangler_output .= "<li>Center/afdeling</li>";
+                              $mangler++;
+                            }
+                            // Ansvarsområder
+                            if(!$showuser->field_ansvarsomraader) {
+                              $mangler_output .= "<li>Ansvarsområder</li>";
+                              $mangler++;
+                            }
+                            // Direkte telefon
+                            if(!$showuser->field_direkte_telefon) {
+                              $mangler_output .= "<li>Direkte telefon</li>";
+                              $mangler++;
+                            }
+
+                          $mangler_output_bottom .= "</ul>";
+
+                          // Ret bruger knap
+                          if($logged_in) {
+                            if(($user->uid == $showuser->uid) or $is_admin) {
+                              $mangler_output_bottom .= "<div style=\"float:left; width:100%; margin-bottom:1em;\"><div class=\"edit-node\"><a href=\"/user/" . $showuser->uid . "/edit?pk_campaign=Forside-RetBruger\" title=\"Ret bruger\"><span>Ret profil</span></a></div></div>";
+                            }
+                          }
+
+                        // Citat
+                        $mangler_output_bottom .= "</div>";
+                        $mangler_output_bottom .= "<div class=\"right\">";
+                          $mangler_output_bottom .= "<div class=\"foto\"><img src=\"/sites/all/themes/ishoj/dist/img/ahj_brugeroplysninger.png\"></div>";
+                          $mangler_output_bottom .= "<div class=\"text\"><h2>\"Det er vigtigt, at vi alle sørger for at opdatere vores profiler på Uglen\"</h2><h2>- Anders Hvid Jensen</h2><h3>Kommunaldirektør</h3></div>";
+                        $mangler_output_bottom .= "</div>";
                       $mangler_output_bottom .= "</div>";
-                      $mangler_output_bottom .= "<div class=\"right\">";
-                        $mangler_output_bottom .= "<div class=\"foto\"><img src=\"/sites/all/themes/ishoj/dist/img/ahj_brugeroplysninger.png\"></div>";
-                        $mangler_output_bottom .= "<div class=\"text\"><h2>\"Det er vigtigt, at vi alle sørger for at opdatere vores profiler på Uglen\"</h2><h2>- Anders Hvid Jensen</h2><h3>Kommunaldirektør</h3></div>";
-                      $mangler_output_bottom .= "</div>";
-                    $mangler_output_bottom .= "</div>";
 
-                  $mangler_output_bottom .= "</div></div>";
-                  
-                  // Hvis der min. er et felt, der mangler at blive udfyldt
-                  if($mangler > 0) {
-                    list($first_word) = explode(' ', trim($showuser->field_fornavn['und'][0]['safe_value']));
+                    $mangler_output_bottom .= "</div></div>";
 
-                    if($mangler == 1) {
-                      $output .= $mangler_output_top . "<h3>Hej " . $first_word . "</h3><p>Du mangler at udfylde følgende felt for at færdiggøre din profil:</p>" . $mangler_output .  $mangler_output_bottom;
-                    }
-                    else {
-                      $output .= $mangler_output_top . "<h3>Hej " . $first_word . "</h3><p>Du mangler at udfylde følgende felter for at færdiggøre din profil:</p>" . $mangler_output . $mangler_output_bottom;              
+                    // Hvis der min. er et felt, der mangler at blive udfyldt
+                    if($mangler > 0) {
+                      list($first_word) = explode(' ', trim($showuser->field_fornavn['und'][0]['safe_value']));
+
+                      if($mangler == 1) {
+                        $output .= $mangler_output_top . "<h3>Hej " . $first_word . "</h3><p>Du mangler at udfylde følgende felt for at færdiggøre din profil:</p>" . $mangler_output .  $mangler_output_bottom;
+                      }
+                      else {
+                        $output .= $mangler_output_top . "<h3>Hej " . $first_word . "</h3><p>Du mangler at udfylde følgende felter for at færdiggøre din profil:</p>" . $mangler_output . $mangler_output_bottom;
+                      }
                     }
                   }
                 }
@@ -497,24 +499,79 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                     $output .= views_embed_view('nyhedsliste','topnyheder_lodret_liste');
                  $output .= "</div>";
                  $output .= "<div class=\"grid-two-thirds almindelige\">";
+
+                    // TILMELDING TIL SMS-DRIFTSSTATUS START
+                    // if($is_admin or ($showuser->name == "kln")) {
+                      $output .= "<div class=\"sms-driftsstatus\">";
+
+                        $output .= "<div class=\"microArticleContainer\" style=\"margin:0 0 2.5em !important;\">";
+                          $output .= "<div class=\"microArticle\">";
+                            $output .= "<h3 class=\"mArticle\" id=\"mArticle2\">";
+                              $output .= "<span class=\"sprites-sprite sprite-plus mikroartikel\"></span>Tilmelding til SMS-driftsinformation";
+                            $output .= "</h3>";
+                            $output .= "<div class=\"mArticle2 mArticle\" style=\"overflow: hidden; display: none;\">";
+                              $output .= "<div class=\"formularen\">";
+                                $output .= "<h3>Nu kan du som noget nyt modtage driftsinformation på din mobiltelefon</h3>";
+                                $output .= "<form class=\"sms-formular\">";
+
+                                  $output .= "<input type=\"hidden\" id=\"Fornavn\" name=\"Fornavn\" value=\"" . $firstname . "\">";
+                                  $output .= "<input type=\"hidden\" id=\"Efternavn\" name=\"Efternavn\" value=\"" . $lastname . "\">";
+
+                                  $output .= "<label>Indtast dit mobilnummer</label>";
+                                  $output .= "<p class=\"sms-error sms-error-mobile hide-me\"></p>";
+                                  $output .= "<input type=\"text\" id=\"Mobilnummer\" name=\"Mobilnummer\" value=\"\" required placeholder=\"Mobilnummer\" style=\"width:112px;\">";
+
+                                  $output .= "<label>Hvilke områder vil du modtage driftsinformation om?</label>";
+                                  $output .= "<p class=\"sms-error sms-error-checkbox hide-me\"></p>";
+                                  $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_care\" name=\"keys[]\" value=\"ctI1460622408ct570f544877950\" /> Care<br />";
+                                  $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_citrix\" name=\"keys[]\" value=\"ctY1460622344ct570f5408d1c8e\" /> Citrix<br />";
+                                  $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_outlook\" name=\"keys[]\" value=\"ctA1460622381ct570f542dd2eb5\" /> Outlook<br />";
+                                  $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_sbsys\" name=\"keys[]\" value=\"ctK1460617948ct570f42dc13215\" /> SBSYS<br />";
+                                  $output .= "<input type=\"checkbox\" class=\"checkbox_type\" id=\"checkbox_telefoni\" name=\"keys[]\" value=\"ctW1462950899ct5732dbf37e8db\" /> Telefoni<br />";
+
+                                  $output .= "<p>&nbsp;</p>";
+
+                                  $output .= "<p>Hvis du i stedet for ønsker at afmelde, klik da på knappen, Afmeld. </p>";
+
+                                  $output .= "<input class=\"submitter\" type=\"hidden\" name=\"\" value=\"\">";
+                                	$output .= "<input type=\"hidden\" name=\"required\" value=\"Mobilnummer,Efternavn,Fornavn\">";
+
+                                  $output .= "<br />";
+
+                                  $output .= "<a class=\"form-submit submit-action\" data-value=\"Tilmeld\"> Tilmeld </a>";
+                                  $output .= "<a class=\"form-submit submit-action\" data-value=\"Afmeld\"> Afmeld </a>";
+
+                                $output .= "</form>";
+                              $output .= "</div>";
+                              $output .= "<div class=\"meddelelserne hide-me\">";
+                                $output .= "<div></div>";
+                              $output .= "</div>";
+                              $output .= "<p>&nbsp;</p>";
+
+                            $output .= "</div>";
+                          $output .= "</div>";
+                        $output .= "</div>";
+                      $output .= "</div>";
+                    // }
+
                     $output .= views_embed_view('nyhedsliste','almindelige_nyheder_ny2', $node->nid);
-                    
+
                     // MIDLERTIDIG BOKS I.F.M. VINDUESUDSKIFTNINGEN
                     $output .= '<p class="vinduesudskiftning"><a title="Information om vinduesudskiftningen på rådhuset" href="/kategori/vinduesudskiftning-paa-raadhuset">Information om vinduesudskiftningen på rådhuset</a></p>';
-        
+
                  $output .= "</div>";
                  $output .= "<div class=\"grid-third\">";
                  $output .= "</div>";
               $output .= "</div>";
             $output .= "</div>";
           $output .= "</section>";
-          
+
           print $output;
 //        }
-        
+
         ?>
 
-        
+
         <!-- NYHEDER SLUT -->
 
         <!-- AKTIVITER START -->
@@ -528,7 +585,7 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                   <div class="swiper-wrapper">
                     <?php // print views_embed_view('aktiviteter','aktivitet_forside'); ?>
                   </div>
-                </div>        
+                </div>
                 <div class="activities-swiper-button-container">
                   <div class="swiper-button activities-swiper-button-prev"></div>
                   <div class="swiper-button activities-swiper-button-next"></div>
@@ -543,8 +600,8 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
 -->
         <!-- AKTIVITER SLUT -->
 
-                        
-        <!-- SOCIAL CONTENT START --> 
+
+        <!-- SOCIAL CONTENT START -->
         <section class="social-content">
           <div class="container">
             <div class="row">
@@ -554,7 +611,7 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                   <div class="swiper-wrapper">
                     <?php print views_embed_view('social_content','default'); ?>
                   </div>
-                </div>        
+                </div>
                 <div class="swiper-button-container">
                   <div class="swiper-button swiper-button-prev"></div>
                   <div class="swiper-button swiper-button-next"></div>
@@ -563,30 +620,30 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
             </div>
           </div>
         </section>
-        <!-- SOCIAL CONTENT SLUT --> 
-        
+        <!-- SOCIAL CONTENT SLUT -->
 
-       
+
+
         <?php //print render($page['content']); ?>
       </div>
-      <!-- CONTENT SLUT --> 
-      
+      <!-- CONTENT SLUT -->
 
-      
+
+
       <!-- FOOTER START -->
       <footer data-role="footer">
         <div class="container">
           <div class="row">
             <div class="grid-third">
               <?php //print render($page['footer_kontakt']); ?>
-              
+
               <h3>Vi vil gerne høre, hvad du synes</h3>
               <p class="artikel"><a class="btn btn-large_ sigdinmening" href="/sig-din-mening-om-uglen" title="Sig din mening om Uglen"><span class="sprites-sprite sprite-arrow-right"></span>Sig din mening om Uglen</a>
 
             </div>
             <div class="grid-third"></div>
             <div class="grid-third sociale-medier">
-              <?php print render($page['footer_sociale']); ?>           
+              <?php print render($page['footer_sociale']); ?>
               <h3>Ishøj Kommune på sociale medier</h3>
               <p>
                 <a class="sprite sprite-facebook footer" href="http://www.facebook.com/ishojkommune" title="Følg Ishøj Kommune på Facebook"><span><span class="screen-reader">Følg Ishøj Kommune på Facebook</span></span></a>
@@ -602,24 +659,23 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                 <label for="hjemmesider">Andre hjemmesider</label>
                   <select name="hjemmesider" id="hjemmesider" class="sprite-menu">
                   <optgroup label="Andre hjemmeside">
-                   <option value="0" selected="">Vælg en hjemmeside</option>                  
+                   <option value="0" selected="">Vælg en hjemmeside</option>
                   <?php //print views_embed_view('andre_kommunale_hjemmesider','default', $node->nid); ?>
                   </optgroup>
                       <?php //print render($page['footer_hjemmesider']); ?>
-                
+
                     </select>
               </form>
             </div>
 -->
 
-          </div>             
-        </div>   
+          </div>
+        </div>
       </footer>
       <!-- FOOTER SLUT-->
-      
+
       <?php print breaking(); ?>
 
-            
+
     </div>
     <!-- PAGE SLUT -->
-    

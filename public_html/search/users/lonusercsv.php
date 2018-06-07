@@ -11,17 +11,18 @@ foreach($data as &$row) {
 $row = str_getcsv($row, ";");
 $username = strtolower($row[2]);
 $titelname = ucfirst(str_replace("NULL","",$row[9]));
-$afnamename = str_replace("NULL","",$row[14]);   
+$afnamename = str_replace("NULL","",$row[14]);
  $firstname = $row[4];
-    $lastname = $row[5];
+ $lastname = $row[5];
  $fullname = $row[6];
+ // $fullname = $firstname . " " . $lastname;
  $ansatdato = $row[1];
 //$ledername = str_replace("null","",strtolower($row[18])); // leder username
 //$aflosname = str_replace("null","",strtolower($row[15])); // leder username
-//$telephone = str_replace(" ","",str_replace("NULL","",$row[8]));   
+//$telephone = str_replace(" ","",str_replace("NULL","",$row[8]));
 $int = (int)$username;
 if ($int > 34205) {
-//$fullnameuser = $usertochange->field_fornavn['und'][0]['value'] . " " . $usertochange->field_efternavn['und'][0]['value']   
+//$fullnameuser = $usertochange->field_fornavn['und'][0]['value'] . " " . $usertochange->field_efternavn['und'][0]['value']
 $usertochange = user_load_by_name($username);
 if (empty($usertochange->uid)) {
 print "TOM <br />";
@@ -46,31 +47,31 @@ $query = new EntityFieldQuery;
 $resulttitel = $query
 ->entityCondition('entity_type', 'taxonomy_term')
 ->propertyCondition('name', $titelname)
-->propertyCondition('vid', 37) 
+->propertyCondition('vid', 37)
 ->execute();
 
 print "final titel" . "<br/>";
-print_r($resulttitel);   
-print "sluts" . "<br/>";  
+print_r($resulttitel);
+print "sluts" . "<br/>";
 $testtest = array_values(array_values($resulttitel)[0]);
      print "herant ";
      print_r($testtest[0]);
-}        
-        
+}
+
 print "OPRET ny <br />";
-            
+
 // Determine the roles of our new user
-$editor_role = user_role_load_by_name('Webredaktør'); 
+$editor_role = user_role_load_by_name('Webredaktør');
 $editor_rid = $editor_role->rid;
-          
+
 $new_user_roles = array(
   DRUPAL_AUTHENTICATED_RID => 'authenticated user',
   $editor_rid => TRUE,
-); 
-   
-  print_r($new_user_roles); 
+);
+
+  print_r($new_user_roles);
     print "<br />";
-           
+
 // Create a new user
 $new_user = new stdClass();
 $new_user->name = $username;
@@ -79,30 +80,30 @@ $new_user->pass = $username . '183'; // plain text, hashed later
 $new_user->field_fornavn['und'][0]['value'] = $firstname;
 $new_user->field_efternavn['und'][0]['value'] = $lastname;
 $new_user->field_kaldenavn['und'][0]['value'] = $fullname;
-$new_user->field_medarbejderid['und'][0]['value'] = $username;            
+$new_user->field_medarbejderid['und'][0]['value'] = $username;
 $new_user->field_os2intra_employee_id['und'][0]['value'] = $username;
 $new_user->field_user_in_ad['und'][0]['value'] = '0';
 $new_user->field_createdfromopus['und'][0]['value'] = '1';
-            
+
 $new_user->roles = $new_user_roles;
 $new_user->status = 1; // omit this line to block this user at creation
 $new_user->is_new = TRUE; // not necessary because we already omit $new_user->uid
-// 
-        
-        
+//
+
+
 $os = array("Pensionist administration", "YYYY", "XXXX", "ZZZZZ");
 if (in_array($titelname, $os)) {
 print "IKKE OPRETTET skal ikke";
 } else {
-//user_save($new_user);
+// user_save($new_user);
   print $username ." OPRETTET !!<br />";
-}         
+}
 
-        
+
 //field_birthday['und'][0]['value'] = '1446246000';
  // field_birthday['und'][0]['timezone'] = 'Europe/Copenhagen';
             // field_birthday['und'][0]['timezone_db'] = 'Europe/Copenhagen';
-       
+
     }
 
 // TJEK OM NAVNET ER DER SÅ SKAL DER IKKE OPRETTES
@@ -112,13 +113,13 @@ print "IKKE OPRETTET skal ikke";
 
     //field_birthday
     //field_commencement
- 
-    
-} else { 
-print "FINDES ALLEREDE" . "<br/>"; 
-} 
-} 
-}   
+
+
+} else {
+print "FINDES ALLEREDE" . "<br/>";
+}
+}
+}
 //
 
 ?>
