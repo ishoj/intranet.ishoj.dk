@@ -256,7 +256,7 @@ var secstart = '<div class="container"><div class="row"><div class="grid-half me
       countContent = dataindhold.hits.total;
     
    $(".soegeresultat-blinker").addClass("show");      
-    
+   dataindhold.hits.hits.reverse();
          $.each(dataindhold.hits.hits, function( ital, itemdata ) {
 	
         strindhold += '<li><a href="' + itemdata._source.url + '" titel="' + itemdata._source.title + '" alt="' + itemdata._source.field_os2web_base_field_summary_value + '" ><span class="navn">' + itemdata._source.title + '</span></a></li>';
