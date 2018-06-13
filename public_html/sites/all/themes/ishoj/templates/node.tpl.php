@@ -230,9 +230,9 @@ $bterm = taxonomy_term_load($buftid);
                 }
                 $output = $output . "<!-- UNDEROVERSKRIFT SLUT -->";
                  // Beskrivelse
-                if($node->body) {
-                   $output = $output . $node->body['und'][0]['value'];
-                }
+               // if($node->body) {
+               //    $output = $output . $node->body['und'][0]['value'];
+               // }
                 // SELVBETJENINGSLØSNING
                 if($node->field_field_url_3) {
                   $output = $output . "<!-- SELBETJENINGSLØSNING START -->";
