@@ -1,0 +1,3 @@
+[submodule "public_html/profiles/os2web/modules/os2intra_user_import"]
+	path = public_html/profiles/os2web/modules/os2intra_user_import
+	url = https://github.com/bellcom/os2intra_user_import
