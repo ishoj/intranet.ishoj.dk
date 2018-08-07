@@ -13,6 +13,3 @@ test/coverage
 ._*
 .Spotlight-V100
 .Trashes
-
-# Ignore submodules
-profiles/os2web/modules/os2intra_user_import
