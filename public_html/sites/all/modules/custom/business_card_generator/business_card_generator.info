@@ -1,0 +1,4 @@
+name = Business card generator
+core = 7.x
+
+dependencies[] = composer_manager

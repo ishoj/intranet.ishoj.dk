@@ -1,0 +1,109 @@
+.wrapper {
+  margin: auto;
+
+  width: 166mm;
+}
+.wrapper:before,
+.wrapper:after {
+  display: table;
+  content: " ";
+}
+.wrapper:after {
+  clear: both;
+}
+
+.column {
+  position: relative;
+
+  min-height: 1px;
+
+  float: left;
+
+  width: 50%;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Business card. */
+.business-card {
+  overflow: hidden;
+
+  width: 83mm;
+  height: 55mm;
+
+  color: #000;
+
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.business-card__inner {
+  position: relative;
+
+  overflow: hidden;
+
+  width: 80mm;
+  height: 44mm;
+
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-size: 180pt;
+}
+
+/* Company information. */
+.company-information {
+  padding-top: 5.5mm;
+  padding-left: 5.5mm;
+}
+.company-information__name {
+  font-family: franklin_gothic_medium_condensed;
+  font-size: 9pt;
+
+  text-transform: uppercase;
+}
+
+/* Personal information. */
+.personal-information {
+  padding-top: 3mm;
+  padding-left: 5.5mm;
+}
+.personal-information__name {
+  font-family: franklin_gothic_demi_condensed;
+  font-size: 14pt;
+}
+.personal-information__job-position {
+  margin-top: -1mm;
+
+  font-family: franklin_gothic_medium_condensed;
+  font-size: 12pt;
+}
+.personal-information__department {
+  margin-top: -0.55mm;
+
+  font-family: franklin_gothic_medium_condensed;
+  font-size: 10pt;
+}
+
+/* Contact information. */
+.contact-information {
+  padding-top: 2mm;
+  padding-left: 5.5mm;
+}
+.contact-information__email {
+  font-family: franklin_gothic_demi_condensed;
+  font-size: 10pt;
+
+  letter-spacing: -0.1mm;
+}
+.contact-information__phone {
+  font-family: franklin_gothic_demi_condensed;
+  font-size: 10pt;
+
+  letter-spacing: -0.05mm;
+}

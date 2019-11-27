@@ -1,0 +1,31 @@
+<?php
+
+/*
+ * Implements hook_menu().
+ */
+function business_card_generator_menu() {
+  $items = array();
+
+  $items['business-card-generator/form'] = array(
+    'type' => MENU_LOCAL_TASK,
+    'title' => t('Generer personligt visitkort'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('business_card_generator_form'),
+    'access arguments' => array('use business card generator'),
+    'file' => 'includes/form.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function business_card_generator_permission() {
+  return array(
+    'use business card generator' => array(
+      'title' => t('Use business card generator'),
+      'description' => '',
+    ),
+  );
+}
