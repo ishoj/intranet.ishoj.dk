@@ -557,7 +557,7 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                     $output .= views_embed_view('nyhedsliste','almindelige_nyheder_ny2', $node->nid);
 
                     // MIDLERTIDIG BOKS I.F.M. VINDUESUDSKIFTNINGEN
-                    $output .= '<p class="vinduesudskiftning"><a title="Information om rådhusrenoveringen" href="/kategori/vinduesudskiftning-paa-raadhuset">Information om rådhusrenoveringen</a></p>';
+                    //$output .= '<p class="vinduesudskiftning"><a title="Information om rådhusrenoveringen" href="/kategori/vinduesudskiftning-paa-raadhuset">Information om rådhusrenoveringen</a></p>';
 
                  $output .= "</div>";
                  $output .= "<div class=\"grid-third\">";
