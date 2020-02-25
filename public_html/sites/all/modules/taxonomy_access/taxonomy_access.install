@@ -182,6 +182,8 @@ function taxonomy_access_schema() {
  * Add vocabulary defaults for all configured vocabularies.
  */
 function taxonomy_access_update_7002() {
+   // Load taxonomy_access.module functions.
+   drupal_load('module', 'taxonomy_access');
   // Get a list of all vocabularies with any term configurations for each role.
   $ta_configs = db_query(
     "SELECT td.vid, ta.rid
