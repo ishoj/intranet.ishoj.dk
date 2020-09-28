@@ -5252,7 +5252,10 @@ Copyright (c) 2015 Daniel Eden
 body {
   background: #ffffff;
 }
-
+/* line 12, src/sass/_styles.scss */
+.sms-driftsstatus {
+  margin-top: 4.5em;
+}
 /* line 12, src/sass/_styles.scss */
 .sms-driftsstatus .sms-error {
   color: #d64937;
@@ -6153,7 +6156,6 @@ body {
 }
 /* line 857, src/sass/_styles.scss */
 .news-almindelige .row .almindelige .vinduesudskiftning, .tilfoej-indhold .row .almindelige .vinduesudskiftning {
-  margin-top: 4.5em;
   margin-bottom: 3em;
   background-color: #dadfe1;
 }

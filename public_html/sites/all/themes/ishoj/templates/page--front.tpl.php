@@ -499,7 +499,9 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                     $output .= views_embed_view('nyhedsliste','topnyheder_lodret_liste');
                  $output .= "</div>";
                  $output .= "<div class=\"grid-two-thirds almindelige\">";
-
+ // MIDLERTIDIG BOKS I.F.M. VINDUESUDSKIFTNINGEN
+                    $output .= '<p class="vinduesudskiftning"><a title="Ophør af det forpligtende samarbejde" href="/ophoer-af-det-forpligtende-samarbejde">Ophør af det forpligtende samarbejde</a></p>';
+                    $output .= views_embed_view('nyhedsliste','almindelige_nyheder_ny2', $node->nid);
                     // TILMELDING TIL SMS-DRIFTSSTATUS START
                     // if($is_admin or ($showuser->name == "kln")) {
                       $output .= "<div class=\"sms-driftsstatus\">";
@@ -554,11 +556,9 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
                       $output .= "</div>";
                     // }
 
-                    $output .= views_embed_view('nyhedsliste','almindelige_nyheder_ny2', $node->nid);
+                    
 
-                    // MIDLERTIDIG BOKS I.F.M. VINDUESUDSKIFTNINGEN
-                    //$output .= '<p class="vinduesudskiftning"><a title="Information om rådhusrenoveringen" href="/kategori/vinduesudskiftning-paa-raadhuset">Information om rådhusrenoveringen</a></p>';
-
+                   
                  $output .= "</div>";
                  $output .= "<div class=\"grid-third\">";
                  $output .= "</div>";
@@ -647,6 +647,8 @@ print '<input id="soegefelt" placeholder="Indtast dit søgeord"/>';
               <h3>Ishøj Kommune på sociale medier</h3>
               <p>
                 <a class="sprite sprite-facebook footer" href="http://www.facebook.com/ishojkommune" title="Følg Ishøj Kommune på Facebook"><span><span class="screen-reader">Følg Ishøj Kommune på Facebook</span></span></a>
+                <a class="sprite sprite-linkedin footer" href="https://www.linkedin.com/company/ishoj-kommune" title="Følg Ishøj Kommune på LinkedIn"><span><span class="screen-reader">Følg Ishøj Kommune på LinkedIn</span></span></a>
+                <a class="sprite sprite-twitter footer" href="http://www.twitter.com/ishojkommune" title="Følg Ishøj Kommune på Twitter"><span><span class="screen-reader">Følg Ishøj Kommune på Twitter</span></span></a>
                 <a class="sprite sprite-youtube footer" href="http://www.youtube.com/tvishoj" title="Følg Ishøj Kommune på Youtube"><span><span class="screen-reader">Følg Ishøj Kommune på Youtube</span></span></a>
               </p>
             </div>
