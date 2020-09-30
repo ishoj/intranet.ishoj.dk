@@ -9,6 +9,7 @@ body {
 
 
 .sms-driftsstatus {
+  margin-top: 4.5em;
   .sms-error {
     color: $google;
   }
@@ -855,7 +856,6 @@ body {
         padding-left: 3em;
       }
       .vinduesudskiftning {
-        margin-top: 4.5em;
         margin-bottom: 3em;
         background-color: $color-light-gray-normal;
         a {
