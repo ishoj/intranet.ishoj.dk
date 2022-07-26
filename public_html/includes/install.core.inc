@@ -362,7 +362,8 @@ function install_run_tasks(&$install_state) {
  * Runs an individual installation task.
  *
  * @param $task
- *   An array of information about the task to be run.
+ *   An array of information about the task to be run as returned by
+ *   hook_install_tasks().
  * @param $install_state
  *   An array of information about the current installation state. This is
  *   passed in by reference so that it can be modified by the task.
@@ -478,11 +479,15 @@ function install_run_task($task, &$install_state) {
  * the page request evolves (for example, if an installation profile hasn't
  * been selected yet, we don't yet know which profile tasks need to be run).
  *
+ * You can override this using hook_install_tasks() or
+ * hook_install_tasks_alter().
+ *
  * @param $install_state
  *   An array of information about the current installation state.
  *
  * @return
- *   A list of tasks to be performed, with associated metadata.
+ *   A list of tasks to be performed, with associated metadata as returned by
+ *   hook_install_tasks().
  */
 function install_tasks_to_perform($install_state) {
   // Start with a list of all currently available tasks.
@@ -804,6 +809,13 @@ function install_system_module(&$install_state) {
 
   variable_set('install_profile_modules', array_diff($modules, array('system')));
   $install_state['database_tables_exist'] = TRUE;
+
+  // Prevent the hook_requirements() check from telling us to convert the
+  // database to utf8mb4.
+  $connection = Database::getConnection();
+  if ($connection->utf8mb4IsConfigurable() && $connection->utf8mb4IsActive()) {
+    variable_set('drupal_all_databases_are_utf8mb4', TRUE);
+  }
 }
 
 /**
@@ -1493,8 +1505,19 @@ function install_configure_form($form, &$form_state, &$install_state) {
   // especially out of place on the last page of the installer, where it would
   // distract from the message that the Drupal installation has completed
   // successfully.)
-  if (empty($_POST) && (!drupal_verify_install_file(DRUPAL_ROOT . '/' . $settings_file, FILE_EXIST|FILE_READABLE|FILE_NOT_WRITABLE) || !drupal_verify_install_file(DRUPAL_ROOT . '/' . $settings_dir, FILE_NOT_WRITABLE, 'dir'))) {
-    drupal_set_message(st('All necessary changes to %dir and %file have been made, so you should remove write permissions to them now in order to avoid security risks. If you are unsure how to do so, consult the <a href="@handbook_url">online handbook</a>.', array('%dir' => $settings_dir, '%file' => $settings_file, '@handbook_url' => 'http://drupal.org/server-permissions')), 'warning');
+
+  $skip_permissions_hardening = variable_get('skip_permissions_hardening', FALSE);
+  // Allow system administrators to ignore permissions hardening for the site
+  // directory. This allows additional files in the site directory to be
+  // updated when they are managed in a version control system.
+  if (!$skip_permissions_hardening) {
+    if (empty($_POST) && (!drupal_verify_install_file(DRUPAL_ROOT . '/' . $settings_file, FILE_EXIST | FILE_READABLE | FILE_NOT_WRITABLE) || !drupal_verify_install_file(DRUPAL_ROOT . '/' . $settings_dir, FILE_NOT_WRITABLE, 'dir'))) {
+      drupal_set_message(st('All necessary changes to %dir and %file have been made, so you should remove write permissions to them now in order to avoid security risks. If you are unsure how to do so, consult the <a href="@handbook_url">online handbook</a>.', array(
+        '%dir' => $settings_dir,
+        '%file' => $settings_file,
+        '@handbook_url' => 'http://drupal.org/server-permissions'
+      )), 'warning');
+    }
   }
 
   drupal_add_js(drupal_get_path('module', 'system') . '/system.js');
@@ -1585,7 +1608,9 @@ function install_finished(&$install_state) {
 }
 
 /**
- * Batch callback for batch installation of modules.
+ * Implements callback_batch_operation().
+ *
+ * Performs batch installation of modules.
  */
 function _install_module_batch($module, $module_name, &$context) {
   // Install and enable the module right away, so that the module will be
@@ -1598,6 +1623,8 @@ function _install_module_batch($module, $module_name, &$context) {
 }
 
 /**
+ * Implements callback_batch_finished().
+ *
  * 'Finished' callback for module installation batch.
  */
 function _install_profile_modules_finished($success, $results, $operations) {
